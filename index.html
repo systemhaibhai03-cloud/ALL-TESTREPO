@@ -4,115 +4,107 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vishal Technopower - PO Generator</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/docx/7.8.2/docx.umd.min.js"></script>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: 'Segoe UI', sans-serif; background: #f0f4f8; }
-  
-  .header {
-    background: linear-gradient(135deg, #1a237e, #283593);
-    color: white; padding: 20px 30px;
-    display: flex; align-items: center; gap: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-  }
-  .header h1 { font-size: 24px; }
-  .header p { font-size: 13px; opacity: 0.8; }
-  
-  .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-  
-  .card {
-    background: white; border-radius: 12px;
-    padding: 25px; margin-bottom: 25px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-  }
-  .card-title {
-    font-size: 16px; font-weight: 700;
-    color: #1a237e; border-bottom: 3px solid #1a237e;
-    padding-bottom: 10px; margin-bottom: 20px;
-    display: flex; align-items: center; gap: 8px;
-  }
-  
-  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; }
-  
-  .form-group { margin-bottom: 15px; }
-  .form-group label {
-    display: block; font-size: 12px; font-weight: 600;
-    color: #555; margin-bottom: 5px; text-transform: uppercase;
-  }
-  .form-group input, .form-group textarea, .form-group select {
-    width: 100%; padding: 10px 14px;
-    border: 2px solid #e0e0e0; border-radius: 8px;
-    font-size: 14px; transition: border 0.3s;
-    font-family: 'Segoe UI', sans-serif;
-  }
-  .form-group input:focus, .form-group textarea:focus {
-    border-color: #1a237e; outline: none;
-    box-shadow: 0 0 0 3px rgba(26,35,126,0.1);
-  }
-  .form-group textarea { height: 100px; resize: vertical; }
-  
-  .item-row {
-    background: #f8f9ff; border-radius: 8px;
-    padding: 15px; margin-bottom: 10px;
-    border: 1px solid #e8eaf6;
-  }
-  .item-header {
-    display: flex; justify-content: space-between;
-    align-items: center; margin-bottom: 10px;
-  }
-  .item-header span { font-weight: 700; color: #1a237e; }
-  
-  .btn {
-    padding: 12px 25px; border: none;
-    border-radius: 8px; font-size: 14px;
-    font-weight: 600; cursor: pointer;
-    transition: all 0.3s; display: inline-flex;
-    align-items: center; gap: 8px;
-  }
-  .btn-primary { background: #1a237e; color: white; }
-  .btn-primary:hover { background: #283593; transform: translateY(-2px); }
-  .btn-success { background: #2e7d32; color: white; }
-  .btn-success:hover { background: #1b5e20; transform: translateY(-2px); }
-  .btn-danger { background: #c62828; color: white; padding: 8px 15px; font-size: 12px; }
-  .btn-danger:hover { background: #b71c1c; }
-  .btn-warning { background: #f57f17; color: white; }
-  .btn-warning:hover { background: #e65100; }
-  
-  .btn-group { display: flex; gap: 15px; justify-content: center; margin-top: 20px; flex-wrap: wrap; }
-  
-  .total-box {
-    background: linear-gradient(135deg, #1a237e, #283593);
-    color: white; border-radius: 12px; padding: 20px;
-    text-align: right;
-  }
-  .total-box .row { display: flex; justify-content: space-between; margin-bottom: 8px; }
-  .total-box .grand { font-size: 20px; font-weight: 700; border-top: 2px solid rgba(255,255,255,0.4); padding-top: 10px; }
-  
-  .fixed-note {
-    background: #fff8e1; border-left: 4px solid #f9a825;
-    padding: 12px; border-radius: 4px; margin-bottom: 10px;
-    font-size: 13px; color: #555;
-  }
-  
-  .badge {
-    background: #e8eaf6; color: #1a237e;
-    padding: 3px 10px; border-radius: 20px;
-    font-size: 11px; font-weight: 600;
-  }
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Segoe UI',sans-serif; background:#f0f4f8; }
 
-  @media (max-width: 768px) {
-    .grid-2, .grid-3 { grid-template-columns: 1fr; }
-    .header h1 { font-size: 18px; }
-  }
+.header {
+  background:linear-gradient(135deg,#1a237e,#283593);
+  color:white; padding:20px 30px;
+  display:flex; align-items:center; gap:20px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.3);
+}
+.header h1 { font-size:24px; }
+.header p { font-size:13px; opacity:0.8; }
+
+.container { max-width:1200px; margin:30px auto; padding:0 20px; }
+
+.card {
+  background:white; border-radius:12px;
+  padding:25px; margin-bottom:25px;
+  box-shadow:0 4px 15px rgba(0,0,0,0.08);
+}
+.card-title {
+  font-size:16px; font-weight:700;
+  color:#1a237e; border-bottom:3px solid #1a237e;
+  padding-bottom:10px; margin-bottom:20px;
+}
+.grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+.grid-3 { display:grid; grid-template-columns:1fr 1fr 1fr; gap:15px; }
+
+.form-group { margin-bottom:15px; }
+.form-group label {
+  display:block; font-size:12px; font-weight:600;
+  color:#555; margin-bottom:5px; text-transform:uppercase;
+}
+.form-group input, .form-group textarea, .form-group select {
+  width:100%; padding:10px 14px;
+  border:2px solid #e0e0e0; border-radius:8px;
+  font-size:14px; transition:border 0.3s;
+  font-family:'Segoe UI',sans-serif;
+}
+.form-group input:focus, .form-group textarea:focus {
+  border-color:#1a237e; outline:none;
+}
+.form-group textarea { height:100px; resize:vertical; }
+
+.item-row {
+  background:#f8f9ff; border-radius:8px;
+  padding:15px; margin-bottom:10px;
+  border:1px solid #e8eaf6;
+}
+.item-header {
+  display:flex; justify-content:space-between;
+  align-items:center; margin-bottom:10px;
+}
+.item-header span { font-weight:700; color:#1a237e; }
+
+.btn {
+  padding:12px 25px; border:none;
+  border-radius:8px; font-size:14px;
+  font-weight:600; cursor:pointer;
+  transition:all 0.3s; display:inline-flex;
+  align-items:center; gap:8px;
+}
+.btn-primary { background:#1a237e; color:white; }
+.btn-primary:hover { background:#283593; transform:translateY(-2px); }
+.btn-success { background:#2e7d32; color:white; }
+.btn-success:hover { background:#1b5e20; transform:translateY(-2px); }
+.btn-danger { background:#c62828; color:white; padding:8px 15px; font-size:12px; }
+.btn-warning { background:#f57f17; color:white; }
+
+.btn-group { display:flex; gap:15px; justify-content:center; margin-top:20px; flex-wrap:wrap; }
+
+.total-box {
+  background:linear-gradient(135deg,#1a237e,#283593);
+  color:white; border-radius:12px; padding:20px;
+  text-align:right; margin-top:20px;
+}
+.total-box .row { display:flex; justify-content:space-between; margin-bottom:8px; }
+.total-box .grand { font-size:20px; font-weight:700; border-top:2px solid rgba(255,255,255,0.4); padding-top:10px; }
+
+.fixed-note {
+  background:#fff8e1; border-left:4px solid #f9a825;
+  padding:12px; border-radius:4px; margin-bottom:10px;
+  font-size:13px; color:#555;
+}
+.badge {
+  background:#e8eaf6; color:#1a237e;
+  padding:3px 10px; border-radius:20px;
+  font-size:11px; font-weight:600; margin-left:8px;
+}
+
+@media(max-width:768px){
+  .grid-2,.grid-3{grid-template-columns:1fr;}
+}
 </style>
 </head>
 <body>
 
 <div class="header">
   <div>
-    <h1>⚡ Vishal Technopower Pvt Ltd</h1>
-    <p>Purchase Order Generator — Engineering Your Electrical Needs!</p>
+    <h1>⚡ Vishal Technopower Pvt Ltd - PO Generator</h1>
+    <p>Engineering Your Electrical Needs! | Same Format as Original PDF</p>
   </div>
 </div>
 
@@ -128,11 +120,11 @@
       </div>
       <div class="form-group">
         <label>Purchase Order No.</label>
-        <input type="text" id="poNo" placeholder="VTPL/26-27/BPCL CHEMBUR/02">
+        <input type="text" id="poNo" value="VTPL/26-27/BPCL CHEMBUR/02">
       </div>
       <div class="form-group">
         <label>Project Name</label>
-        <input type="text" id="projectName" placeholder="Supply and Installation of...">
+        <input type="text" id="projectName" value="Supply and Installation of smart high mast towers in BPCL-Mumbai Refinery">
       </div>
     </div>
   </div>
@@ -142,59 +134,46 @@
     <div class="card-title">🏢 Vendor's Address (To)</div>
     <div class="grid-2">
       <div>
-        <div class="form-group">
-          <label>Company Name</label>
-          <input type="text" id="vendorName" placeholder="VANKAL CABLES AND TRANSMISSION LIMITED">
+        <div class="form-group"><label>Company Name</label>
+          <input type="text" id="vendorName" value="VANKAL CABLES AND TRANSMISSION LIMITED.">
         </div>
-        <div class="form-group">
-          <label>Floor / Khasra No.</label>
-          <input type="text" id="vendorFloor" placeholder="Khasra No-2">
+        <div class="form-group"><label>Floor / Khasra No.</label>
+          <input type="text" id="vendorFloor" value="Khasra No-2">
         </div>
-        <div class="form-group">
-          <label>Building / Flat No.</label>
-          <input type="text" id="vendorBuilding" placeholder="P.H. No.-10">
+        <div class="form-group"><label>Building / Flat No.</label>
+          <input type="text" id="vendorBuilding" value="P.H. No.-10">
         </div>
-        <div class="form-group">
-          <label>Road / Street</label>
-          <input type="text" id="vendorRoad" placeholder="Main Road Tilda">
+        <div class="form-group"><label>Road / Street</label>
+          <input type="text" id="vendorRoad" value="Main Road Tilda">
         </div>
-        <div class="form-group">
-          <label>Locality / Sub Locality</label>
-          <input type="text" id="vendorLocality" placeholder="Village- Tandwa, Tehsil and Block Tilda">
+        <div class="form-group"><label>Locality / Sub Locality</label>
+          <input type="text" id="vendorLocality" value="Village- Tandwa, Tehsil and Block Tilda">
         </div>
       </div>
       <div>
-        <div class="form-group">
-          <label>City / Town / Village</label>
-          <input type="text" id="vendorCity" placeholder="Tilda">
+        <div class="form-group"><label>City / Town / Village</label>
+          <input type="text" id="vendorCity" value="Tilda">
         </div>
-        <div class="form-group">
-          <label>District</label>
-          <input type="text" id="vendorDistrict" placeholder="Raipur">
+        <div class="form-group"><label>District</label>
+          <input type="text" id="vendorDistrict" value="Raipur">
         </div>
-        <div class="form-group">
-          <label>State</label>
-          <input type="text" id="vendorState" placeholder="Chhattisgarh">
+        <div class="form-group"><label>State</label>
+          <input type="text" id="vendorState" value="Chhattisgarh">
         </div>
-        <div class="form-group">
-          <label>PIN Code</label>
-          <input type="text" id="vendorPin" placeholder="493114">
+        <div class="form-group"><label>PIN Code</label>
+          <input type="text" id="vendorPin" value="493114">
         </div>
-        <div class="form-group">
-          <label>Contact Person</label>
-          <input type="text" id="vendorContact" placeholder="Mr. Deepak Kathuria Ji & Mr. Abhishek Jain">
+        <div class="form-group"><label>Contact Person</label>
+          <input type="text" id="vendorContact" value="Mr. Deepak kathuria Ji &amp; Mr. Abhishek Jain">
         </div>
-        <div class="form-group">
-          <label>Mobile No.</label>
-          <input type="text" id="vendorMobile" placeholder="91 98103 86068, 91 99530 04073">
+        <div class="form-group"><label>Mobile No.</label>
+          <input type="text" id="vendorMobile" value="91 98103 86068 , 91 99530 04073">
         </div>
-        <div class="form-group">
-          <label>Email</label>
-          <input type="text" id="vendorEmail" placeholder="deepak.kathuria@vankal.in">
+        <div class="form-group"><label>Email</label>
+          <input type="text" id="vendorEmail" value="deepak.kathuria@vankal.in, abhishek.jain@vankal.in">
         </div>
-        <div class="form-group">
-          <label>GST No.</label>
-          <input type="text" id="vendorGST" placeholder="22AAHCV0901D1Z0">
+        <div class="form-group"><label>GST No.</label>
+          <input type="text" id="vendorGST" value="22AAHCV0901D1Z0">
         </div>
       </div>
     </div>
@@ -203,69 +182,74 @@
   <!-- Shipping Address -->
   <div class="card">
     <div class="card-title">🚚 Shipping Address</div>
-    <div class="form-group">
-      <label>Company Name</label>
-      <input type="text" id="shipName" placeholder="BHARAT PETROLEUM CORPN LTD">
+    <div class="form-group"><label>Company Name</label>
+      <input type="text" id="shipName" value="BHARAT PETROLEUM CORPN LTD">
     </div>
-    <div class="form-group">
-      <label>Full Address</label>
-      <textarea id="shipAddress" placeholder="MUMBAI REFINERY, MAHUL, CHEMBUR, MUMBAI, MAHARASHTRA-400071, India"></textarea>
+    <div class="form-group"><label>Full Address</label>
+      <textarea id="shipAddress">MUMBAI REFINERY,
+MAHUL, CHEMBUR,
+MUMBAI, MAHARASHTRA-400071, India</textarea>
     </div>
-    <div class="form-group">
-      <label>GST No.</label>
-      <input type="text" id="shipGST" placeholder="27AAACB2902M1ZT">
+    <div class="form-group"><label>GST No.</label>
+      <input type="text" id="shipGST" value="27AAACB2902M1ZT">
     </div>
   </div>
 
   <!-- Items -->
   <div class="card">
     <div class="card-title">📦 Items / BOQ <span class="badge" id="itemCount">1 Item</span></div>
-    
     <div id="itemsContainer">
-      <!-- Item 1 Default -->
       <div class="item-row" id="item_1">
         <div class="item-header">
           <span>Item #1</span>
           <button class="btn btn-danger" onclick="removeItem(1)">✕ Remove</button>
         </div>
         <div class="grid-2">
-          <div class="form-group">
-            <label>Item Name</label>
-            <input type="text" id="itemName_1" placeholder="30m smart High Mast Shaft">
+          <div class="form-group"><label>Item Name (Bold Heading)</label>
+            <input type="text" id="itemName_1" value="30m smart High Mast Shaft">
           </div>
-          <div class="form-group">
-            <label>Short Description</label>
-            <input type="text" id="itemShort_1" placeholder="30M SMART HIGH MAST SHAFT">
+          <div class="form-group"><label>Short Description</label>
+            <input type="text" id="itemShort_1" value="30M SMART HIGH MAST SHAFT">
           </div>
         </div>
-        <div class="form-group">
-          <label>Full Description</label>
-          <textarea id="itemDesc_1" placeholder="HEIGHT & CONSTRUCTION: - 30M SHAFT IN 3 SECTIONS..."></textarea>
+        <div class="form-group"><label>MATGRP</label>
+          <input type="text" id="itemMatgrp_1" value="69">
+        </div>
+        <div class="form-group"><label>Full Technical Description</label>
+          <textarea id="itemDesc_1" style="height:150px;">HEIGHT & CONSTRUCTION: - 30M SHAFT IN 3 SECTIONS, SUITABLE FOR 50 M/SEC WIND.
+TOP FRAME: - INCLUDES HEAD FRAME, WINCH BRACKET, AND LUMINAIRE CARRIAGE FOR 12 LIGHTS (SYMMETRICAL).
+RAISING/LOWERING SYSTEM: - RAISING/LOWERING SYSTEM WITH DOUBLE DRUM WINCH, 6 MM SS WIRE ROPE, TRAILING CABLE, CONNECTOR, POWER TOOL MOTOR & MANUAL HANDLE.
+ELECTRICALS & ACCESSORIES: - INCLUDES JUNCTION BOX AND LIGHTNING FINIAL.
+FOUNDATION HARDWARE: - SUPPLIED WITH SPECIAL STEEL FOUNDATION BOLTS, NUTS, WASHERS, ANCHOR PLATE & COMMON TEMPLATE</textarea>
+        </div>
+        <div class="form-group"><label>BOQ Line Item No.</label>
+          <input type="text" id="itemBOQ_1" value="BOQ Line Item 1">
+        </div>
+        <div class="form-group"><label>⚠️ Yellow Highlighted Note (Additional Info)</label>
+          <textarea id="itemYellow_1">Additional Pulley arrangement shall be provided for the communication cable. (4C x 1.5sqmm EPR Flexible Cable)
+High mast shall be supply strictly as per approved technical documents & Tender technical specification only</textarea>
         </div>
         <div class="grid-3">
-          <div class="form-group">
-            <label>UOM</label>
-            <input type="text" id="itemUom_1" placeholder="Nos">
+          <div class="form-group"><label>UOM</label>
+            <input type="text" id="itemUom_1" value="Nos">
           </div>
-          <div class="form-group">
-            <label>Quantity</label>
-            <input type="number" id="itemQty_1" placeholder="20" oninput="calcTotal()">
+          <div class="form-group"><label>Quantity</label>
+            <input type="number" id="itemQty_1" value="20" oninput="calcTotal()">
           </div>
-          <div class="form-group">
-            <label>Rate (₹)</label>
-            <input type="number" id="itemRate_1" placeholder="243500" oninput="calcTotal()">
+          <div class="form-group"><label>Rate (₹)</label>
+            <input type="number" id="itemRate_1" value="243500" oninput="calcTotal()">
           </div>
         </div>
       </div>
     </div>
-
     <button class="btn btn-warning" onclick="addItem()">➕ Add Item</button>
 
-    <!-- Totals -->
-    <div class="total-box" style="margin-top:20px;">
+    <div class="total-box">
       <div class="row"><span>Total (Basic):</span><span id="dispTotal">₹ 0</span></div>
       <div class="row">
-        <span>GST @ <input type="number" id="gstRate" value="18" style="width:50px;padding:2px 5px;border:none;border-radius:4px;text-align:center;" oninput="calcTotal()"> %</span>
+        <span>GST @ <input type="number" id="gstRate" value="18"
+          style="width:50px;padding:2px 5px;border:none;border-radius:4px;text-align:center;"
+          oninput="calcTotal()"> %</span>
         <span id="dispGST">₹ 0</span>
       </div>
       <div class="row grand"><span>Grand Total:</span><span id="dispGrand">₹ 0</span></div>
@@ -273,41 +257,36 @@
     </div>
   </div>
 
-  <!-- Fixed Terms Preview -->
+  <!-- Terms Preview -->
   <div class="card">
-    <div class="card-title">📜 Terms & Conditions <span class="badge">Fixed</span></div>
-    <div class="fixed-note">⚠️ Yeh Terms & Conditions sabhi PO mein same rahenge. Sirf Party Name change hoga automatically.</div>
+    <div class="card-title">📜 Terms & Conditions <span class="badge">Fixed - Auto Fill</span></div>
+    <div class="fixed-note">✅ Yeh Terms & Conditions bilkul PDF jaisi hain — Automatically Word mein jayengi. Kuch change nahi hoga.</div>
     <ol style="padding-left:20px;font-size:13px;line-height:2;">
-      <li><b>Price Basis:</b> The rates quoted are F.O.R. BPCL Chembur.</li>
-      <li><b>Inspection:</b> BPCL inspection at manufacturer's premises before dispatch. <b>Material shall be dispatched after successful inspection clearance. (Cost of TPI in Vishal's Scope)</b></li>
-      <li><b>Inspection Call:</b> At least 15 days prior to date of inspection.</li>
-      <li>Inspection clearance at factory shall not indemnify from ensuring material quality at site.</li>
-      <li>If inspection fails, Vendor shall pay damages to Vishal Technopower Pvt Ltd.</li>
-      <li><b>Delivery time:</b> Within 3 weeks from date of P.O.</li>
-      <li><b>Payment Terms:</b> 10% Advance | 70% after material received | 20% after 90 days successful erection.</li>
-      <li><b>Technical Compliance:</b> Strictly as per BPCL specifications.</li>
-      <li><b>Technical Documents:</b> Within 2 days from LOI.</li>
-      <li><b>Dispatch:</b> Only after dispatch clearance from us.</li>
-      <li><b>Deviation:</b> Written approval required.</li>
-      <li><b>Part-Delivery:</b> Single lot unless specified.</li>
-      <li>Prices firm and final till completion of order.</li>
-      <li><b>Warranty:</b> 12 months from commissioning or 18 months from supply (whichever later).</li>
-      <li><b>Indemnification, Confidentiality, Termination, Dispute Resolution, Compliance with Laws</b> — as per standard clauses.</li>
+      <li><b>Price Basis:</b> F.O.R. BPCL Chembur.</li>
+      <li><b>Inspection:</b> BPCL inspection before dispatch. Material dispatched after inspection clearance. (Cost of TPI in Vishal's Scope)</li>
+      <li><b>Inspection Call:</b> 15 days prior.</li>
+      <li>Site inspection final and firm.</li>
+      <li>Failed inspection — vendor pays damages.</li>
+      <li><b>Delivery:</b> 3 weeks from PO date.</li>
+      <li><b>Payment:</b> 10% Advance | 70% after delivery | 20% after 90 days erection.</li>
+      <li><b>Technical Compliance, Documents, Dispatch, Deviation, Part-Delivery, Warranty, Indemnification, Confidentiality, Termination, Dispute Resolution, Compliance</b> — all as per original PDF.</li>
     </ol>
   </div>
 
-  <!-- Generate Buttons -->
   <div class="btn-group">
-    <button class="btn btn-primary" onclick="previewPO()">👁️ Preview PO</button>
-    <button class="btn btn-success" onclick="downloadWord()">📄 Download MS Word</button>
+    <button class="btn btn-primary" onclick="previewPO()">👁️ Preview</button>
+    <button class="btn btn-success" onclick="downloadWord()">📄 Download MS Word (.doc)</button>
   </div>
-
 </div>
 
 <!-- Preview Modal -->
-<div id="previewModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.7);z-index:1000;overflow-y:auto;">
-  <div style="max-width:900px;margin:30px auto;background:white;border-radius:12px;padding:40px;position:relative;">
-    <button onclick="closePreview()" style="position:absolute;top:15px;right:15px;background:#c62828;color:white;border:none;border-radius:50%;width:35px;height:35px;font-size:18px;cursor:pointer;">✕</button>
+<div id="previewModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;
+  background:rgba(0,0,0,0.7);z-index:1000;overflow-y:auto;">
+  <div style="max-width:950px;margin:30px auto;background:white;border-radius:12px;
+    padding:40px;position:relative;">
+    <button onclick="closePreview()" style="position:absolute;top:15px;right:15px;
+      background:#c62828;color:white;border:none;border-radius:50%;
+      width:35px;height:35px;font-size:18px;cursor:pointer;">✕</button>
     <div id="previewContent"></div>
     <div class="btn-group" style="margin-top:30px;">
       <button class="btn btn-success" onclick="downloadWord()">📄 Download MS Word</button>
@@ -317,589 +296,653 @@
 
 <script>
 let itemCounter = 1;
-
-// Set today's date
 document.getElementById('poDate').valueAsDate = new Date();
+calcTotal();
 
-function addItem() {
+function addItem(){
   itemCounter++;
-  const container = document.getElementById('itemsContainer');
-  const div = document.createElement('div');
-  div.className = 'item-row';
-  div.id = `item_${itemCounter}`;
-  div.innerHTML = `
+  const c = document.getElementById('itemsContainer');
+  const d = document.createElement('div');
+  d.className='item-row'; d.id=`item_${itemCounter}`;
+  d.innerHTML=`
     <div class="item-header">
       <span>Item #${itemCounter}</span>
       <button class="btn btn-danger" onclick="removeItem(${itemCounter})">✕ Remove</button>
     </div>
     <div class="grid-2">
-      <div class="form-group">
-        <label>Item Name</label>
+      <div class="form-group"><label>Item Name</label>
         <input type="text" id="itemName_${itemCounter}" placeholder="Item Name">
       </div>
-      <div class="form-group">
-        <label>Short Description</label>
+      <div class="form-group"><label>Short Description</label>
         <input type="text" id="itemShort_${itemCounter}" placeholder="Short Description">
       </div>
     </div>
-    <div class="form-group">
-      <label>Full Description</label>
-      <textarea id="itemDesc_${itemCounter}" placeholder="Full description..."></textarea>
+    <div class="form-group"><label>MATGRP</label>
+      <input type="text" id="itemMatgrp_${itemCounter}" placeholder="69">
+    </div>
+    <div class="form-group"><label>Full Technical Description</label>
+      <textarea id="itemDesc_${itemCounter}" style="height:150px;" placeholder="Full description..."></textarea>
+    </div>
+    <div class="form-group"><label>BOQ Line Item No.</label>
+      <input type="text" id="itemBOQ_${itemCounter}" placeholder="BOQ Line Item 1">
+    </div>
+    <div class="form-group"><label>Yellow Highlighted Note</label>
+      <textarea id="itemYellow_${itemCounter}" placeholder="Additional notes..."></textarea>
     </div>
     <div class="grid-3">
-      <div class="form-group">
-        <label>UOM</label>
+      <div class="form-group"><label>UOM</label>
         <input type="text" id="itemUom_${itemCounter}" placeholder="Nos">
       </div>
-      <div class="form-group">
-        <label>Quantity</label>
+      <div class="form-group"><label>Quantity</label>
         <input type="number" id="itemQty_${itemCounter}" placeholder="0" oninput="calcTotal()">
       </div>
-      <div class="form-group">
-        <label>Rate (₹)</label>
+      <div class="form-group"><label>Rate (₹)</label>
         <input type="number" id="itemRate_${itemCounter}" placeholder="0" oninput="calcTotal()">
       </div>
-    </div>
-  `;
-  container.appendChild(div);
+    </div>`;
+  c.appendChild(d);
   updateItemCount();
 }
 
-function removeItem(id) {
-  const el = document.getElementById(`item_${id}`);
-  if (el) el.remove();
-  calcTotal();
-  updateItemCount();
+function removeItem(id){
+  const el=document.getElementById(`item_${id}`);
+  if(el) el.remove();
+  calcTotal(); updateItemCount();
 }
 
-function updateItemCount() {
-  const items = document.querySelectorAll('.item-row');
-  document.getElementById('itemCount').textContent = `${items.length} Item${items.length > 1 ? 's' : ''}`;
+function updateItemCount(){
+  const items=document.querySelectorAll('.item-row');
+  document.getElementById('itemCount').textContent=`${items.length} Item${items.length>1?'s':''}`;
 }
 
-function calcTotal() {
-  let total = 0;
-  for (let i = 1; i <= itemCounter; i++) {
-    const qty = parseFloat(document.getElementById(`itemQty_${i}`)?.value) || 0;
-    const rate = parseFloat(document.getElementById(`itemRate_${i}`)?.value) || 0;
-    total += qty * rate;
+function calcTotal(){
+  let total=0;
+  for(let i=1;i<=itemCounter;i++){
+    const qty=parseFloat(document.getElementById(`itemQty_${i}`)?.value)||0;
+    const rate=parseFloat(document.getElementById(`itemRate_${i}`)?.value)||0;
+    total+=qty*rate;
   }
-  const gst = parseFloat(document.getElementById('gstRate').value) || 18;
-  const gstAmt = total * gst / 100;
-  const grand = total + gstAmt;
-
-  document.getElementById('dispTotal').textContent = '₹ ' + formatNum(total);
-  document.getElementById('dispGST').textContent = '₹ ' + formatNum(gstAmt);
-  document.getElementById('dispGrand').textContent = '₹ ' + formatNum(grand);
-  document.getElementById('dispWords').textContent = 'In Words: ' + numberToWords(Math.round(grand)) + ' Only.';
+  const gst=parseFloat(document.getElementById('gstRate').value)||18;
+  const gstAmt=total*gst/100;
+  const grand=total+gstAmt;
+  document.getElementById('dispTotal').textContent='₹ '+fmtN(total);
+  document.getElementById('dispGST').textContent='₹ '+fmtN(gstAmt);
+  document.getElementById('dispGrand').textContent='₹ '+fmtN(grand);
+  document.getElementById('dispWords').textContent='In Words: '+n2w(Math.round(grand))+' Only.';
 }
 
-function formatNum(n) {
-  return n.toLocaleString('en-IN', {minimumFractionDigits: 0, maximumFractionDigits: 0});
+function fmtN(n){
+  return n.toLocaleString('en-IN',{minimumFractionDigits:0,maximumFractionDigits:0});
 }
 
-function getFormData() {
-  const poDate = document.getElementById('poDate').value;
-  const dateObj = poDate ? new Date(poDate) : new Date();
-  const formattedDate = dateObj.toLocaleDateString('en-GB').replace(/\//g, '.');
-
-  let items = [];
-  for (let i = 1; i <= itemCounter; i++) {
-    if (!document.getElementById(`itemName_${i}`)) continue;
-    const qty = parseFloat(document.getElementById(`itemQty_${i}`)?.value) || 0;
-    const rate = parseFloat(document.getElementById(`itemRate_${i}`)?.value) || 0;
+function getData(){
+  const poDate=document.getElementById('poDate').value;
+  const dateObj=poDate?new Date(poDate):new Date();
+  const fd=dateObj.toLocaleDateString('en-GB').replace(/\//g,'.');
+  let items=[];
+  for(let i=1;i<=itemCounter;i++){
+    if(!document.getElementById(`itemName_${i}`)) continue;
+    const qty=parseFloat(document.getElementById(`itemQty_${i}`)?.value)||0;
+    const rate=parseFloat(document.getElementById(`itemRate_${i}`)?.value)||0;
     items.push({
-      name: document.getElementById(`itemName_${i}`)?.value || '',
-      short: document.getElementById(`itemShort_${i}`)?.value || '',
-      desc: document.getElementById(`itemDesc_${i}`)?.value || '',
-      uom: document.getElementById(`itemUom_${i}`)?.value || 'Nos',
-      qty, rate,
-      total: qty * rate
+      name:document.getElementById(`itemName_${i}`)?.value||'',
+      short:document.getElementById(`itemShort_${i}`)?.value||'',
+      matgrp:document.getElementById(`itemMatgrp_${i}`)?.value||'',
+      desc:document.getElementById(`itemDesc_${i}`)?.value||'',
+      boq:document.getElementById(`itemBOQ_${i}`)?.value||'',
+      yellow:document.getElementById(`itemYellow_${i}`)?.value||'',
+      uom:document.getElementById(`itemUom_${i}`)?.value||'Nos',
+      qty,rate,total:qty*rate
     });
   }
-
-  const basicTotal = items.reduce((s, i) => s + i.total, 0);
-  const gstRate = parseFloat(document.getElementById('gstRate').value) || 18;
-  const gstAmt = basicTotal * gstRate / 100;
-  const grandTotal = basicTotal + gstAmt;
-
-  return {
-    poDate: formattedDate,
-    poNo: document.getElementById('poNo').value || 'VTPL/26-27/BPCL CHEMBUR/02',
-    projectName: document.getElementById('projectName').value || '',
-    vendor: {
-      name: document.getElementById('vendorName').value || '',
-      floor: document.getElementById('vendorFloor').value || '',
-      building: document.getElementById('vendorBuilding').value || '',
-      road: document.getElementById('vendorRoad').value || '',
-      locality: document.getElementById('vendorLocality').value || '',
-      city: document.getElementById('vendorCity').value || '',
-      district: document.getElementById('vendorDistrict').value || '',
-      state: document.getElementById('vendorState').value || '',
-      pin: document.getElementById('vendorPin').value || '',
-      contact: document.getElementById('vendorContact').value || '',
-      mobile: document.getElementById('vendorMobile').value || '',
-      email: document.getElementById('vendorEmail').value || '',
-      gst: document.getElementById('vendorGST').value || '',
+  const basicTotal=items.reduce((s,i)=>s+i.total,0);
+  const gstRate=parseFloat(document.getElementById('gstRate').value)||18;
+  const gstAmt=basicTotal*gstRate/100;
+  const grandTotal=basicTotal+gstAmt;
+  return{
+    poDate:fd,
+    poNo:document.getElementById('poNo').value||'',
+    projectName:document.getElementById('projectName').value||'',
+    vendor:{
+      name:document.getElementById('vendorName').value||'',
+      floor:document.getElementById('vendorFloor').value||'',
+      building:document.getElementById('vendorBuilding').value||'',
+      road:document.getElementById('vendorRoad').value||'',
+      locality:document.getElementById('vendorLocality').value||'',
+      city:document.getElementById('vendorCity').value||'',
+      district:document.getElementById('vendorDistrict').value||'',
+      state:document.getElementById('vendorState').value||'',
+      pin:document.getElementById('vendorPin').value||'',
+      contact:document.getElementById('vendorContact').value||'',
+      mobile:document.getElementById('vendorMobile').value||'',
+      email:document.getElementById('vendorEmail').value||'',
+      gst:document.getElementById('vendorGST').value||''
     },
-    ship: {
-      name: document.getElementById('shipName').value || '',
-      address: document.getElementById('shipAddress').value || '',
-      gst: document.getElementById('shipGST').value || '',
+    ship:{
+      name:document.getElementById('shipName').value||'',
+      address:document.getElementById('shipAddress').value||'',
+      gst:document.getElementById('shipGST').value||''
     },
-    items, basicTotal, gstRate, gstAmt, grandTotal,
-    grandWords: numberToWords(Math.round(grandTotal)) + ' Only.'
+    items,basicTotal,gstRate,gstAmt,grandTotal,
+    grandWords:n2w(Math.round(grandTotal))+' Only.'
   };
 }
 
-function previewPO() {
-  const d = getFormData();
-  let itemsHTML = '';
-  d.items.forEach((item, idx) => {
-    itemsHTML += `
-      <tr>
-        <td style="border:1px solid #000;padding:6px;vertical-align:top;text-align:center;">${idx + 1}</td>
-        <td style="border:1px solid #000;padding:6px;vertical-align:top;">
-          <b>${item.name}</b><br>
-          <b>SHORT DESCRIPTION:</b> ${item.short}<br>
-          ${item.desc}
-        </td>
-        <td style="border:1px solid #000;padding:6px;text-align:center;vertical-align:middle;">${item.uom}</td>
-        <td style="border:1px solid #000;padding:6px;text-align:center;vertical-align:middle;">${item.qty}</td>
-        <td style="border:1px solid #000;padding:6px;text-align:right;vertical-align:middle;">₹ ${formatNum(item.rate)}/-</td>
-        <td style="border:1px solid #000;padding:6px;text-align:right;vertical-align:middle;">₹ ${formatNum(item.total)}/-</td>
-      </tr>
-    `;
-  });
-
-  const html = `
-    <div style="font-family:Arial,sans-serif;font-size:13px;">
-      <div style="text-align:center;font-size:20px;font-weight:bold;text-decoration:underline;margin-bottom:20px;">PURCHASE ORDER</div>
-      
-      <table style="width:100%;border-collapse:collapse;margin-bottom:15px;">
-        <tr>
-          <td style="width:55%;border:1px solid #000;padding:10px;vertical-align:top;">
-            <b>Vendor's Address:</b><br>To,<br>
-            <b>${d.vendor.name}</b><br>
-            Floor No.: ${d.vendor.floor}<br>
-            Building No./Flat No.: ${d.vendor.building}<br>
-            Road/Street: ${d.vendor.road}<br>
-            Locality: ${d.vendor.locality}<br>
-            City/District: ${d.vendor.city}, ${d.vendor.district}<br>
-            State: ${d.vendor.state} | PIN: ${d.vendor.pin}<br>
-            <b>Contact:</b> ${d.vendor.contact}<br>
-            <b>Mobile:</b> ${d.vendor.mobile}<br>
-            <b>Email:</b> ${d.vendor.email}<br>
-            <b>GST No.:</b> ${d.vendor.gst}
-          </td>
-          <td style="width:45%;border:1px solid #000;padding:10px;vertical-align:top;text-align:center;">
-            <b>Purchase Order Details:</b><br><br>
-            Date: ${d.poDate}<br><br>
-            PO No.: ${d.poNo}<br><br>
-            <b>TOTAL VALUE (With GST): ₹ ${formatNum(d.grandTotal)}/-</b>
-          </td>
-        </tr>
-        <tr>
-          <td style="border:1px solid #000;padding:10px;vertical-align:top;">
-            <b>Billing Address:</b><br>
-            Vishal Technopower Pvt Ltd.<br>
-            B-4, Hans Plaza Ambedkar Road,<br>
-            Ghaziabad-201001 (U.P.)<br>
-            GST No. 09AAICV6289K1ZF<br><br>
-            <b>Contact:</b> Ms. Deepali Sharma (Operations)<br>
-            <b>Mobile:</b> +91-9717197378<br>
-            <b>Email:</b> operations2.ve@yahoo.com
-          </td>
-          <td style="border:1px solid #000;padding:10px;vertical-align:top;text-align:center;">
-            <b>Shipping Address:</b><br><br>
-            <b>${d.ship.name}</b><br>
-            ${d.ship.address.replace(/\n/g, '<br>')}<br><br>
-            GST No. ${d.ship.gst}
-          </td>
-        </tr>
-      </table>
-      
-      <p><b>Name of Project:</b> ${d.projectName}</p><br>
-      <p>Please find attached here the following:</p>
-      <ul style="margin:10px 0 15px 20px;">
-        <li>Purchase of Items</li>
-        <li>Important Note.</li>
-        <li>Commercial Terms & Conditions.</li>
-      </ul>
-      
-      <hr><br>
-      <div style="text-align:center;font-size:16px;font-weight:bold;text-decoration:underline;margin-bottom:15px;">Purchase Order Items</div>
-      
-      <table style="width:100%;border-collapse:collapse;font-size:12px;">
-        <tr style="background:#1a237e;color:white;">
-          <th style="border:1px solid #000;padding:8px;">Sr.</th>
-          <th style="border:1px solid #000;padding:8px;">Items Description</th>
-          <th style="border:1px solid #000;padding:8px;">UOM</th>
-          <th style="border:1px solid #000;padding:8px;">Qty</th>
-          <th style="border:1px solid #000;padding:8px;">Rate</th>
-          <th style="border:1px solid #000;padding:8px;">Total</th>
-        </tr>
-        ${itemsHTML}
-        <tr>
-          <td colspan="5" style="border:1px solid #000;padding:8px;text-align:right;font-weight:bold;">Total</td>
-          <td style="border:1px solid #000;padding:8px;text-align:right;font-weight:bold;">₹ ${formatNum(d.basicTotal)}/-</td>
-        </tr>
-        <tr>
-          <td colspan="5" style="border:1px solid #000;padding:8px;text-align:right;font-weight:bold;">GST @ ${d.gstRate}%</td>
-          <td style="border:1px solid #000;padding:8px;text-align:right;font-weight:bold;">₹ ${formatNum(d.gstAmt)}/-</td>
-        </tr>
-        <tr style="background:#f0f4ff;">
-          <td colspan="5" style="border:1px solid #000;padding:8px;text-align:right;font-weight:bold;">Grand Total</td>
-          <td style="border:1px solid #000;padding:8px;text-align:right;font-weight:bold;">₹ ${formatNum(d.grandTotal)}/-</td>
-        </tr>
-      </table>
-      
-      <p style="margin-top:15px;font-weight:bold;font-size:14px;">In Words: ${d.grandWords}</p>
-      
-      <hr style="margin:20px 0;">
-      <div style="text-align:center;font-size:16px;font-weight:bold;text-decoration:underline;margin-bottom:15px;">IMPORTANT NOTE</div>
-      <ol style="font-size:12px;line-height:1.8;padding-left:20px;">
-        <li>BPCL/TPI inspection is applicable for the items.</li>
-        <li>All materials shall be strictly as per enclosed tender technical specification, BOQ description and approved documents.</li>
-        <li>Vendor shall provide the GA drawing TDS and other technical documents for approval from client as per the technical specification.</li>
-        <li><b>For High Mast:</b> 12 months onsite warranty/guarantee from date of commissioning or 18 months from date of supply whichever is later.</li>
-        <li><b>Vendor has to provide following documents:</b><br>
-          i. GA Drawing | ii. Technical Data Sheet | iii. Foundation Drawing<br>
-          iv. Structural & Foundation design calculation | v. QAP<br>
-          vi. TC for Accessories | vii. Other test certificates | viii. Warranty Certificate
-        </li>
-        <li><b>Additional Pulley</b> for communication cable (4C x 1.5sqmm EPR) to be provided in Head frame.</li>
-        <li>CIMFR and PESO for FLP Motor to be submitted before dispatch for dispatch clearance from BPCL.</li>
-      </ol>
-      
-      <hr style="margin:20px 0;">
-      <div style="text-align:center;font-size:16px;font-weight:bold;text-decoration:underline;margin-bottom:15px;">Terms & Conditions</div>
-      <ol style="font-size:12px;line-height:1.8;padding-left:20px;">
-        <li><b>Price Basis:</b> The rates quoted are F.O.R. BPCL Chembur.</li>
-        <li><b>Inspection:</b> BPCL inspection at manufacturer's premises before dispatch. <b>Material shall be dispatched after successful inspection clearance. (Cost of TPI in Vishal's Scope)</b></li>
-        <li><b>Inspection Call:</b> At least 15 days prior to date of inspection.</li>
-        <li>Inspection clearance at factory shall not indemnify from ensuring material quality at site. Site findings shall be firm and final.</li>
-        <li>If inspection fails, Vendor shall pay damages to Vishal Technopower Private Limited.</li>
-        <li><b>Delivery time:</b> Within 3 weeks from date of P.O.</li>
-        <li><b>Payment Terms:</b><br>
-          &nbsp;&nbsp;• 10% advance of basic value<br>
-          &nbsp;&nbsp;• 70% — 30 days after material received at site in good condition<br>
-          &nbsp;&nbsp;• 20% — 90 days after successful erection & acceptance by end client
-        </li>
-        <li><b>Technical Compliance:</b> Vendor to comply with all technical specifications laid down by BPCL strictly.</li>
-        <li><b>Technical Documents:</b> All documents along with QAP to be submitted within 2 days from LOI.</li>
-        <li><b>Dispatch:</b> Only after dispatch clearance from us.</li>
-        <li><b>Deviation:</b> Written approval required, else not paid or accepted.</li>
-        <li><b>Part-Delivery:</b> Material shall be supplied in 1 & only 1 single lot.</li>
-        <li>Prices will be firm and final and shall not be revised till completion of order.</li>
-        <li><b>Warranty:</b> 12 months from commissioning or 18 months from supply (whichever later) for High Mast & accessories against manufacturing defect. Structure shall hold good for 25 years.</li>
-        <li><b>Indemnification:</b> Vendor shall indemnify Vishal Technopower Pvt Ltd from any claims/damages due to defects or non-compliance.</li>
-        <li><b>Confidentiality:</b> Both parties to maintain confidentiality of all proprietary information.</li>
-        <li><b>Termination:</b> Vishal Technopower reserves right to terminate PO with 7 days written notice for breach of terms.</li>
-        <li><b>Dispute Resolution:</b> Arbitration as per Arbitration & Conciliation Act, 1996. Venue: Ghaziabad, U.P.</li>
-        <li><b>Compliance with Laws:</b> Vendor must comply with all applicable GST laws, labor laws, and environmental regulations.</li>
-      </ol>
-      
-      <div style="margin-top:40px;display:flex;justify-content:space-between;">
-        <div><br>________________________<br>Signature of the Vendor</div>
-        <div style="text-align:right;"><br>________________________<br>For Vishal Technopower Pvt Ltd</div>
-      </div>
-      <hr style="margin:20px 0;">
-      <div style="text-align:center;font-size:11px;color:#555;">
-        B-4, Hans Plaza, Ambedkar Road, Ghaziabad, U.P. – 201001 | E-mail: vishaltechnopower@yahoo.com<br>
-        T: +91 – 120 – 4122684 | Website: www.vishaltechnopower.com
-      </div>
-    </div>
-  `;
-
-  document.getElementById('previewContent').innerHTML = html;
-  document.getElementById('previewModal').style.display = 'block';
+// ===================== LETTERHEAD SVG =====================
+function getLetterheadHTML(){
+  return `
+  <table width="100%" border="0" cellpadding="0" cellspacing="0" style="margin-bottom:0;">
+    <tr>
+      <td style="padding:0;vertical-align:middle;" width="70%">
+        &nbsp;
+      </td>
+      <td style="padding:5px 0;vertical-align:middle;text-align:right;" width="30%">
+        <table border="0" cellpadding="0" cellspacing="0" style="margin-left:auto;">
+          <tr>
+            <td style="vertical-align:middle;padding-right:8px;">
+              <!-- Triangle Logo SVG -->
+              <svg width="55" height="60" viewBox="0 0 55 60" xmlns="http://www.w3.org/2000/svg">
+                <polygon points="27,2 52,55 2,55" fill="#4a90d9" opacity="0.85"/>
+                <polygon points="27,12 46,50 8,50" fill="#1a3a6e"/>
+                <text x="27" y="42" font-family="Arial" font-size="18" font-weight="bold"
+                  fill="white" text-anchor="middle">&#x26A1;</text>
+              </svg>
+            </td>
+            <td style="vertical-align:middle;">
+              <div style="font-family:Arial,sans-serif;font-size:18pt;font-weight:900;
+                color:#1a237e;line-height:1.1;letter-spacing:1px;">VISHAL</div>
+              <div style="font-family:Arial,sans-serif;font-size:14pt;font-weight:900;
+                color:#1a237e;line-height:1.1;letter-spacing:1px;">TECHNOPOWER</div>
+              <div style="font-family:Arial,sans-serif;font-size:8pt;
+                color:#1a237e;font-style:italic;letter-spacing:0.5px;">Engineering Your Electrical Needs!</div>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <hr style="border:2px solid #1a237e;margin:4px 0 12px 0;">`;
 }
 
-function closePreview() {
-  document.getElementById('previewModal').style.display = 'none';
+// ===================== FOOTER HTML =====================
+function getFooterHTML(){
+  return `
+  <hr style="border:1px solid #333;margin:30px 0 8px 0;">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="50%" style="vertical-align:bottom;font-family:Arial,sans-serif;font-size:10pt;">
+        Signature of the Vendor
+      </td>
+      <td width="50%" style="text-align:right;vertical-align:bottom;font-family:Arial,sans-serif;font-size:10pt;">
+        For Vishal Technopower Pvt Ltd
+      </td>
+    </tr>
+  </table>
+  <p style="text-align:center;font-family:Arial,sans-serif;font-size:9pt;margin-top:10px;border-top:1px solid #999;padding-top:6px;">
+    <b>B-4, Hans Plaza, Ambedkar Road, Ghaziabad, U.P. &#8211; 201001 | E-mail: vishaltechnopower@yahoo.com</b><br>
+    <b>T: +91 &#8211; 120 &#8211; 4122684 | Website: www.vishaltechnopower.com</b>
+  </p>`;
 }
 
-function downloadWord() {
-  const d = getFormData();
+function previewPO(){
+  const d=getData();
+  let itemsHTML='';
+  d.items.forEach((item,idx)=>{
+    const yellowLines=item.yellow.split('\n').filter(l=>l.trim());
+    let yellowHTML=yellowLines.map(l=>`<div style="background:yellow;font-weight:bold;">${l}</div>`).join('');
+    const descLines=item.desc.split('\n').filter(l=>l.trim());
+    let descHTML=descLines.map(l=>{
+      const parts=l.split(':');
+      if(parts.length>1){
+        return `<span style="font-weight:bold;">${parts[0]}:</span>${parts.slice(1).join(':')}`;
+      }
+      return l;
+    }).join('<br>');
 
-  // Build full HTML for Word
-  let itemRows = '';
-  d.items.forEach((item, idx) => {
-    itemRows += `
+    itemsHTML+=`
+    <tr>
+      <td style="border:1px solid black;padding:6px;text-align:center;vertical-align:top;"></td>
+      <td style="border:1px solid black;padding:6px;vertical-align:top;font-size:11pt;">
+        <b>${item.name}</b><br>
+        <b>SHORT DESCRIPTION : ${item.short}</b><br>
+        <b>MATGRP : ${item.matgrp}</b><br>
+        <b>UOM : NO</b><br>
+        ${descHTML}<br><br>
+        <b>${item.boq}</b><br><br>
+        ${yellowHTML}
+      </td>
+      <td style="border:1px solid black;padding:6px;text-align:center;vertical-align:middle;">${item.uom}</td>
+      <td style="border:1px solid black;padding:6px;text-align:center;vertical-align:middle;">${item.qty}</td>
+      <td style="border:1px solid black;padding:6px;text-align:right;vertical-align:middle;">&#8377; ${fmtN(item.rate)}/-</td>
+      <td style="border:1px solid black;padding:6px;text-align:right;vertical-align:middle;">&#8377; ${fmtN(item.total)}/-</td>
+    </tr>`;
+  });
+
+  const html=`<div style="font-family:Arial,sans-serif;font-size:12pt;max-width:900px;margin:auto;">
+    ${getLetterheadHTML()}
+    <h2 style="text-align:center;text-decoration:underline;font-style:italic;margin-bottom:15px;">PURCHASE ORDER</h2>
+    <table width="100%" style="border-collapse:collapse;margin-bottom:15px;">
       <tr>
-        <td style="border:1px solid black;padding:6px;text-align:center;vertical-align:top;">${idx + 1}</td>
-        <td style="border:1px solid black;padding:6px;vertical-align:top;">
-          <b>${item.name}</b><br>
-          <b>SHORT DESCRIPTION:</b> ${item.short}<br>
-          ${item.desc.replace(/\n/g,'<br>')}
+        <td width="55%" style="border:1px solid black;padding:10px;vertical-align:top;">
+          <b>Vendor's Address:</b><br>To,<br>
+          <b>${d.vendor.name}</b><br>
+          Floor No.: ${d.vendor.floor}<br>
+          Building No./Flat No.: ${d.vendor.building}<br>
+          Road/Street: ${d.vendor.road}<br>
+          Locality/Sub Locality: ${d.vendor.locality}<br>
+          City/Town/Village: ${d.vendor.city} District: ${d.vendor.district}<br>
+          State: ${d.vendor.state}<br>
+          PIN Code-${d.vendor.pin}<br>
+          <b>Contact Person</b>: ${d.vendor.contact}<br>
+          <b>Mobile No.</b> ${d.vendor.mobile}<br>
+          <b>Email</b>: ${d.vendor.email}<br>
+          <b>GST No. -</b> ${d.vendor.gst}
         </td>
-        <td style="border:1px solid black;padding:6px;text-align:center;vertical-align:middle;">${item.uom}</td>
-        <td style="border:1px solid black;padding:6px;text-align:center;vertical-align:middle;">${item.qty}</td>
-        <td style="border:1px solid black;padding:6px;text-align:right;vertical-align:middle;">&#8377; ${formatNum(item.rate)}/-</td>
-        <td style="border:1px solid black;padding:6px;text-align:right;vertical-align:middle;">&#8377; ${formatNum(item.total)}/-</td>
+        <td width="45%" style="border:1px solid black;padding:10px;vertical-align:top;text-align:center;">
+          <b>Purchase Order details:</b><br><br>
+          Date: ${d.poDate}<br><br>
+          Purchase Order No.: ${d.poNo}<br><br>
+          <b>TOTAL VALUE (With GST): &#8377;${fmtN(d.grandTotal)} /-</b>
+        </td>
       </tr>
-    `;
+      <tr>
+        <td style="border:1px solid black;padding:10px;vertical-align:top;">
+          <b>Billing Address:</b><br>
+          Vishal Technopower Pvt Ltd.<br>
+          B-4, Hans Plaza Ambedkar Road,<br>
+          Ghaziabad-201001 (U.P.)<br><br>
+          &nbsp;GST No.09AAICV6289K1ZF<br><br>
+          <b>Contact Person:</b> Ms. Deepali Sharma (Operations)<br>
+          <b>Mobile No. -</b> +91-9717197378<br>
+          <b>E-mail:</b> operations2.ve@yahoo.com
+        </td>
+        <td style="border:1px solid black;padding:10px;text-align:center;vertical-align:top;">
+          <b>Shipping Address:</b><br><br>
+          <b>${d.ship.name}</b><br>
+          ${d.ship.address.replace(/\n/g,'<br>')}<br><br>
+          GST No. ${d.ship.gst}
+        </td>
+      </tr>
+    </table>
+    <p style="margin-bottom:10px;"><b>Name of Project: ${d.projectName}</b></p>
+    <p>Please find attached here the following:</p>
+    <ul style="margin:10px 0 10px 25px;">
+      <li>Purchase of Items</li>
+      <li>Important Note.</li>
+      <li>Commercial Terms &amp; Conditions.</li>
+    </ul>
+    ${getFooterHTML()}
+    <div style="page-break-after:always;"></div>
+
+    <!-- PAGE 2 ITEMS -->
+    ${getLetterheadHTML()}
+    <h2 style="text-align:center;text-decoration:underline;font-style:italic;margin-bottom:15px;">Purchase Order Items</h2>
+    <table width="100%" style="border-collapse:collapse;font-size:11pt;">
+      <tr style="background:#f0f0f0;">
+        <th style="border:1px solid black;padding:8px;text-align:center;">Sr.<br>No.</th>
+        <th style="border:1px solid black;padding:8px;text-align:center;">Items Description</th>
+        <th style="border:1px solid black;padding:8px;text-align:center;">Uom</th>
+        <th style="border:1px solid black;padding:8px;text-align:center;">Qty</th>
+        <th style="border:1px solid black;padding:8px;text-align:center;">Rate</th>
+        <th style="border:1px solid black;padding:8px;text-align:center;">Total</th>
+      </tr>
+      ${itemsHTML}
+      <tr>
+        <td colspan="5" style="border:1px solid black;padding:8px;text-align:right;font-weight:bold;">Total</td>
+        <td style="border:1px solid black;padding:8px;text-align:right;font-weight:bold;">&#8377; ${fmtN(d.basicTotal)}/-</td>
+      </tr>
+      <tr>
+        <td colspan="5" style="border:1px solid black;padding:8px;text-align:right;font-weight:bold;">GST @ ${d.gstRate} %</td>
+        <td style="border:1px solid black;padding:8px;text-align:right;font-weight:bold;">&#8377; ${fmtN(d.gstAmt)}/-</td>
+      </tr>
+      <tr>
+        <td colspan="5" style="border:1px solid black;padding:8px;text-align:right;font-weight:bold;">Grand Total</td>
+        <td style="border:1px solid black;padding:8px;text-align:right;font-weight:bold;">&#8377; ${fmtN(d.grandTotal)}/-</td>
+      </tr>
+    </table>
+    <p style="margin-top:15px;font-weight:bold;font-size:13pt;">In words: ${d.grandWords}</p>
+    ${getFooterHTML()}
+    <div style="page-break-after:always;"></div>
+
+    <!-- PAGE 3 IMPORTANT NOTE -->
+    ${getLetterheadHTML()}
+    <h2 style="text-align:left;font-size:14pt;margin-bottom:15px;">IMPORTANT NOTE</h2>
+    <ol style="font-size:11pt;line-height:1.8;padding-left:25px;">
+      <li>BPCL/TPI inspection is applicable for the items.</li>
+      <li>All materials shall be strictly as per enclosed tender technical specification, BOQ description and approved documents.</li>
+      <li>Vender shall provide the GA drawing TDS and other technical documents for approval from Gail as per the technical specification of the tender enclosed.</li>
+      <li><b>For High Mast:</b> 12months onsite warranty/guarantee from date of commissioning or 18 months onsite warranty/guarantee from date of supply whichever is later for High Mast and it's all accessories against any manufacturing defect/operation/electricals accessories, However the structure shall hold good for 25 years as the standard industrialnorms.</li>
+      <li><b>Vendor has to provide following documents for approval for High Mast from end client:</b>
+        <ol type="i" style="margin-top:8px;">
+          <li>GA Drawing for High Mast</li>
+          <li>Technical Data Sheet</li>
+          <li>Foundation Drawing</li>
+          <li>Structural &amp; Foundation design calculation</li>
+          <li>QAP</li>
+          <li>TC for Accessories. (Trailing cable, SS wire, JB, Winch, structure, GI Coating and other relevant required to BPCL)</li>
+          <li>Other relevant test certificates as required to client.</li>
+          <li>Warranty Certificate</li>
+        </ol>
+      </li>
+      <li><b>Additional Pulley for communication cable of size 4 core 1.5 sq mm EPR Cable to be provided in High mast's Head frame for easy movement of Cable without damage.</b></li>
+      <li><b>CIMFR and PESO for FLP Motor to be submitted before dispatch for dispatch clearance from BPCL.</b></li>
+    </ol>
+    ${getFooterHTML()}
+    <div style="page-break-after:always;"></div>
+
+    <!-- PAGE 4-5 TERMS -->
+    ${getLetterheadHTML()}
+    <h2 style="text-align:left;font-size:14pt;text-decoration:underline;margin-bottom:15px;">Terms &amp; Conditions:</h2>
+    <ol style="font-size:11pt;line-height:1.8;padding-left:25px;">
+      <li><b>Price Basis</b>: The rates quoted are F.O.R. BPCL Chembur.</li>
+      <li><b>Inspection</b>: BPCL' inspection at manufacturer's premises shall be done before the dispatch of material. It is the responsibility of the manufacturer to satisfy the BPCL technically during the inspection and in line with the approved documents &amp; technical specifications by producing necessary documents or conducting required tests. <b>Material shall be dispatched after successful inspection clearance and obtaining dispatch clearance from the end client. (Cost of TPI in Vishal's Scope)</b></li>
+      <li><b>Inspection Call</b>: Inspection call shall be raised at least 15 days prior to the date of inspection.</li>
+      <li>Inspection clearance at the factory shall not indemnify you from ensuring material quality at the site. The quality of material delivered at site will be the sole and final basis for acceptance. Factory inspection does not guarantee acceptance of the material. Only materials received at site in good and acceptable condition will be considered for acceptance. Site inspection and findings shall be firm and final and will supersede any factory inspection.</li>
+      <li>If the inspection fails and is rejected, Vendor shall be liable to pay the damages caused and shall compensate for the losses so incurred on as per actual basis to Vishal Technopower Private Limited, and get the inspection cleared in next attempt.</li>
+      <li><b>Delivery time</b>: Within 3 weeks from the date of P.O. (before 02th June 2026 including Successfully inspection)</li>
+      <li><b>Payment Terms:</b>
+        <ol style="margin-top:8px;">
+          <li>Payment shall be <b>10%</b> advance of basic value</li>
+          <li>Balance <b>70 %</b> shall be 30 days after successfully material received at site in good condition.</li>
+          <li>And <b>20%</b> payment shall be 90 days subject to successful erection of one high mast without any hindrance or design fault and acceptance by the end client. (Part delivery shall not be accounted for payment.)</li>
+        </ol>
+      </li>
+      <li><b>Technical Compliance</b>: Vendor to comply with all the technical specifications laid down by BPCL strictly and as per approved documents provided to the vendor by us and provide stamped signed acknowledgement of the same.</li>
+      <li><b>Technical Documents</b>: All technical documents along with QAP to be submitted within 2 days from the date of LOI for approval from the end client.</li>
+      <li><b>Dispatch</b>: Material shall only be dispatched after receiving dispatch clearance from us.</li>
+      <li><b>Deviation</b>: Any deviation either in quantity or technical specification shall have written approval, or else it will not be likely to paid or accepted.</li>
+      <li><b>Part &#8211; Delivery:</b> Until &amp; otherwise specified, material shall be supplied in 1 &amp; only 1 single lot.</li>
+      <li>Prices will be firm and final and shall not be revised at any cost till completion of order.</li>
+      <li><b>Guaranty / Warranty for item: For High Mast:</b> 12months onsite warranty/guarantee from date of commissioning or 18 months onsite warranty/guarantee from date of supply whichever is later for High mast &amp; Octagonal Poles and it's all accessories against any manufacturing defect/operation/electricals accessories, However the structure shall hold good for 25 years as the standard industrial norms</li>
+      <li><b>Indemnification</b>: The vendor shall indemnify and hold harmless Vishal Technopower Private Limited from any claims, damages, or losses arising due to defects in supplied materials, non-compliance with technical specifications, or legal violations related to the delivery of goods.</li>
+      <li><b>Confidentiality Clause</b>: Both parties agree to maintain the confidentiality of all proprietary and technical information exchanged during the course of this transaction and shall not disclose such information to third parties without prior written consent.</li>
+      <li><b>Termination Clause</b>: Vishal Technopower Private Limited reserves the right to terminate this Purchase Order in the event of the vendor's failure to meet the agreed delivery timeline, quality standards, or any breach of terms, with a written notice of 7 days. In such cases, any advance paid may be recovered and additional costs for alternative procurement shall be borne by the vendor.</li>
+      <li><b>Dispute Resolution</b>: Any dispute arising from this Purchase Order shall first be resolved amicably between the parties. If unresolved, the dispute shall be referred to arbitration as per the Arbitration &amp; Conciliation Act, 1996, with the venue of arbitration in Ghaziabad, Uttar Pradesh.</li>
+      <li><b>Compliance with Laws</b>: The vendor must comply with all applicable statutory and regulatory requirements, including but not limited to GST laws, labor laws, and environmental regulations in India.</li>
+    </ol>
+    ${getFooterHTML()}
+  </div>`;
+
+  document.getElementById('previewContent').innerHTML=html;
+  document.getElementById('previewModal').style.display='block';
+}
+
+function closePreview(){
+  document.getElementById('previewModal').style.display='none';
+}
+
+function downloadWord(){
+  const d=getData();
+  let itemRows='';
+  d.items.forEach((item,idx)=>{
+    const yellowLines=item.yellow.split('\n').filter(l=>l.trim());
+    let yellowHTML=yellowLines.map(l=>
+      `<p style="background:yellow;font-weight:bold;margin:3px 0;">${l}</p>`
+    ).join('');
+    const descLines=item.desc.split('\n').filter(l=>l.trim());
+    let descHTML=descLines.map(l=>{
+      const colonIdx=l.indexOf(':');
+      if(colonIdx>0 && colonIdx<30){
+        return `<p style="margin:2px 0;"><b>${l.substring(0,colonIdx)}:</b>${l.substring(colonIdx+1)}</p>`;
+      }
+      return `<p style="margin:2px 0;">${l}</p>`;
+    }).join('');
+
+    itemRows+=`
+    <tr>
+      <td style="border:1px solid black;padding:5px;text-align:center;vertical-align:top;width:5%;"></td>
+      <td style="border:1px solid black;padding:5px;vertical-align:top;">
+        <p style="margin:2px 0;"><b>${item.name}</b></p>
+        <p style="margin:2px 0;"><b>SHORT DESCRIPTION : ${item.short}</b></p>
+        <p style="margin:2px 0;"><b>MATGRP : ${item.matgrp}</b></p>
+        <p style="margin:2px 0;"><b>UOM : NO</b></p>
+        ${descHTML}
+        <p style="margin:8px 0 2px 0;"><b>${item.boq}</b></p>
+        ${yellowHTML}
+      </td>
+      <td style="border:1px solid black;padding:5px;text-align:center;vertical-align:middle;width:6%;">${item.uom}</td>
+      <td style="border:1px solid black;padding:5px;text-align:center;vertical-align:middle;width:5%;">${item.qty}</td>
+      <td style="border:1px solid black;padding:5px;text-align:right;vertical-align:middle;width:12%;">&#8377; ${fmtN(item.rate)}/-</td>
+      <td style="border:1px solid black;padding:5px;text-align:right;vertical-align:middle;width:13%;">&#8377; ${fmtN(item.total)}/-</td>
+    </tr>`;
   });
 
-  const wordHTML = `
-    <html xmlns:o='urn:schemas-microsoft-com:office:office'
-          xmlns:w='urn:schemas-microsoft-com:office:word'
-          xmlns='http://www.w3.org/TR/REC-html40'>
-    <head>
-      <meta charset='utf-8'>
-      <title>Purchase Order</title>
-      <!--[if gte mso 9]><xml><w:WordDocument><w:View>Print</w:View><w:Zoom>90</w:Zoom></w:WordDocument></xml><![endif]-->
-      <style>
-        body { font-family: Arial, sans-serif; font-size: 12pt; margin: 1cm; }
-        table { width: 100%; border-collapse: collapse; }
-        td, th { border: 1px solid black; padding: 6px; }
-        h1 { text-align:center; font-size:16pt; text-decoration:underline; }
-        h2 { text-align:center; font-size:14pt; text-decoration:underline; }
-        .footer { text-align:center; font-size:9pt; border-top:1px solid #999; padding-top:8px; margin-top:20px; }
-        @page { margin: 2cm; }
-        @page Section2 { mso-page-orientation: portrait; }
-        div.Section2 { page: Section2; }
-      </style>
-    </head>
-    <body>
-    
-    <!-- PAGE 1: PURCHASE ORDER -->
-    <div>
-      <div style="text-align:center;margin-bottom:5px;">
-        <img src="https://i.imgur.com/placeholder.png" style="height:60px;" onerror="this.style.display='none'">
-        <h1 style="font-size:18pt;text-decoration:underline;">PURCHASE ORDER</h1>
-      </div>
+  const logoSVG=`<svg width="55" height="60" viewBox="0 0 55 60" xmlns="http://www.w3.org/2000/svg">
+    <polygon points="27,2 52,55 2,55" fill="#4a90d9" opacity="0.85"/>
+    <polygon points="27,12 46,50 8,50" fill="#1a3a6e"/>
+    <text x="27" y="42" font-family="Arial" font-size="18" font-weight="bold" fill="white" text-anchor="middle">&#x26A1;</text>
+  </svg>`;
 
-      <table style="margin-bottom:15px;">
-        <tr>
-          <td style="width:55%;padding:10px;vertical-align:top;">
-            <b>Vendor's Address:</b><br>To,<br>
-            <b>${d.vendor.name}</b><br>
-            Floor No.: ${d.vendor.floor}<br>
-            Building No./Flat No.: ${d.vendor.building}<br>
-            Road/Street: ${d.vendor.road}<br>
-            Locality/Sub Locality: ${d.vendor.locality}<br>
-            City/Town/Village: ${d.vendor.city} &nbsp; District: ${d.vendor.district}<br>
-            State: ${d.vendor.state}<br>
-            PIN Code-${d.vendor.pin}<br>
-            <b>Contact Person:</b> ${d.vendor.contact}<br>
-            <b>Mobile No.</b> ${d.vendor.mobile}<br>
-            <b>Email:</b> ${d.vendor.email}<br>
-            <b>GST No. -</b> ${d.vendor.gst}
-          </td>
-          <td style="width:45%;padding:10px;vertical-align:top;text-align:center;">
-            <b>Purchase Order details:</b><br><br>
-            Date: ${d.poDate}<br><br>
-            Purchase Order No.: ${d.poNo}<br><br>
-            <b>TOTAL VALUE (With GST): &#8377;${formatNum(d.grandTotal)} /-</b>
-          </td>
-        </tr>
-        <tr>
-          <td style="padding:10px;vertical-align:top;">
-            <b>Billing Address:</b><br>
-            Vishal Technopower Pvt Ltd.<br>
-            B-4, Hans Plaza Ambedkar Road,<br>
-            Ghaziabad-201001 (U.P.)<br><br>
-            GST No.09AAICV6289K1ZF<br><br>
-            <b>Contact Person:</b> Ms. Deepali Sharma (Operations)<br>
-            <b>Mobile No. -</b> +91-9717197378<br>
-            <b>E-mail:</b> operations2.ve@yahoo.com
-          </td>
-          <td style="padding:10px;vertical-align:top;text-align:center;">
-            <b>Shipping Address:</b><br><br>
-            <b>${d.ship.name}</b><br>
-            ${d.ship.address.replace(/\n/g,'<br>')}<br><br>
-            GST No. ${d.ship.gst}
-          </td>
-        </tr>
-      </table>
+  const letterhead=`
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="65%">&nbsp;</td>
+      <td width="35%" style="text-align:right;padding-bottom:5px;">
+        <table border="0" cellpadding="0" cellspacing="0" style="margin-left:auto;">
+          <tr>
+            <td style="padding-right:8px;vertical-align:middle;">${logoSVG}</td>
+            <td style="vertical-align:middle;">
+              <p style="font-family:Arial;font-size:18pt;font-weight:900;color:#1a237e;margin:0;line-height:1.1;">VISHAL</p>
+              <p style="font-family:Arial;font-size:14pt;font-weight:900;color:#1a237e;margin:0;line-height:1.1;">TECHNOPOWER</p>
+              <p style="font-family:Arial;font-size:8pt;color:#1a237e;font-style:italic;margin:0;">Engineering Your Electrical Needs!</p>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+  <hr style="border:2px solid #1a237e;margin:4px 0 12px 0;">`;
 
-      <p><b>Name of Project:</b> ${d.projectName}</p><br>
-      <p>Please find attached here the following:</p>
-      <ul>
-        <li>Purchase of Items</li>
-        <li>Important Note.</li>
-        <li>Commercial Terms &amp; Conditions.</li>
-      </ul>
+  const footer=`
+  <br><br>
+  <hr style="border:1px solid #333;margin:10px 0 6px 0;">
+  <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <tr>
+      <td width="50%" style="font-family:Arial;font-size:10pt;">Signature of the Vendor</td>
+      <td width="50%" style="text-align:right;font-family:Arial;font-size:10pt;">For Vishal Technopower Pvt Ltd</td>
+    </tr>
+  </table>
+  <p style="text-align:center;font-family:Arial;font-size:9pt;margin-top:8px;border-top:1px solid #aaa;padding-top:5px;">
+    <b>B-4, Hans Plaza, Ambedkar Road, Ghaziabad, U.P. &#8211; 201001 | E-mail: vishaltechnopower@yahoo.com</b><br>
+    <b>T: +91 &#8211; 120 &#8211; 4122684 | Website: www.vishaltechnopower.com</b>
+  </p>`;
 
-      <br><br><br>
-      <table style="width:100%;margin-top:30px;border:none;">
-        <tr style="border:none;">
-          <td style="border:none;width:40%;">Signature of the Vendor</td>
-          <td style="border:none;width:60%;text-align:right;">For Vishal Technopower Pvt Ltd</td>
-        </tr>
-      </table>
-      <div class="footer">
-        B-4, Hans Plaza, Ambedkar Road, Ghaziabad, U.P. &#8211; 201001 | E-mail: vishaltechnopower@yahoo.com<br>
-        T: +91 &#8211; 120 &#8211; 4122684 | Website: www.vishaltechnopower.com
-      </div>
-    </div>
+  const wordHTML=`<html xmlns:o='urn:schemas-microsoft-com:office:office'
+    xmlns:w='urn:schemas-microsoft-com:office:word'
+    xmlns='http://www.w3.org/TR/REC-html40'>
+  <head>
+    <meta charset='utf-8'>
+    <title>Purchase Order - Vishal Technopower</title>
+    <!--[if gte mso 9]><xml>
+    <w:WordDocument><w:View>Print</w:View><w:Zoom>90</w:Zoom>
+    <w:DoNotOptimizeForBrowser/></w:WordDocument></xml><![endif]-->
+    <style>
+      body{font-family:Arial,sans-serif;font-size:11pt;margin:1.5cm 2cm;}
+      p{margin:3px 0;}
+      ol li{margin-bottom:6px;line-height:1.6;}
+      @page{margin:2cm;}
+    </style>
+  </head>
+  <body>
 
-    <br style="mso-special-character:line-break;page-break-before:always">
+  <!-- ===== PAGE 1: MAIN PO ===== -->
+  ${letterhead}
+  <h2 style="text-align:center;font-family:Arial;font-size:16pt;text-decoration:underline;font-style:italic;">PURCHASE ORDER</h2>
+  <table width="100%" style="border-collapse:collapse;margin-top:10px;">
+    <tr>
+      <td width="55%" style="border:1px solid black;padding:10px;vertical-align:top;font-size:11pt;">
+        <b>Vendor's Address:</b><br>To,<br>
+        <b>${d.vendor.name}</b><br>
+        Floor No.: ${d.vendor.floor}<br>
+        Building No./Flat No.: ${d.vendor.building}<br>
+        Road/Street: ${d.vendor.road}<br>
+        Locality/Sub Locality: ${d.vendor.locality}<br>
+        City/Town/Village: ${d.vendor.city} District: ${d.vendor.district}<br>
+        State: ${d.vendor.state}<br>
+        PIN Code-${d.vendor.pin}<br>
+        <b>Contact Person</b>: ${d.vendor.contact}<br>
+        <b>Mobile No.</b> ${d.vendor.mobile}<br>
+        <b>Email</b>: ${d.vendor.email}<br>
+        <b>GST No. -</b> ${d.vendor.gst}
+      </td>
+      <td width="45%" style="border:1px solid black;padding:10px;vertical-align:top;text-align:center;font-size:11pt;">
+        <b>Purchase Order details:</b><br><br>
+        Date: ${d.poDate}<br><br>
+        Purchase Order No.: ${d.poNo}<br><br><br>
+        <b>TOTAL VALUE (With GST): &#8377;${fmtN(d.grandTotal)} /-</b>
+      </td>
+    </tr>
+    <tr>
+      <td style="border:1px solid black;padding:10px;vertical-align:top;font-size:11pt;">
+        <b>Billing Address:</b><br>
+        Vishal Technopower Pvt Ltd.<br>
+        B-4, Hans Plaza Ambedkar Road,<br>
+        Ghaziabad-201001 (U.P.)<br><br>
+        &nbsp;GST No.09AAICV6289K1ZF<br><br>
+        <b>Contact Person:</b> Ms. Deepali Sharma (Operations)<br>
+        <b>Mobile No. -</b> +91-9717197378<br>
+        <b>E-mail:</b> operations2.ve@yahoo.com
+      </td>
+      <td style="border:1px solid black;padding:10px;vertical-align:top;text-align:center;font-size:11pt;">
+        <b>Shipping Address:</b><br><br>
+        <b>${d.ship.name}</b><br>
+        ${d.ship.address.replace(/\n/g,'<br>')}<br><br>
+        <b>GST No. ${d.ship.gst}</b>
+      </td>
+    </tr>
+  </table>
+  <br>
+  <p style="font-size:11pt;"><b>Name of Project: ${d.projectName}</b></p><br>
+  <p style="font-size:11pt;">Please find attached here the following:</p>
+  <ul style="font-size:11pt;margin:8px 0 8px 25px;">
+    <li>Purchase of Items</li>
+    <li>Important Note.</li>
+    <li>Commercial Terms &amp; Conditions.</li>
+  </ul>
+  ${footer}
 
-    <!-- PAGE 2: ITEMS -->
-    <div>
-      <h2>Purchase Order Items</h2>
-      <table>
-        <tr style="background:#dde;">
-          <th style="padding:8px;text-align:center;">Sr. No.</th>
-          <th style="padding:8px;">Items Description</th>
-          <th style="padding:8px;text-align:center;">UOM</th>
-          <th style="padding:8px;text-align:center;">Qty</th>
-          <th style="padding:8px;text-align:right;">Rate</th>
-          <th style="padding:8px;text-align:right;">Total</th>
-        </tr>
-        ${itemRows}
-        <tr>
-          <td colspan="5" style="text-align:right;font-weight:bold;padding:8px;">Total</td>
-          <td style="text-align:right;font-weight:bold;padding:8px;">&#8377; ${formatNum(d.basicTotal)}/-</td>
-        </tr>
-        <tr>
-          <td colspan="5" style="text-align:right;font-weight:bold;padding:8px;">GST @ ${d.gstRate} %</td>
-          <td style="text-align:right;font-weight:bold;padding:8px;">&#8377; ${formatNum(d.gstAmt)}/-</td>
-        </tr>
-        <tr>
-          <td colspan="5" style="text-align:right;font-weight:bold;padding:8px;">Grand Total</td>
-          <td style="text-align:right;font-weight:bold;padding:8px;">&#8377; ${formatNum(d.grandTotal)}/-</td>
-        </tr>
-      </table>
-      <p style="margin-top:10px;"><b>In words: ${d.grandWords}</b></p>
+  <br style="mso-special-character:line-break;page-break-before:always">
 
-      <br><br>
-      <table style="width:100%;border:none;">
-        <tr style="border:none;">
-          <td style="border:none;width:40%;">Signature of the Vendor</td>
-          <td style="border:none;width:60%;text-align:right;">For Vishal Technopower Pvt Ltd</td>
-        </tr>
-      </table>
-      <div class="footer">
-        B-4, Hans Plaza, Ambedkar Road, Ghaziabad, U.P. &#8211; 201001 | E-mail: vishaltechnopower@yahoo.com<br>
-        T: +91 &#8211; 120 &#8211; 4122684 | Website: www.vishaltechnopower.com
-      </div>
-    </div>
+  <!-- ===== PAGE 2: ITEMS ===== -->
+  ${letterhead}
+  <h2 style="text-align:center;font-family:Arial;font-size:14pt;text-decoration:underline;font-style:italic;">Purchase Order of Items</h2>
+  <table width="100%" style="border-collapse:collapse;font-size:10.5pt;margin-top:10px;">
+    <tr>
+      <th style="border:1px solid black;padding:6px;text-align:center;background:#eee;">Sr.<br>No.</th>
+      <th style="border:1px solid black;padding:6px;text-align:center;background:#eee;">Items Description</th>
+      <th style="border:1px solid black;padding:6px;text-align:center;background:#eee;">Uom</th>
+      <th style="border:1px solid black;padding:6px;text-align:center;background:#eee;">Qty</th>
+      <th style="border:1px solid black;padding:6px;text-align:center;background:#eee;">Rate</th>
+      <th style="border:1px solid black;padding:6px;text-align:center;background:#eee;">Total</th>
+    </tr>
+    ${itemRows}
+    <tr>
+      <td colspan="5" style="border:1px solid black;padding:6px;text-align:right;font-weight:bold;">Total</td>
+      <td style="border:1px solid black;padding:6px;text-align:right;font-weight:bold;">&#8377; ${fmtN(d.basicTotal)}/-</td>
+    </tr>
+    <tr>
+      <td colspan="5" style="border:1px solid black;padding:6px;text-align:right;font-weight:bold;">GST @ ${d.gstRate} %</td>
+      <td style="border:1px solid black;padding:6px;text-align:right;font-weight:bold;">&#8377; ${fmtN(d.gstAmt)}/-</td>
+    </tr>
+    <tr>
+      <td colspan="5" style="border:1px solid black;padding:6px;text-align:right;font-weight:bold;">Grand Total</td>
+      <td style="border:1px solid black;padding:6px;text-align:right;font-weight:bold;">&#8377; ${fmtN(d.grandTotal)}/-</td>
+    </tr>
+  </table>
+  <p style="margin-top:12px;font-weight:bold;font-size:12pt;">In words: ${d.grandWords}</p>
+  ${footer}
 
-    <br style="mso-special-character:line-break;page-break-before:always">
+  <br style="mso-special-character:line-break;page-break-before:always">
 
-    <!-- PAGE 3: IMPORTANT NOTE -->
-    <div>
-      <h2>IMPORTANT NOTE</h2>
-      <ol style="line-height:1.8;font-size:11pt;">
-        <li>BPCL/TPI inspection is applicable for the items.</li>
-        <li>All materials shall be strictly as per enclosed tender technical specification, BOQ description and approved documents.</li>
-        <li>Vendor shall provide the GA drawing TDS and other technical documents for approval from client as per the technical specification of the tender enclosed.</li>
-        <li><b>For High Mast:</b> 12 months onsite warranty/guarantee from date of commissioning or 18 months onsite warranty/guarantee from date of supply whichever is later for High Mast and it's all accessories against any manufacturing defect/operation/electricals accessories. However the structure shall hold good for 25 years as the standard industrial norms.</li>
-        <li><b>Vendor has to provide following documents for approval for High Mast from end client:</b>
-          <ol type="i">
-            <li>GA Drawing for High Mast</li>
-            <li>Technical Data Sheet</li>
-            <li>Foundation Drawing</li>
-            <li>Structural &amp; Foundation design calculation</li>
-            <li>QAP</li>
-            <li>TC for Accessories. (Trailing cable, SS wire, JB, Winch, structure, GI Coating and other relevant required to BPCL)</li>
-            <li>Other relevant test certificates as required to client.</li>
-            <li>Warranty Certificate</li>
-          </ol>
-        </li>
-        <li><b>Additional Pulley for communication cable of size 4 core 1.5 sq mm EPR Cable to be provided in High mast's Head frame for easy movement of Cable without damage.</b></li>
-        <li><b>CIMFR and PESO for FLP Motor to be submitted before dispatch for dispatch clearance from BPCL.</b></li>
+  <!-- ===== PAGE 3: IMPORTANT NOTE ===== -->
+  ${letterhead}
+  <h2 style="font-family:Arial;font-size:14pt;font-weight:bold;margin-bottom:15px;">IMPORTANT NOTE</h2>
+  <ol style="font-size:11pt;line-height:1.7;padding-left:25px;">
+    <li>BPCL/TPI inspection is applicable for the items.</li>
+    <li>All materials shall be strictly as per enclosed tender technical specification, BOQ description and approved documents.</li>
+    <li>Vender shall provide the GA drawing TDS and other technical documents for approval from Gail as per the technical specification of the tender enclosed.</li>
+    <li><b>For High Mast:</b> 12months onsite warranty/guarantee from date of commissioning or 18 months onsite warranty/guarantee from date of supply whichever is later for High Mast and it's all accessories against any manufacturing defect/operation/electricals accessories, However the structure shall hold good for 25 years as the standard industrialnorms.</li>
+    <li><b>Vendor has to provide following documents for approval for High Mast from end client:</b>
+      <ol type="i" style="margin-top:6px;">
+        <li>GA Drawing for High Mast</li>
+        <li>Technical Data Sheet</li>
+        <li>Foundation Drawing</li>
+        <li>Structural &amp; Foundation design calculation</li>
+        <li>QAP</li>
+        <li>TC for Accessories. (Trailing cable, SS wire, JB, Winch, structure, GI Coating and other relevant required to BPCL)</li>
+        <li>Other relevant test certificates as required to client.</li>
+        <li>Warranty Certificate</li>
       </ol>
-      <br><br>
-      <table style="width:100%;border:none;">
-        <tr style="border:none;">
-          <td style="border:none;width:40%;">Signature of the Vendor</td>
-          <td style="border:none;width:60%;text-align:right;">For Vishal Technopower Pvt Ltd</td>
-        </tr>
-      </table>
-      <div class="footer">
-        B-4, Hans Plaza, Ambedkar Road, Ghaziabad, U.P. &#8211; 201001 | E-mail: vishaltechnopower@yahoo.com<br>
-        T: +91 &#8211; 120 &#8211; 4122684 | Website: www.vishaltechnopower.com
-      </div>
-    </div>
+    </li>
+    <li><b>Additional Pulley for communication cable of size 4 core 1.5 sq mm EPR Cable to be provided in High mast's Head frame for easy movement of Cable without damage.</b></li>
+    <li><b>CIMFR and PESO for FLP Motor to be submitted before dispatch for dispatch clearance from BPCL.</b></li>
+  </ol>
+  ${footer}
 
-    <br style="mso-special-character:line-break;page-break-before:always">
+  <br style="mso-special-character:line-break;page-break-before:always">
 
-    <!-- PAGE 4 & 5: TERMS & CONDITIONS -->
-    <div>
-      <h2>Terms &amp; Conditions:</h2>
-      <ol style="line-height:1.8;font-size:11pt;">
-        <li><b>Price Basis:</b> The rates quoted are F.O.R. BPCL Chembur.</li>
-        <li><b>Inspection:</b> BPCL&#39; inspection at manufacturer&#39;s premises shall be done before the dispatch of material. It is the responsibility of the manufacturer to satisfy the BPCL technically during the inspection and in line with the approved documents &amp; technical specifications by producing necessary documents or conducting required tests. <b>Material shall be dispatched after successful inspection clearance and obtaining dispatch clearance from the end client. (Cost of TPI in Vishal&#39;s Scope)</b></li>
-        <li><b>Inspection Call:</b> Inspection call shall be raised at least 15 days prior to the date of inspection.</li>
-        <li>Inspection clearance at the factory shall not indemnify you from ensuring material quality at the site. The quality of material delivered at site will be the sole and final basis for acceptance. Factory inspection does not guarantee acceptance of the material. Only materials received at site in good and acceptable condition will be considered for acceptance. Site inspection and findings shall be firm and final and will supersede any factory inspection.</li>
-        <li>If the inspection fails and is rejected, Vendor shall be liable to pay the damages caused and shall compensate for the losses so incurred on as per actual basis to Vishal Technopower Private Limited, and get the inspection cleared in next attempt.</li>
-        <li><b>Delivery time:</b> Within 3 weeks from the date of P.O.</li>
-        <li><b>Payment Terms:</b>
-          <ol>
-            <li>Payment shall be <b>10%</b> advance of basic value</li>
-            <li>Balance <b>70%</b> shall be 30 days after successfully material received at site in good condition.</li>
-            <li>And <b>20%</b> payment shall be 90 days subject to successful erection of one high mast without any hindrance or design fault and acceptance by the end client. (Part delivery shall not be accounted for payment.)</li>
-          </ol>
-        </li>
-        <li><b>Technical Compliance:</b> Vendor to comply with all the technical specifications laid down by BPCL strictly and as per approved documents provided to the vendor by us and provide stamped signed acknowledgement of the same.</li>
-        <li><b>Technical Documents:</b> All technical documents along with QAP to be submitted within 2 days from the date of LOI for approval from the end client.</li>
-        <li><b>Dispatch:</b> Material shall only be dispatched after receiving dispatch clearance from us.</li>
-        <li><b>Deviation:</b> Any deviation either in quantity or technical specification shall have written approval, or else it will not be likely to paid or accepted.</li>
-        <li><b>Part &#8211; Delivery:</b> Until &amp; otherwise specified, material shall be supplied in 1 &amp; only 1 single lot.</li>
-        <li>Prices will be firm and final and shall not be revised at any cost till completion of order.</li>
-        <li><b>Guaranty / Warranty for item: For High Mast:</b> 12 months onsite warranty/guarantee from date of commissioning or 18 months onsite warranty/guarantee from date of supply whichever is later for High mast &amp; Octagonal Poles and it's all accessories against any manufacturing defect/operation/electricals accessories. However the structure shall hold good for 25 years as the standard industrial norms.</li>
-        <li><b>Indemnification:</b> The vendor shall indemnify and hold harmless Vishal Technopower Private Limited from any claims, damages, or losses arising due to defects in supplied materials, non-compliance with technical specifications, or legal violations related to the delivery of goods.</li>
-        <li><b>Confidentiality Clause:</b> Both parties agree to maintain the confidentiality of all proprietary and technical information exchanged during the course of this transaction and shall not disclose such information to third parties without prior written consent.</li>
-        <li><b>Termination Clause:</b> Vishal Technopower Private Limited reserves the right to terminate this Purchase Order in the event of the vendor&#39;s failure to meet the agreed delivery timeline, quality standards, or any breach of terms, with a written notice of 7 days. In such cases, any advance paid may be recovered and additional costs for alternative procurement shall be borne by the vendor.</li>
-        <li><b>Dispute Resolution:</b> Any dispute arising from this Purchase Order shall first be resolved amicably between the parties. If unresolved, the dispute shall be referred to arbitration as per the Arbitration &amp; Conciliation Act, 1996, with the venue of arbitration in Ghaziabad, Uttar Pradesh.</li>
-        <li><b>Compliance with Laws:</b> The vendor must comply with all applicable statutory and regulatory requirements, including but not limited to GST laws, labor laws, and environmental regulations in India.</li>
+  <!-- ===== PAGE 4-5: TERMS & CONDITIONS ===== -->
+  ${letterhead}
+  <h2 style="font-family:Arial;font-size:14pt;font-weight:bold;text-decoration:underline;margin-bottom:15px;">Terms &amp; Conditions:</h2>
+  <ol style="font-size:11pt;line-height:1.7;padding-left:25px;">
+    <li><b>Price Basis</b>: The rates quoted are F.O.R. BPCL Chembur.</li>
+    <li><b>Inspection</b>: BPCL' inspection at manufacturer's premises shall be done before the dispatch of material. It is the responsibility of the manufacturer to satisfy the BPCL technically during the inspection and in line with the approved documents &amp; technical specifications by producing necessary documents or conducting required tests. <b>Material shall be dispatched after successful inspection clearance and obtaining dispatch clearance from the end client. (Cost of TPI in Vishal's Scope)</b></li>
+    <li><b>Inspection Call</b>: Inspection call shall be raised at least 15 days prior to the date of inspection.</li>
+    <li>Inspection clearance at the factory shall not indemnify you from ensuring material quality at the site. The quality of material delivered at site will be the sole and final basis for acceptance. Factory inspection does not guarantee acceptance of the material. Only materials received at site in good and acceptable condition will be considered for acceptance. Site inspection and findings shall be firm and final and will supersede any factory inspection. Inspection clearance at the factory shall not indemnify you from ensuring material quality at the site. The quality of material delivered at site will be the sole and final basis for acceptance. Factory inspection does not guarantee acceptance of the material. Only materials received at site in good and acceptable condition will be considered for acceptance. Site inspection and findings shall be firm and final and will supersede any factory inspection</li>
+    <li>If the inspection fails and is rejected, Vendor shall be liable to pay the damages caused and shall compensate for the losses so incurred on as per actual basis to Vishal Technopower Private Limited, and get the inspection cleared in next attempt.</li>
+    <li><b>Delivery time</b>: Within 3 weeks from the date of P.O. (before 02th June 2026 including Successfully inspection)</li>
+    <li><b>Payment Terms:</b>
+      <ol style="margin-top:6px;">
+        <li>Payment shall be <b>10%</b> advance of basic value</li>
+        <li>Balance <b>70 %</b> shall be 30 days after successfully material received at site in good condition.</li>
+        <li>And <b>20%</b> payment shall be 90 days subject to successful erection of one high mast without any hindrance or design fault and acceptance by the end client. (Part delivery shall not be accounted for payment.)</li>
       </ol>
-      <br><br>
-      <table style="width:100%;border:none;">
-        <tr style="border:none;">
-          <td style="border:none;width:40%;">Signature of the Vendor</td>
-          <td style="border:none;width:60%;text-align:right;">For Vishal Technopower Pvt Ltd</td>
-        </tr>
-      </table>
-      <div class="footer">
-        B-4, Hans Plaza, Ambedkar Road, Ghaziabad, U.P. &#8211; 201001 | E-mail: vishaltechnopower@yahoo.com<br>
-        T: +91 &#8211; 120 &#8211; 4122684 | Website: www.vishaltechnopower.com
-      </div>
-    </div>
+    </li>
+    <li><b>Technical Compliance</b>: Vendor to comply with all the technical specifications laid down by BPCL strictly and as per approved documents provided to the vendor by us and provide stamped signed acknowledgement of the same.</li>
+    <li><b>Technical Documents</b>: All technical documents along with QAP to be submitted within 2 days from the date of LOI for approval from the end client.</li>
+    <li><b>Dispatch</b>: Material shall only be dispatched after receiving dispatch clearance from us.</li>
+    <li><b>Deviation</b>: Any deviation either in quantity or technical specification shall have written approval, or else it will not be likely to paid or accepted.</li>
+    <li><b>Part &#8211; Delivery:</b> Until &amp; otherwise specified, material shall be supplied in 1 &amp; only 1 single lot.</li>
+    <li>Prices will be firm and final and shall not be revised at any cost till completion of order.</li>
+    <li><b>Guaranty / Warranty for item: For High Mast:</b> 12months onsite warranty/guarantee from date of commissioning or 18 months onsite warranty/guarantee from date of supply whichever is later for High mast &amp; Octagonal Poles and it's all accessories against any manufacturing defect/operation/electricals accessories, However the structure shall hold good for 25 years as the standard industrial norms</li>
+    <li><b>Indemnification</b>: The vendor shall indemnify and hold harmless Vishal Technopower Private Limited from any claims, damages, or losses arising due to defects in supplied materials, non-compliance with technical specifications, or legal violations related to the delivery of goods.</li>
+    <li><b>Confidentiality Clause</b>: Both parties agree to maintain the confidentiality of all proprietary and technical information exchanged during the course of this transaction and shall not disclose such information to third parties without prior written consent.</li>
+    <li><b>Termination Clause</b>: Vishal Technopower Private Limited reserves the right to terminate this Purchase Order in the event of the vendor's failure to meet the agreed delivery timeline, quality standards, or any breach of terms, with a written notice of 7 days. In such cases, any advance paid may be recovered and additional costs for alternative procurement shall be borne by the vendor.</li>
+    <li><b>Dispute Resolution</b>: Any dispute arising from this Purchase Order shall first be resolved amicably between the parties. If unresolved, the dispute shall be referred to arbitration as per the Arbitration &amp; Conciliation Act, 1996, with the venue of arbitration in Ghaziabad, Uttar Pradesh.</li>
+    <li><b>Compliance with Laws</b>: The vendor must comply with all applicable statutory and regulatory requirements, including but not limited to GST laws, labor laws, and environmental regulations in India.</li>
+  </ol>
+  ${footer}
 
-    </body>
-    </html>
-  `;
+  </body></html>`;
 
-  const blob = new Blob(['\ufeff', wordHTML], {
-    type: 'application/msword'
-  });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `PO_${d.poNo.replace(/\//g,'_')}_${d.poDate.replace(/\./g,'')}.doc`;
+  const blob=new Blob(['\ufeff',wordHTML],{type:'application/msword'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;
+  a.download=`PO_${d.poNo.replace(/\//g,'_')}_${d.poDate.replace(/\./g,'')}.doc`;
   document.body.appendChild(a);
   a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
 }
 
-// Number to Words
-function numberToWords(num) {
-  if (num === 0) return 'Zero';
-  const ones = ['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
-  const tens = ['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
-  
-  function convertHundreds(n) {
-    if (n >= 100) return ones[Math.floor(n/100)] + ' Hundred ' + convertHundreds(n%100);
-    if (n >= 20) return tens[Math.floor(n/10)] + (n%10 ? ' ' + ones[n%10] : '');
+function n2w(num){
+  if(num===0) return 'Zero';
+  const ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine','Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+  const tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+  function ch(n){
+    if(n>=100) return ones[Math.floor(n/100)]+' Hundred '+(n%100?ch(n%100):'');
+    if(n>=20) return tens[Math.floor(n/10)]+(n%10?' '+ones[n%10]:'');
     return ones[n];
   }
-  
-  let result = '';
-  if (num >= 10000000) { result += convertHundreds(Math.floor(num/10000000)) + ' Crore '; num %= 10000000; }
-  if (num >= 100000) { result += convertHundreds(Math.floor(num/100000)) + ' Lakh '; num %= 100000; }
-  if (num >= 1000) { result += convertHundreds(Math.floor(num/1000)) + ' Thousand '; num %= 1000; }
-  if (num > 0) result += convertHundreds(num);
-  return result.trim();
+  let r='',n2=num;
+  if(n2>=10000000){r+=ch(Math.floor(n2/10000000))+' Crore ';n2%=10000000;}
+  if(n2>=100000){r+=ch(Math.floor(n2/100000))+' Lakh ';n2%=100000;}
+  if(n2>=1000){r+=ch(Math.floor(n2/1000))+' Thousand ';n2%=1000;}
+  if(n2>0) r+=ch(n2);
+  return r.trim();
 }
 
-// Initialize
 calcTotal();
 </script>
 </body>
