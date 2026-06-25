@@ -1,735 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VaultCore — Secure Banking</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
-
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-  :root {
-    --bg-deep: #0a0e17;
-    --card-bg: rgba(16, 20, 30, 0.75);
-    --accent: #c9a84c;
-    --accent-glow: rgba(201, 168, 76, 0.35);
-    --text-primary: #e8e6e3;
-    --text-muted: #8b8d94;
-    --border: rgba(255, 255, 255, 0.06);
-    --input-bg: rgba(255, 255, 255, 0.03);
-    --danger: #e0556a;
-    --success: #4caf93;
-  }
-
-  body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: var(--bg-deep);
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-    position: relative;
-  }
-
-  /* ---------- ANIMATED GRID BACKGROUND ---------- */
-  .bg-grid {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-  }
-  .bg-grid canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  /* ---------- FLOATING ORBS ---------- */
-  .orb {
-    position: fixed;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.18;
-    pointer-events: none;
-    z-index: 0;
-    animation: orbFloat 18s ease-in-out infinite;
-  }
-  .orb:nth-child(1) {
-    width: 420px; height: 420px;
-    background: radial-gradient(circle, var(--accent), transparent 70%);
-    top: -120px; right: -100px;
-    animation-delay: 0s;
-  }
-  .orb:nth-child(2) {
-    width: 340px; height: 340px;
-    background: radial-gradient(circle, #4a6cf7, transparent 70%);
-    bottom: -100px; left: -80px;
-    animation-delay: -6s;
-    animation-duration: 20s;
-  }
-  .orb:nth-child(3) {
-    width: 260px; height: 260px;
-    background: radial-gradient(circle, #7c5ce7, transparent 70%);
-    top: 45%; left: 55%;
-    animation-delay: -12s;
-    animation-duration: 16s;
-  }
-
-  @keyframes orbFloat {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    25% { transform: translate(40px, -50px) scale(1.1); }
-    50% { transform: translate(-30px, -20px) scale(0.95); }
-    75% { transform: translate(-50px, 40px) scale(1.05); }
-  }
-
-  /* ---------- MAIN CONTAINER ---------- */
-  .login-wrapper {
-    position: relative;
-    z-index: 1;
-    width: 100%;
-    max-width: 440px;
-    padding: 24px;
-  }
-
-  /* ---------- BRAND ---------- */
-  .brand {
-    text-align: center;
-    margin-bottom: 8px;
-  }
-  .brand-icon {
-    width: 52px;
-    height: 52px;
-    margin: 0 auto 14px;
-    background: linear-gradient(135deg, var(--accent), #e0c56e);
-    border-radius: 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 8px 32px var(--accent-glow);
-    animation: brandPulse 3s ease-in-out infinite;
-  }
-  @keyframes brandPulse {
-    0%, 100% { box-shadow: 0 8px 32px var(--accent-glow); }
-    50% { box-shadow: 0 12px 44px rgba(201, 168, 76, 0.55); }
-  }
-  .brand-icon svg { width: 26px; height: 26px; }
-  .brand-name {
-    font-size: 1.65rem;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: -0.02em;
-  }
-  .brand-name span { color: var(--accent); }
-  .brand-sub {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-top: 2px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-  }
-
-  /* ---------- CARD ---------- */
-  .card {
-    background: var(--card-bg);
-    backdrop-filter: blur(24px);
-    -webkit-backdrop-filter: blur(24px);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    padding: 40px 36px 36px;
-    box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45), inset 0 1px 0 rgba(255,255,255,0.04);
-    animation: cardEnter 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both;
-  }
-  @keyframes cardEnter {
-    from { opacity: 0; transform: translateY(30px) scale(0.96); }
-    to { opacity: 1; transform: translateY(0) scale(1); }
-  }
-
-  /* ---------- TABS ---------- */
-  .tabs {
-    display: flex;
-    gap: 0;
-    margin-bottom: 32px;
-    position: relative;
-    background: var(--input-bg);
-    border-radius: 10px;
-    padding: 4px;
-  }
-  .tab-btn {
-    flex: 1;
-    padding: 10px 0;
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    background: transparent;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    position: relative;
-    z-index: 1;
-    transition: color 0.3s;
-    letter-spacing: 0.01em;
-  }
-  .tab-btn.active {
-    color: #fff;
-    background: rgba(255,255,255,0.06);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  .tab-slider {
-    position: absolute;
-    top: 4px;
-    left: 4px;
-    width: calc(50% - 4px);
-    height: calc(100% - 8px);
-    background: rgba(255,255,255,0.06);
-    border-radius: 8px;
-    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-    pointer-events: none;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
-  }
-  .tabs.signup-active .tab-slider { transform: translateX(100%); }
-
-  /* ---------- FORM ---------- */
-  .form-panel { display: none; animation: fadeSlideIn 0.45s ease both; }
-  .form-panel.active { display: block; }
-  @keyframes fadeSlideIn {
-    from { opacity: 0; transform: translateX(-8px); }
-    to { opacity: 1; transform: translateX(0); }
-  }
-
-  .field { margin-bottom: 20px; position: relative; }
-  .field-label {
-    display: block;
-    font-size: 0.78rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    margin-bottom: 6px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .input-group {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  .input-group input {
-    width: 100%;
-    padding: 13px 14px 13px 42px;
-    background: var(--input-bg);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    font-size: 0.95rem;
-    color: var(--text-primary);
-    font-family: inherit;
-    outline: none;
-    transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
-    letter-spacing: 0.01em;
-  }
-  .input-group input::placeholder { color: #5a5d66; }
-  .input-group input:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px var(--accent-glow);
-    background: rgba(255,255,255,0.05);
-  }
-  .input-group .input-icon {
-    position: absolute;
-    left: 14px;
-    width: 18px;
-    height: 18px;
-    color: var(--text-muted);
-    pointer-events: none;
-    transition: color 0.3s;
-  }
-  .input-group input:focus ~ .input-icon,
-  .input-group input:focus + .input-icon { color: var(--accent); }
-
-  /* toggle password */
-  .toggle-pw {
-    position: absolute;
-    right: 12px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--text-muted);
-    padding: 4px;
-    display: flex;
-    transition: color 0.3s;
-  }
-  .toggle-pw:hover { color: var(--accent); }
-
-  /* ---------- OPTIONS ROW ---------- */
-  .options-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 24px;
-    font-size: 0.82rem;
-  }
-  .remember {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    color: var(--text-muted);
-    cursor: pointer;
-    user-select: none;
-  }
-  .remember input[type="checkbox"] {
-    appearance: none;
-    width: 17px; height: 17px;
-    border: 1.5px solid var(--border);
-    border-radius: 4px;
-    background: var(--input-bg);
-    cursor: pointer;
-    position: relative;
-    transition: all 0.25s;
-  }
-  .remember input[type="checkbox"]:checked {
-    background: var(--accent);
-    border-color: var(--accent);
-  }
-  .remember input[type="checkbox"]:checked::after {
-    content: '';
-    position: absolute;
-    left: 5px; top: 2px;
-    width: 5px; height: 9px;
-    border: solid #0a0e17;
-    border-width: 0 2px 2px 0;
-    transform: rotate(45deg);
-  }
-  .forgot-link {
-    color: var(--accent);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s;
-  }
-  .forgot-link:hover { color: #e0c56e; text-decoration: underline; }
-
-  /* ---------- BUTTON ---------- */
-  .btn-submit {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #c9a84c, #b8922e);
-    border: none;
-    border-radius: 10px;
-    color: #0a0e17;
-    font-size: 0.95rem;
-    font-weight: 700;
-    cursor: pointer;
-    position: relative;
-    overflow: hidden;
-    transition: transform 0.2s, box-shadow 0.3s;
-    letter-spacing: 0.02em;
-    box-shadow: 0 4px 20px var(--accent-glow);
-  }
-  .btn-submit:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 32px rgba(201, 168, 76, 0.5);
-  }
-  .btn-submit:active { transform: scale(0.97); }
-  .btn-submit.loading {
-    pointer-events: none;
-    color: transparent;
-  }
-  .btn-submit.loading::after {
-    content: '';
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .btn-spinner {
-    display: none;
-    position: absolute;
-    inset: 0;
-    align-items: center;
-    justify-content: center;
-  }
-  .btn-submit.loading .btn-spinner { display: flex; }
-  .btn-submit.loading .btn-text { opacity: 0; }
-  .spinner-ring {
-    width: 22px; height: 22px;
-    border: 2.5px solid rgba(10,14,23,0.3);
-    border-top-color: #0a0e17;
-    border-radius: 50%;
-    animation: spin 0.7s linear infinite;
-  }
-  @keyframes spin { to { transform: rotate(360deg); } }
-
-  /* ---------- DIVIDER ---------- */
-  .divider {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin: 24px 0;
-    color: var(--text-muted);
-    font-size: 0.75rem;
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-  }
-  .divider::before, .divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
-  /* ---------- BIOMETRIC ---------- */
-  .bio-btn {
-    width: 100%;
-    padding: 12px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    color: var(--text-primary);
-    font-size: 0.88rem;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    transition: background 0.3s, border-color 0.3s;
-  }
-  .bio-btn:hover {
-    background: rgba(255,255,255,0.03);
-    border-color: rgba(255,255,255,0.15);
-  }
-  .bio-btn svg { width: 20px; height: 20px; color: var(--accent); }
-
-  /* fingerprint scan animation */
-  .fingerprint-scan {
-    position: relative;
-    width: 28px; height: 28px;
-  }
-  .fingerprint-scan .scan-line {
-    position: absolute;
-    left: 0; right: 0;
-    height: 2px;
-    background: var(--accent);
-    border-radius: 1px;
-    animation: scanDown 2s ease-in-out infinite;
-    box-shadow: 0 0 8px var(--accent-glow);
-  }
-  @keyframes scanDown {
-    0% { top: 0; opacity: 0; }
-    20% { opacity: 1; }
-    50% { top: 100%; opacity: 1; }
-    70% { opacity: 0; }
-    100% { top: 100%; opacity: 0; }
-  }
-
-  /* ---------- TOAST ---------- */
-  .toast {
-    position: fixed;
-    top: 28px;
-    left: 50%;
-    transform: translateX(-50%) translateY(-120px);
-    background: #1a1e2a;
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 14px 24px;
-    color: var(--text-primary);
-    font-size: 0.88rem;
-    font-weight: 500;
-    z-index: 100;
-    backdrop-filter: blur(16px);
-    box-shadow: 0 12px 40px rgba(0,0,0,0.5);
-    transition: transform 0.45s cubic-bezier(0.22, 0.61, 0.36, 1);
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  .toast.success { border-left: 3px solid var(--success); }
-  .toast.error { border-left: 3px solid var(--danger); }
-  .toast-icon { flex-shrink: 0; }
-
-  /* ---------- RESPONSIVE ---------- */
-  @media (max-width: 480px) {
-    .login-wrapper { padding: 16px; }
-    .card { padding: 28px 22px 24px; }
-    .brand-name { font-size: 1.4rem; }
-  }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cash Flow Dashboard</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
 
-<!-- Ambient floating orbs -->
-<div class="orb"></div>
-<div class="orb"></div>
-<div class="orb"></div>
-
-<!-- Animated grid -->
-<div class="bg-grid"><canvas id="gridCanvas"></canvas></div>
-
-<!-- Main Wrapper -->
-<div class="login-wrapper">
-  <!-- Brand -->
-  <div class="brand">
-    <div class="brand-icon">
-      <svg viewBox="0 0 24 24" fill="none" stroke="#0a0e17" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/>
-        <path d="M9 12l2 2 4-4"/>
-      </svg>
+  <!-- ============ TOP BAR ============ -->
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">₹</div>
+      <div>
+        <h1>Cash Flow Dashboard</h1>
+        <p class="sub" id="updatedAt">Loading…</p>
+      </div>
     </div>
-    <div class="brand-name">Vault<span>Core</span></div>
-    <div class="brand-sub">Private Banking</div>
-  </div>
-
-  <!-- Card -->
-  <div class="card">
-    <!-- Tabs -->
-    <div class="tabs" id="tabs">
-      <div class="tab-slider"></div>
-      <button class="tab-btn active" data-tab="login">Sign In</button>
-      <button class="tab-btn" data-tab="signup">Sign Up</button>
-    </div>
-
-    <!-- LOGIN FORM -->
-    <form class="form-panel active" id="loginForm" novalidate>
-      <div class="field">
-        <label class="field-label">Account ID or Email</label>
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0110 0v4"/>
-          </svg>
-          <input type="text" id="loginUser" placeholder="Enter your account ID" autocomplete="username" required>
-        </div>
-      </div>
-      <div class="field">
-        <label class="field-label">Password</label>
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0110 0v4"/>
-          </svg>
-          <input type="password" id="loginPass" placeholder="••••••••" autocomplete="current-password" required>
-          <button type="button" class="toggle-pw" aria-label="Toggle password visibility">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <div class="options-row">
-        <label class="remember">
-          <input type="checkbox" id="rememberMe">
-          Remember me
-        </label>
-        <a href="#" class="forgot-link">Forgot password?</a>
-      </div>
-      <button type="submit" class="btn-submit" id="loginBtn">
-        <span class="btn-text">Sign In</span>
-        <span class="btn-spinner"><span class="spinner-ring"></span></span>
-      </button>
-    </form>
-
-    <!-- SIGNUP FORM -->
-    <form class="form-panel" id="signupForm" novalidate>
-      <div class="field">
-        <label class="field-label">Full Name</label>
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-          <input type="text" id="signupName" placeholder="John Doe" autocomplete="name" required>
-        </div>
-      </div>
-      <div class="field">
-        <label class="field-label">Email</label>
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-            <polyline points="22,6 12,13 2,6"/>
-          </svg>
-          <input type="email" id="signupEmail" placeholder="you@example.com" autocomplete="email" required>
-        </div>
-      </div>
-      <div class="field">
-        <label class="field-label">Password</label>
-        <div class="input-group">
-          <svg class="input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0110 0v4"/>
-          </svg>
-          <input type="password" id="signupPass" placeholder="Min. 8 characters" autocomplete="new-password" required minlength="8">
-          <button type="button" class="toggle-pw" aria-label="Toggle password visibility">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-              <circle cx="12" cy="12" r="3"/>
-            </svg>
-          </button>
-        </div>
-      </div>
-      <button type="submit" class="btn-submit" id="signupBtn">
-        <span class="btn-text">Create Account</span>
-        <span class="btn-spinner"><span class="spinner-ring"></span></span>
-      </button>
-    </form>
-
-    <!-- Divider -->
-    <div class="divider">or</div>
-
-    <!-- Biometric -->
-    <button class="bio-btn" id="bioBtn">
-      <span class="fingerprint-scan">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
-          <path d="M5 5.5A7 7 0 0119 5.5M7.5 7.5A3.5 3.5 0 0116.5 7.5M10 9.5A1 1 0 0114 9.5"/>
-          <path d="M12 11v7"/>
-          <path d="M8 13v3"/>
-          <path d="M16 13v3"/>
-          <path d="M4 17v-2.5M20 17v-2.5"/>
-        </svg>
-        <span class="scan-line"></span>
-      </span>
-      Sign in with biometrics
+    <button class="refresh-btn" id="refreshBtn">
+      <span class="spin-icon">⟳</span> Refresh data
     </button>
+  </header>
+
+  <!-- ============ CONTROLS ============ -->
+  <section class="controls">
+    <div class="seg" id="companySeg">
+      <button class="seg-btn active" data-company="BOTH">Both</button>
+      <button class="seg-btn" data-company="VE">Vishal Electricals</button>
+      <button class="seg-btn" data-company="VTPL">Vishal Technopower</button>
+    </div>
+
+    <div class="seg" id="periodSeg">
+      <button class="seg-btn active" data-period="monthly">Monthly</button>
+      <button class="seg-btn" data-period="weekly">Weekly</button>
+    </div>
+
+    <label class="field">
+      <span>Month</span>
+      <select id="monthSelect"></select>
+    </label>
+
+    <label class="field" id="weekField" style="display:none">
+      <span>Week</span>
+      <select id="weekSelect">
+        <option value="ALL">All weeks</option>
+        <option value="1">Week 1 (1–7)</option>
+        <option value="2">Week 2 (8–14)</option>
+        <option value="3">Week 3 (15–21)</option>
+        <option value="4">Week 4 (22–end)</option>
+      </select>
+    </label>
+
+    <label class="toggle" id="interToggle">
+      <input type="checkbox" id="interCheck" />
+      <span>Include inter-company transfers</span>
+    </label>
+  </section>
+
+  <!-- ============ MAIN ============ -->
+  <main id="main">
+    <div class="loading" id="loadingBox">
+      <div class="loader"></div>
+      <p>Fetching your Google Sheet…</p>
+    </div>
+
+    <div id="errorBox" class="errorbox" style="display:none"></div>
+
+    <div id="content" style="display:none"></div>
+  </main>
+
+  <!-- ============ DETAIL MODAL ============ -->
+  <div class="modal-overlay" id="modalOverlay" style="display:none">
+    <div class="modal">
+      <div class="modal-head">
+        <h3 id="modalTitle">Details</h3>
+        <button class="close-btn" id="modalClose">✕</button>
+      </div>
+      <div class="modal-body" id="modalBody"></div>
+    </div>
   </div>
-</div>
 
-<!-- Toast -->
-<div class="toast" id="toast">
-  <span class="toast-icon" id="toastIcon"></span>
-  <span id="toastMsg"></span>
-</div>
+  <script src="app.js"></script>
 
-<script>
-  // ── ANIMATED GRID BACKGROUND ──
-  (function Grid() {
-    const canvas = document.getElementById('gridCanvas');
-    const ctx = canvas.getContext('2d');
-    let w, h, cols, rows, offsetY = 0;
+  <!-- ================================================================= -->
+  <!--  PAGE AGENT — AI assistant (natural language se dashboard chalao)  -->
+  <!--  Library: https://github.com/alibaba/page-agent  (MIT License)     -->
+  <!-- ================================================================= -->
+  <script>
+  /* -------------------------------------------------------------------
+     CONFIG — sirf yahan badalna padega
+     -------------------------------------------------------------------
+       mode: 'demo'   -> Alibaba ka FREE testing LLM. Koi API key nahi.
+                         SIRF test / evaluation ke liye.
+                         ⚠️ Screen pe jo numbers dikh rahe hain wo LLM ko
+                            bheje jaate hain — asli daily use ke liye apna
+                            proxy laga ke 'custom' mode use karna.
 
-    function resize() {
-      w = canvas.width = window.innerWidth;
-      h = canvas.height = window.innerHeight;
-      cols = Math.ceil(w / 50);
-      rows = Math.ceil(h / 50);
+       mode: 'custom' -> Apna model (Qwen/OpenAI/etc.).
+                         apiKey browser mein MAT daalo. baseURL ko apne
+                         PROXY (Render / Apps Script) pe point karo jo key
+                         server-side rakhe. Tab key public source mein
+                         expose nahi hogi.
+     ------------------------------------------------------------------- */
+  const PA_CONFIG = {
+    mode: 'demo',                       // 'demo'  ya  'custom'
+
+    // FREE testing LLM — test ke liye aise hi rehne do
+    demo: {
+      model:   'qwen3.5-plus',
+      baseURL: 'https://page-ag-testing-ohftxirgbn.cn-shanghai.fcapp.run',
+      apiKey:  'NA',
+    },
+
+    // Production — apna proxy URL daalo, key SERVER pe rakho
+    custom: {
+      model:   'qwen3.5-plus',
+      baseURL: 'https://YOUR-PROXY.onrender.com/v1',  // <- apna proxy (… ke aage /chat/completions lagega)
+      apiKey:  '',                                    // <- KHAALI rakho! key proxy ke andar
+    },
+
+    language: 'en-US',                  // 'en-US' ya 'zh-CN'
+  };
+
+  /* Agent ko is dashboard ke controls samjha do — taaki sahi navigate kare */
+  const DASHBOARD_INSTRUCTIONS = `
+You are an assistant embedded inside the "Cash Flow Dashboard" of
+Vishal Electricals (VE) and Vishal Technopower (VTPL).
+
+Operate this page by clicking and selecting — do NOT compute numbers yourself,
+just set the right filters and then read the figures already shown on screen.
+
+Controls on this page:
+- Company filter (top buttons): "Both", "Vishal Electricals" (= VE),
+  "Vishal Technopower" (= VTPL).
+- Period filter: "Monthly" / "Weekly" buttons. Choosing Weekly reveals a
+  "Week" dropdown — Week 1 = days 1–7, Week 2 = 8–14, Week 3 = 15–21,
+  Week 4 = 22–end.
+- "Month" dropdown selects the month.
+- "Include inter-company transfers" checkbox toggles VE↔VTPL transfers.
+- "Refresh data" button reloads from the Google Sheet.
+- Clicking a table row opens an entry-wise detail popup; close it with ✕.
+
+All amounts are INR (shown in Cr / Lakh). Data starts 1 April 2026 (FY).
+Reply briefly in the user's language.
+`.trim();
+
+  /* -------------------------------------------------------------------
+     LOADER — script ko 3 CDN se try karta hai. jsDelivr block/slow ho
+     (India ke kuch network pe hota hai) to apne aap unpkg / npmmirror
+     try karega. Agar teeno fail ho to console mein clear message aayega.
+     ------------------------------------------------------------------- */
+  (function loadPageAgent(){
+    const VER    = '1.10.0';
+    const FILE   = 'dist/iife/page-agent.demo.js?autoInit=false';
+    const isFile = location.protocol === 'file:';
+
+    // file:// pe query string file-naam ka hissa ban jaata hai → locally query mat lagao.
+    // Isliye http server (localhost / GitHub Pages) se kholna sabse saaf rehta hai.
+    const LOCAL = isFile ? 'page-agent.demo.js' : 'page-agent.demo.js?autoInit=false';
+
+    const CDNS = [
+      LOCAL,                                                             // 1) local copy pehle
+      'https://cdn.jsdelivr.net/npm/page-agent@' + VER + '/' + FILE,     // 2) fallback CDNs
+      'https://unpkg.com/page-agent@' + VER + '/' + FILE,
+      'https://registry.npmmirror.com/page-agent/' + VER + '/files/' + FILE,
+    ];
+
+    function init(){
+      // agar bundle ne khud (auto-init se) agent bana diya ho to use hata do
+      try { if (window.pageAgent && window.pageAgent.dispose) window.pageAgent.dispose(); } catch(e){}
+      const c = PA_CONFIG[PA_CONFIG.mode];
+      window.pageAgent = new window.PageAgent({
+        model:    c.model,
+        baseURL:  c.baseURL,
+        apiKey:   c.apiKey,
+        language: PA_CONFIG.language,
+        instructions: { system: DASHBOARD_INSTRUCTIONS },
+      });
+      window.pageAgent.panel.show();
+      console.log('[PageAgent] ready ✓  (mode: ' + PA_CONFIG.mode + ')');
     }
-    resize();
-    window.addEventListener('resize', resize);
 
-    function draw() {
-      ctx.clearRect(0, 0, w, h);
-      ctx.strokeStyle = 'rgba(255,255,255,0.03)';
-      ctx.lineWidth = 0.5;
-      offsetY = (offsetY + 0.3) % 50;
-
-      for (let i = 0; i <= cols; i++) {
-        const x = i * 50;
-        ctx.beginPath();
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, h);
-        ctx.stroke();
+    function onReady(src){
+      if (!window.PageAgent) return false;       // script load to hua par class nahi mili
+      if (src.indexOf('autoInit=false') !== -1) {
+        init();                                  // http: manual init (en-US + instructions)
+      } else {
+        // file://: bundle khud auto-init karega (default), thoda ruk ke apni config se replace
+        setTimeout(init, 100);
       }
-      for (let j = 0; j <= rows; j++) {
-        const y = (j * 50 + offsetY) % (h + 50) - 25;
-        ctx.beginPath();
-        ctx.moveTo(0, y);
-        ctx.lineTo(w, y);
-        ctx.stroke();
-      }
-      requestAnimationFrame(draw);
+      return true;
     }
-    draw();
+
+    function tryCdn(i){
+      if (window.PageAgent) return;              // pehle hi load ho chuka
+      if (i >= CDNS.length){
+        console.error('[PageAgent] Load nahi hua. Sabse saaf: is folder mein ' +
+          '`python -m http.server` chala ke http://localhost:8000 kholo (file:// se nahi).');
+        return;
+      }
+      const s = document.createElement('script');
+      s.src = CDNS[i];
+      s.onload  = function(){ if (!onReady(this.src)) tryCdn(i + 1); };
+      s.onerror = function(){ console.warn('[PageAgent] fail:', CDNS[i], '→ agla try…'); tryCdn(i + 1); };
+      document.head.appendChild(s);
+    }
+
+    tryCdn(0);
   })();
+  </script>
 
-  // ── TABS ──
-  const tabsEl = document.getElementById('tabs');
-  const tabBtns = tabsEl.querySelectorAll('.tab-btn');
-  const panels = document.querySelectorAll('.form-panel');
-
-  tabBtns.forEach(btn => {
-    btn.addEventListener('click', () => {
-      const tab = btn.dataset.tab;
-      tabBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      tabsEl.classList.toggle('signup-active', tab === 'signup');
-      panels.forEach(p => p.classList.remove('active'));
-      document.getElementById(tab === 'login' ? 'loginForm' : 'signupForm').classList.add('active');
-    });
-  });
-
-  // ── TOGGLE PASSWORD ──
-  document.querySelectorAll('.toggle-pw').forEach(btn => {
-    btn.addEventListener('click', () => {
-      const input = btn.parentElement.querySelector('input');
-      const isPassword = input.type === 'password';
-      input.type = isPassword ? 'text' : 'password';
-      btn.querySelector('svg').innerHTML = isPassword
-        ? '<path d="M17.94 17.94A10.07 10.07 0 0112 20c-7 0-11-8-11-8a18.45 18.45 0 015.06-5.94M9.9 4.24A9.12 9.12 0 0112 4c7 0 11 8 11 8a18.5 18.5 0 01-2.16 3.19m-6.72-1.07a3 3 0 11-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/>'
-        : '<path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/>';
-    });
-  });
-
-  // ── TOAST ──
-  function showToast(msg, type = 'success') {
-    const toast = document.getElementById('toast');
-    const icon = document.getElementById('toastIcon');
-    const msgEl = document.getElementById('toastMsg');
-    toast.classList.remove('show', 'success', 'error');
-    void toast.offsetWidth;
-    toast.classList.add(type, 'show');
-    msgEl.textContent = msg;
-    icon.innerHTML = type === 'success'
-      ? '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#4caf93" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>'
-      : '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#e0556a" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>';
-    clearTimeout(toast._timeout);
-    toast._timeout = setTimeout(() => toast.classList.remove('show'), 3500);
-  }
-
-  // ── FORM SUBMISSION (simulated) ──
-  function simulateSubmit(btnId, formId) {
-    const btn = document.getElementById(btnId);
-    const form = document.getElementById(formId);
-    form.addEventListener('submit', e => {
-      e.preventDefault();
-      if (btn.classList.contains('loading')) return;
-      btn.classList.add('loading');
-
-      setTimeout(() => {
-        btn.classList.remove('loading');
-        const isLogin = formId === 'loginForm';
-        const user = isLogin
-          ? document.getElementById('loginUser').value.trim()
-          : document.getElementById('signupName').value.trim();
-        if (!user) {
-          showToast('Please fill in all required fields.', 'error');
-          return;
-        }
-        showToast(isLogin ? 'Welcome back! Authenticating…' : 'Account created successfully!', 'success');
-        form.reset();
-      }, 1800);
-    });
-  }
-  simulateSubmit('loginBtn', 'loginForm');
-  simulateSubmit('signupBtn', 'signupForm');
-
-  // ── BIOMETRIC SIMULATION ──
-  document.getElementById('bioBtn').addEventListener('click', () => {
-    const btn = document.getElementById('bioBtn');
-    const orig = btn.innerHTML;
-    btn.innerHTML = '<span class="spinner-ring" style="width:20px;height:20px;border-color:rgba(255,255,255,0.2);border-top-color:#c9a84c;"></span> Scanning…';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.innerHTML = orig;
-      btn.disabled = false;
-      showToast('Biometric verified. Welcome!', 'success');
-    }, 2200);
-  });
-
-  // ── KEYBOARD: Enter to submit active form ──
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && e.target.tagName === 'INPUT') {
-      const activePanel = document.querySelector('.form-panel.active');
-      if (activePanel) activePanel.requestSubmit();
-    }
-  });
-</script>
 </body>
 </html>
