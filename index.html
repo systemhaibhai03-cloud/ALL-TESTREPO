@@ -1,214 +1,390 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cash Flow Dashboard</title>
-  <link rel="stylesheet" href="styles.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GlassEffect Login Form</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Poppins', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Autumn Sky Gradient Background ── */
+  .bg {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      #f7a44c 0%,
+      #f0873a 20%,
+      #e8692e 40%,
+      #f09040 60%,
+      #f4b85c 80%,
+      #f8d98a 100%
+    );
+    z-index: 0;
+  }
+
+  /* ── Sun ── */
+  .sun {
+    position: absolute;
+    top: 12%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 120px;
+    height: 120px;
+    background: radial-gradient(circle, #fff8e1 0%, #ffe082 40%, transparent 70%);
+    border-radius: 50%;
+    z-index: 1;
+    filter: blur(2px);
+  }
+
+  /* ── Clouds ── */
+  .cloud {
+    position: absolute;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50px;
+    z-index: 2;
+  }
+  .cloud::before, .cloud::after {
+    content: '';
+    position: absolute;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+  }
+  .cloud-1 {
+    width: 120px; height: 36px;
+    top: 10%; left: 15%;
+  }
+  .cloud-1::before { width: 50px; height: 50px; top: -25px; left: 20px; }
+  .cloud-1::after { width: 40px; height: 40px; top: -18px; left: 55px; }
+
+  .cloud-2 {
+    width: 100px; height: 30px;
+    top: 15%; right: 18%;
+  }
+  .cloud-2::before { width: 44px; height: 44px; top: -22px; left: 16px; }
+  .cloud-2::after { width: 34px; height: 34px; top: -14px; left: 48px; }
+
+  /* ── Ground ── */
+  .ground {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 28%;
+    background: linear-gradient(180deg, #c07830 0%, #a86428 40%, #8b5020 100%);
+    z-index: 3;
+    border-radius: 60% 60% 0 0 / 30px 30px 0 0;
+  }
+  .ground::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    background: linear-gradient(180deg, #d09040, #c07830);
+    border-radius: 60% 60% 0 0 / 20px 20px 0 0;
+  }
+
+  /* ── Trees ── */
+  .tree {
+    position: absolute;
+    z-index: 4;
+  }
+  .trunk {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #5a3a1e;
+    border-radius: 8px 8px 0 0;
+  }
+  .branch {
+    position: absolute;
+    background: #5a3a1e;
+    border-radius: 4px;
+    transform-origin: bottom left;
+  }
+  .canopy {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  /* Tree Left */
+  .tree-left {
+    left: -2%;
+    bottom: 24%;
+    width: 200px;
+    height: 400px;
+  }
+  .tree-left .trunk { width: 28px; height: 280px; }
+  .tree-left .branch-1 { width: 80px; height: 10px; bottom: 200px; left: 64%; transform: rotate(-30deg); }
+  .tree-left .branch-2 { width: 70px; height: 9px; bottom: 260px; left: 20%; transform: rotate(25deg); }
+  .tree-left .canopy-1 { width: 160px; height: 160px; top: 0; left: 20px; background: radial-gradient(ellipse, #d04020 0%, #b83018 50%, #8b2010 100%); }
+  .tree-left .canopy-2 { width: 120px; height: 120px; top: 40px; left: -10px; background: radial-gradient(ellipse, #e06030 0%, #c04828 60%, #983818 100%); }
+  .tree-left .canopy-3 { width: 100px; height: 90px; top: 60px; left: 90px; background: radial-gradient(ellipse, #c83820 0%, #a02818 70%); }
+
+  /* Tree Right */
+  .tree-right {
+    right: -2%;
+    bottom: 24%;
+    width: 200px;
+    height: 380px;
+  }
+  .tree-right .trunk { width: 26px; height: 260px; }
+  .tree-right .branch-1 { width: 75px; height: 9px; bottom: 180px; right: 58%; transform: rotate(30deg); transform-origin: bottom right; }
+  .tree-right .branch-2 { width: 65px; height: 8px; bottom: 240px; left: 55%; transform: rotate(-28deg); }
+  .tree-right .canopy-1 { width: 150px; height: 150px; top: 0; left: 25px; background: radial-gradient(ellipse, #d04820 0%, #b83418 50%, #902810 100%); }
+  .tree-right .canopy-2 { width: 110px; height: 110px; top: 30px; right: -5px; background: radial-gradient(ellipse, #e85830 0%, #c84020 60%); }
+  .tree-right .canopy-3 { width: 90px; height: 85px; top: 50px; left: 10px; background: radial-gradient(ellipse, #cc3a20 0%, #a82818 70%); }
+
+  /* ── Falling Leaves ── */
+  .leaf {
+    position: absolute;
+    z-index: 5;
+    opacity: 0.85;
+    pointer-events: none;
+  }
+  .leaf svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @keyframes fall {
+    0%   { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+    10%  { opacity: 0.9; }
+    90%  { opacity: 0.8; }
+    100% { transform: translateY(105vh) rotate(720deg) translateX(80px); opacity: 0; }
+  }
+
+  @keyframes fall-alt {
+    0%   { transform: translateY(-10vh) rotate(0deg) translateX(0); opacity: 0; }
+    10%  { opacity: 0.85; }
+    90%  { opacity: 0.7; }
+    100% { transform: translateY(105vh) rotate(-540deg) translateX(-60px); opacity: 0; }
+  }
+
+  .leaf-1  { left: 10%; width: 22px; height: 22px; animation: fall 7s 0s infinite ease-in; }
+  .leaf-2  { left: 25%; width: 18px; height: 18px; animation: fall-alt 9s 1s infinite ease-in; }
+  .leaf-3  { left: 40%; width: 20px; height: 20px; animation: fall 8s 2.5s infinite ease-in; }
+  .leaf-4  { left: 55%; width: 16px; height: 16px; animation: fall-alt 10s 0.5s infinite ease-in; }
+  .leaf-5  { left: 70%; width: 24px; height: 24px; animation: fall 6.5s 3s infinite ease-in; }
+  .leaf-6  { left: 85%; width: 19px; height: 19px; animation: fall-alt 8.5s 1.5s infinite ease-in; }
+  .leaf-7  { left: 18%; width: 15px; height: 15px; animation: fall 11s 4s infinite ease-in; }
+  .leaf-8  { left: 62%; width: 21px; height: 21px; animation: fall-alt 7.5s 2s infinite ease-in; }
+  .leaf-9  { left: 48%; width: 17px; height: 17px; animation: fall 9.5s 3.5s infinite ease-in; }
+  .leaf-10 { left: 78%; width: 20px; height: 20px; animation: fall-alt 8s 0.8s infinite ease-in; }
+
+  /* ── Glass Login Card ── */
+  .login-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 10;
+    width: 340px;
+  }
+
+  .login-card {
+    background: rgba(255, 255, 255, 0.18);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 16px;
+    padding: 40px 32px;
+    box-shadow:
+      0 8px 32px rgba(0, 0, 0, 0.15),
+      inset 0 1px 0 rgba(255, 255, 255, 0.3);
+  }
+
+  .login-card h2 {
+    text-align: center;
+    color: #fff;
+    font-size: 1.6rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+    text-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  }
+
+  .input-group {
+    position: relative;
+    margin-bottom: 22px;
+  }
+
+  .input-group input {
+    width: 100%;
+    padding: 14px 18px;
+    background: rgba(255, 255, 255, 0.85);
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 0.95rem;
+    color: #8f2c24;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .input-group input::placeholder {
+    color: #8f2c24;
+    opacity: 0.6;
+  }
+
+  .input-group input:focus {
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 0 0 3px rgba(255,255,255,0.3);
+  }
+
+  /* Password toggle */
+  .input-group .toggle-pw {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    color: #8f2c24;
+    opacity: 0.6;
+  }
+
+  .login-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #d04828, #b83420);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-family: 'Poppins', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 6px;
+    text-shadow: 0 1px 3px rgba(0,0,0,0.2);
+  }
+
+  .login-btn:hover {
+    background: linear-gradient(135deg, #c04020, #a02c18);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(180, 50, 30, 0.35);
+  }
+
+  .login-btn:active {
+    transform: translateY(0);
+  }
+
+  .bottom-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  .bottom-links a {
+    color: #fff;
+    font-size: 0.82rem;
+    text-decoration: none;
+    opacity: 0.85;
+    transition: opacity 0.2s;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+
+  .bottom-links a:hover {
+    opacity: 1;
+    text-decoration: underline;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 480px) {
+    .login-container { width: 90%; }
+    .tree-left, .tree-right { transform: scale(0.7); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .leaf { animation: none !important; display: none; }
+  }
+</style>
 </head>
 <body>
 
-  <!-- ============ TOP BAR ============ -->
-  <header class="topbar">
-    <div class="brand">
-      <div class="brand-mark">₹</div>
-      <div>
-        <h1>Cash Flow Dashboard</h1>
-        <p class="sub" id="updatedAt">Loading…</p>
-      </div>
-    </div>
-    <button class="refresh-btn" id="refreshBtn">
-      <span class="spin-icon">⟳</span> Refresh data
-    </button>
-  </header>
+  <!-- Background -->
+  <div class="bg"></div>
+  <div class="sun"></div>
 
-  <!-- ============ CONTROLS ============ -->
-  <section class="controls">
-    <div class="seg" id="companySeg">
-      <button class="seg-btn active" data-company="BOTH">Both</button>
-      <button class="seg-btn" data-company="VE">Vishal Electricals</button>
-      <button class="seg-btn" data-company="VTPL">Vishal Technopower</button>
-    </div>
+  <!-- Clouds -->
+  <div class="cloud cloud-1"></div>
+  <div class="cloud cloud-2"></div>
 
-    <div class="seg" id="periodSeg">
-      <button class="seg-btn active" data-period="monthly">Monthly</button>
-      <button class="seg-btn" data-period="weekly">Weekly</button>
-    </div>
+  <!-- Ground -->
+  <div class="ground"></div>
 
-    <label class="field">
-      <span>Month</span>
-      <select id="monthSelect"></select>
-    </label>
-
-    <label class="field" id="weekField" style="display:none">
-      <span>Week</span>
-      <select id="weekSelect">
-        <option value="ALL">All weeks</option>
-        <option value="1">Week 1 (1–7)</option>
-        <option value="2">Week 2 (8–14)</option>
-        <option value="3">Week 3 (15–21)</option>
-        <option value="4">Week 4 (22–end)</option>
-      </select>
-    </label>
-
-    <label class="toggle" id="interToggle">
-      <input type="checkbox" id="interCheck" />
-      <span>Include inter-company transfers</span>
-    </label>
-  </section>
-
-  <!-- ============ MAIN ============ -->
-  <main id="main">
-    <div class="loading" id="loadingBox">
-      <div class="loader"></div>
-      <p>Fetching your Google Sheet…</p>
-    </div>
-
-    <div id="errorBox" class="errorbox" style="display:none"></div>
-
-    <div id="content" style="display:none"></div>
-  </main>
-
-  <!-- ============ DETAIL MODAL ============ -->
-  <div class="modal-overlay" id="modalOverlay" style="display:none">
-    <div class="modal">
-      <div class="modal-head">
-        <h3 id="modalTitle">Details</h3>
-        <button class="close-btn" id="modalClose">✕</button>
-      </div>
-      <div class="modal-body" id="modalBody"></div>
-    </div>
+  <!-- Trees -->
+  <div class="tree tree-left">
+    <div class="canopy canopy-1"></div>
+    <div class="canopy canopy-2"></div>
+    <div class="canopy canopy-3"></div>
+    <div class="branch branch-1"></div>
+    <div class="branch branch-2"></div>
+    <div class="trunk"></div>
   </div>
 
-  <script src="app.js"></script>
+  <div class="tree tree-right">
+    <div class="canopy canopy-1"></div>
+    <div class="canopy canopy-2"></div>
+    <div class="canopy canopy-3"></div>
+    <div class="branch branch-1"></div>
+    <div class="branch branch-2"></div>
+    <div class="trunk"></div>
+  </div>
 
-  <!-- ================================================================= -->
-  <!--  PAGE AGENT — AI assistant (natural language se dashboard chalao)  -->
-  <!--  Library: https://github.com/alibaba/page-agent  (MIT License)     -->
-  <!-- ================================================================= -->
-  <script>
-  /* -------------------------------------------------------------------
-     CONFIG — sirf yahan badalna padega
-     -------------------------------------------------------------------
-       mode: 'demo'   -> Alibaba ka FREE testing LLM. Koi API key nahi.
-                         SIRF test / evaluation ke liye.
-                         ⚠️ Screen pe jo numbers dikh rahe hain wo LLM ko
-                            bheje jaate hain — asli daily use ke liye apna
-                            proxy laga ke 'custom' mode use karna.
+  <!-- Falling Leaves -->
+  <div class="leaf leaf-1"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#c84020"/><line x1="15" y1="4" x2="15" y2="24" stroke="#a03018" stroke-width="0.8"/></svg></div>
+  <div class="leaf leaf-2"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#e07030"/><line x1="15" y1="4" x2="15" y2="24" stroke="#b85820" stroke-width="0.8"/></svg></div>
+  <div class="leaf leaf-3"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#d85028"/><line x1="15" y1="4" x2="15" y2="24" stroke="#a83818" stroke-width="0.8"/></svg></div>
+  <div class="leaf leaf-4"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#f09040"/><line x1="15" y1="4" x2="15" y2="24" stroke="#c07028" stroke-width="0.8"/></svg></div>
+  <div class="leaf leaf-5"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#b83018"/><line x1="15" y1="4" x2="15" y2="24" stroke="#901810" stroke-width="0.8"/></svg></div>
+  <div class="leaf leaf-6"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#e86838"/><line x1="15" y1="4" x2="15" y2="24" stroke="#c05028" stroke-width="0.8"/></svg></div>
+  <div class="leaf leaf-7"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#cc4020"/><line x1="15" y1="4" x2="15" y2="24" stroke="#a03018" stroke-width="0.8"/></svg></div>
+  <div class="leaf leaf-8"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#e88040"/><line x1="15" y1="4" x2="15" y2="24" stroke="#c06028" stroke-width="0.8"/></svg></div>
+  <div class="leaf leaf-9"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#d05828"/><line x1="15" y1="4" x2="15" y2="24" stroke="#a84018" stroke-width="0.8"/></svg></div>
+  <div class="leaf leaf-10"><svg viewBox="0 0 30 30"><path d="M15 2 C20 8 26 14 24 22 C22 28 18 28 15 26 C12 28 8 28 6 22 C4 14 10 8 15 2Z" fill="#f4a050"/><line x1="15" y1="4" x2="15" y2="24" stroke="#c88038" stroke-width="0.8"/></svg></div>
 
-       mode: 'custom' -> Apna model (Qwen/OpenAI/etc.).
-                         apiKey browser mein MAT daalo. baseURL ko apne
-                         PROXY (Render / Apps Script) pe point karo jo key
-                         server-side rakhe. Tab key public source mein
-                         expose nahi hogi.
-     ------------------------------------------------------------------- */
-  const PA_CONFIG = {
-    mode: 'demo',                       // 'demo'  ya  'custom'
+  <!-- Glass Login Form -->
+  <div class="login-container">
+    <div class="login-card">
+      <h2>Sign In</h2>
 
-    // FREE testing LLM — test ke liye aise hi rehne do
-    demo: {
-      model:   'qwen3.5-plus',
-      baseURL: 'https://page-ag-testing-ohftxirgbn.cn-shanghai.fcapp.run',
-      apiKey:  'NA',
-    },
+      <div class="input-group">
+        <input type="text" placeholder="Username" autocomplete="username">
+      </div>
 
-    // Production — apna proxy URL daalo, key SERVER pe rakho
-    custom: {
-      model:   'qwen3.5-plus',
-      baseURL: 'https://YOUR-PROXY.onrender.com/v1',  // <- apna proxy (… ke aage /chat/completions lagega)
-      apiKey:  '',                                    // <- KHAALI rakho! key proxy ke andar
-    },
+      <div class="input-group">
+        <input type="password" id="pw" placeholder="Password" autocomplete="current-password">
+        <button class="toggle-pw" onclick="
+          const p = document.getElementById('pw');
+          if(p.type === 'password') { p.type = 'text'; this.textContent = '🙈'; }
+          else { p.type = 'password'; this.textContent = '🍂'; }
+        ">🍂</button>
+      </div>
 
-    language: 'en-US',                  // 'en-US' ya 'zh-CN'
-  };
+      <button class="login-btn" onclick="this.textContent='Logging in...'; setTimeout(()=>this.textContent='Login', 1500)">Login</button>
 
-  /* Agent ko is dashboard ke controls samjha do — taaki sahi navigate kare */
-  const DASHBOARD_INSTRUCTIONS = `
-You are an assistant embedded inside the "Cash Flow Dashboard" of
-Vishal Electricals (VE) and Vishal Technopower (VTPL).
-
-Operate this page by clicking and selecting — do NOT compute numbers yourself,
-just set the right filters and then read the figures already shown on screen.
-
-Controls on this page:
-- Company filter (top buttons): "Both", "Vishal Electricals" (= VE),
-  "Vishal Technopower" (= VTPL).
-- Period filter: "Monthly" / "Weekly" buttons. Choosing Weekly reveals a
-  "Week" dropdown — Week 1 = days 1–7, Week 2 = 8–14, Week 3 = 15–21,
-  Week 4 = 22–end.
-- "Month" dropdown selects the month.
-- "Include inter-company transfers" checkbox toggles VE↔VTPL transfers.
-- "Refresh data" button reloads from the Google Sheet.
-- Clicking a table row opens an entry-wise detail popup; close it with ✕.
-
-All amounts are INR (shown in Cr / Lakh). Data starts 1 April 2026 (FY).
-Reply briefly in the user's language.
-`.trim();
-
-  /* -------------------------------------------------------------------
-     LOADER — script ko 3 CDN se try karta hai. jsDelivr block/slow ho
-     (India ke kuch network pe hota hai) to apne aap unpkg / npmmirror
-     try karega. Agar teeno fail ho to console mein clear message aayega.
-     ------------------------------------------------------------------- */
-  (function loadPageAgent(){
-    const VER    = '1.10.0';
-    const FILE   = 'dist/iife/page-agent.demo.js?autoInit=false';
-    const isFile = location.protocol === 'file:';
-
-    // file:// pe query string file-naam ka hissa ban jaata hai → locally query mat lagao.
-    // Isliye http server (localhost / GitHub Pages) se kholna sabse saaf rehta hai.
-    const LOCAL = isFile ? 'page-agent.demo.js' : 'page-agent.demo.js?autoInit=false';
-
-    const CDNS = [
-      LOCAL,                                                             // 1) local copy pehle
-      'https://cdn.jsdelivr.net/npm/page-agent@' + VER + '/' + FILE,     // 2) fallback CDNs
-      'https://unpkg.com/page-agent@' + VER + '/' + FILE,
-      'https://registry.npmmirror.com/page-agent/' + VER + '/files/' + FILE,
-    ];
-
-    function init(){
-      // agar bundle ne khud (auto-init se) agent bana diya ho to use hata do
-      try { if (window.pageAgent && window.pageAgent.dispose) window.pageAgent.dispose(); } catch(e){}
-      const c = PA_CONFIG[PA_CONFIG.mode];
-      window.pageAgent = new window.PageAgent({
-        model:    c.model,
-        baseURL:  c.baseURL,
-        apiKey:   c.apiKey,
-        language: PA_CONFIG.language,
-        instructions: { system: DASHBOARD_INSTRUCTIONS },
-      });
-      window.pageAgent.panel.show();
-      console.log('[PageAgent] ready ✓  (mode: ' + PA_CONFIG.mode + ')');
-    }
-
-    function onReady(src){
-      if (!window.PageAgent) return false;       // script load to hua par class nahi mili
-      if (src.indexOf('autoInit=false') !== -1) {
-        init();                                  // http: manual init (en-US + instructions)
-      } else {
-        // file://: bundle khud auto-init karega (default), thoda ruk ke apni config se replace
-        setTimeout(init, 100);
-      }
-      return true;
-    }
-
-    function tryCdn(i){
-      if (window.PageAgent) return;              // pehle hi load ho chuka
-      if (i >= CDNS.length){
-        console.error('[PageAgent] Load nahi hua. Sabse saaf: is folder mein ' +
-          '`python -m http.server` chala ke http://localhost:8000 kholo (file:// se nahi).');
-        return;
-      }
-      const s = document.createElement('script');
-      s.src = CDNS[i];
-      s.onload  = function(){ if (!onReady(this.src)) tryCdn(i + 1); };
-      s.onerror = function(){ console.warn('[PageAgent] fail:', CDNS[i], '→ agla try…'); tryCdn(i + 1); };
-      document.head.appendChild(s);
-    }
-
-    tryCdn(0);
-  })();
-  </script>
+      <div class="bottom-links">
+        <a href="#">Forget Password</a>
+        <a href="#">Signup</a>
+      </div>
+    </div>
+  </div>
 
 </body>
 </html>
