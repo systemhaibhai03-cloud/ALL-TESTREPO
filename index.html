@@ -3,74 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cute Lamp Login</title>
+<title>Vishal Technopower — Master Software</title>
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
+  @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
   :root {
-    --bg: #07070a;
-    --bg-lit: #1a1814;
-    --card: #16161a;
-    --shade: #2b2b30;
-    --shade-on: #3a3a32;
-    --pole: #8a8a92;
-    --cord: #6a6a72;
-    --tongue: #ff8a5b;
-    --accent: #f5a623;
-    --text: #e8e8ec;
-    --muted: #888;
-    --light: #ffe9a8;
+    --bg-1: #050a1a;
+    --bg-2: #0a1530;
+    --bg-lit-1: #0d1d44;
+    --bg-lit-2: #070f26;
+    --card: rgba(16, 28, 56, 0.72);
+    --card-border: rgba(120, 170, 255, 0.16);
+    --shade: #141f38;
+    --shade-on: #1a2848;
+    --pole: #93a6cc;
+    --cord: #5a6e94;
+    --tongue: #38bdf8;
+    --accent: #3b82f6;
+    --accent-bright: #6aa5ff;
+    --text: #eaf1ff;
+    --muted: #8294ba;
+    --light: #d6e8ff;
+    --brand-dark: #2e4f9b;
+    --brand-light: #9fd8f5;
   }
 
-  * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Poppins", sans-serif; }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body, input, button { font-family: "Plus Jakarta Sans", sans-serif; }
 
   body {
     min-height: 100vh;
-    background: var(--bg);
+    background: radial-gradient(circle at 50% 18%, var(--bg-2), var(--bg-1) 72%);
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: 20px;
     overflow-x: hidden;
-    transition: background 0.7s ease;
+    transition: background 0.8s ease;
+    position: relative;
   }
-  /* Whole room brightens when lamp is on */
-  body.lit { background: radial-gradient(circle at center 30%, var(--bg-lit), var(--bg)); }
+  body.lit { background: radial-gradient(circle at 50% 20%, var(--bg-lit-1), var(--bg-lit-2) 74%); }
+
+  /* faint dotted texture */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background-image: radial-gradient(rgba(120,170,255,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none; z-index: 0;
+  }
+
+  /* ── Large logo watermark behind everything ── */
+  .watermark {
+    position: fixed;
+    top: 46%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 640px;
+    max-width: 130vw;
+    opacity: 0.045;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(0.5px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  body.lit .watermark { opacity: 0.08; transform: translate(-50%, -50%) scale(1.04); }
+
+  /* ── Brand header ── */
+  .brand {
+    text-align: center;
+    margin-bottom: 6px;
+    opacity: 0.6;
+    transform: translateY(6px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    z-index: 3;
+  }
+  body.lit .brand { opacity: 1; transform: translateY(0); }
+
+  .emblem {
+    width: 78px; height: 70px;
+    margin: 0 auto 16px;
+    filter: drop-shadow(0 6px 18px rgba(60, 130, 230, 0.45));
+    transition: filter 0.6s ease;
+  }
+  body.lit .emblem { filter: drop-shadow(0 6px 24px rgba(120, 190, 255, 0.6)); }
+  .emblem svg { width: 100%; height: 100%; display: block; }
+
+  .brand h1 {
+    color: var(--text);
+    font-size: clamp(1.35rem, 5vw, 1.85rem);
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    line-height: 1.1;
+  }
+  .brand h1 .accent { color: var(--accent-bright); }
+  .brand .tagline {
+    color: var(--muted);
+    font-size: 0.72rem;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    margin-top: 7px;
+    font-weight: 500;
+  }
 
   /* ── Lamp Scene ── */
   .scene {
     position: relative;
-    width: 280px;
-    height: 300px;
-    display: flex;
-    align-items: flex-end;
-    justify-content: center;
+    width: 260px; height: 250px;
+    display: flex; align-items: flex-end; justify-content: center;
     z-index: 2;
   }
-
   .glow {
     position: absolute;
-    top: 120px;
-    left: 50%;
+    top: 100px; left: 50%;
     transform: translateX(-50%);
-    width: 340px;
-    height: 340px;
+    width: 340px; height: 340px;
     background: radial-gradient(ellipse at top, var(--light) 0%, transparent 60%);
     opacity: 0;
     transition: opacity 0.6s ease;
-    pointer-events: none;
-    z-index: 0;
+    pointer-events: none; z-index: 0;
   }
   .lamp.on .glow { opacity: 0.4; }
 
-  .lamp { position: relative; width: 220px; height: 290px; z-index: 1; }
-
+  .lamp { position: relative; width: 200px; height: 240px; z-index: 1; }
   .shade {
     position: absolute;
-    top: 30px; left: 50%;
+    top: 22px; left: 50%;
     transform: translateX(-50%);
-    width: 170px; height: 110px;
+    width: 152px; height: 96px;
     background: var(--shade);
     clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
     transition: background 0.5s ease, transform 0.4s ease;
@@ -81,10 +141,10 @@
 
   .shade-rim {
     position: absolute;
-    top: 135px; left: 50%;
+    top: 112px; left: 50%;
     transform: translateX(-50%);
-    width: 174px; height: 18px;
-    background: #1f1f24;
+    width: 156px; height: 16px;
+    background: #0c1730;
     border-radius: 50%;
     z-index: 2;
     transition: all 0.5s ease;
@@ -93,60 +153,53 @@
 
   .face {
     position: absolute;
-    top: 78px; left: 50%;
+    top: 62px; left: 50%;
     transform: translateX(-50%);
-    width: 120px; height: 30px;
+    width: 108px; height: 26px;
     z-index: 4;
     display: flex; align-items: center; justify-content: center;
-    gap: 26px;
+    gap: 24px;
   }
-  .eye { width: 18px; height: 18px; position: relative; }
+  .eye { width: 16px; height: 16px; position: relative; }
   .eye::before {
     content: '';
     position: absolute; inset: 0;
-    border: 2.5px solid #111;
     border-radius: 50%;
-    background: #111;
+    background: #0a1220;
     transition: all 0.25s ease;
   }
-  /* sleeping or shy = closed sleepy arcs */
   .lamp.sleeping .eye::before,
   .lamp.shy .eye::before {
     background: transparent;
-    border-color: transparent;
-    border-bottom: 3px solid #111;
-    border-radius: 0 0 18px 18px;
-    height: 10px; top: 5px;
+    border-bottom: 3px solid #0a1220;
+    border-radius: 0 0 16px 16px;
+    height: 9px; top: 4px;
   }
 
   .pole {
     position: absolute;
-    top: 145px; left: 50%;
+    top: 122px; left: 50%;
     transform: translateX(-50%);
-    width: 16px; height: 110px;
-    background: linear-gradient(90deg, #6e6e76, var(--pole), #6e6e76);
-    border-radius: 4px;
-    z-index: 1;
+    width: 14px; height: 96px;
+    background: linear-gradient(90deg, #74879f, var(--pole), #74879f);
+    border-radius: 4px; z-index: 1;
   }
   .base {
     position: absolute;
     bottom: 0; left: 50%;
     transform: translateX(-50%);
-    width: 130px; height: 22px;
-    background: linear-gradient(180deg, var(--pole), #6e6e76);
-    border-radius: 50%;
-    z-index: 1;
+    width: 116px; height: 20px;
+    background: linear-gradient(180deg, var(--pole), #74879f);
+    border-radius: 50%; z-index: 1;
   }
 
-  /* Pull cord */
   .cord {
     position: absolute;
-    top: 110px; left: 38%;
-    width: 2px; height: 70px;
+    top: 90px; left: 38%;
+    width: 2px; height: 62px;
     background: var(--cord);
     transform-origin: top center;
-    z-index: 5;
-    cursor: pointer;
+    z-index: 5; cursor: pointer;
     transition: height 0.15s ease;
   }
   .cord::after {
@@ -154,15 +207,14 @@
     position: absolute;
     bottom: -8px; left: 50%;
     transform: translateX(-50%);
-    width: 14px; height: 14px;
+    width: 13px; height: 13px;
     background: var(--tongue);
     border-radius: 50%;
-    box-shadow: 0 0 10px rgba(255,138,91,0.6);
+    box-shadow: 0 0 12px rgba(56,189,248,0.7);
     animation: pulse 2s infinite ease-in-out;
   }
-  .cord.pulled { height: 90px; }
+  .cord.pulled { height: 80px; }
   .lamp.on .cord::after { animation: none; }
-
   @keyframes pulse {
     0%, 100% { transform: translateX(-50%) scale(1); }
     50% { transform: translateX(-50%) scale(1.25); }
@@ -170,111 +222,158 @@
 
   .cord-hint {
     position: absolute;
-    top: 188px; left: 24%;
-    font-size: 0.72rem;
-    color: var(--accent);
-    z-index: 5;
-    pointer-events: none;
+    top: 162px; left: 18%;
+    font-size: 0.7rem;
+    color: var(--accent-bright);
+    z-index: 5; pointer-events: none;
     white-space: nowrap;
     animation: hintPulse 2s infinite;
+    font-weight: 500;
   }
   .lamp.on .cord-hint { display: none; }
-  @keyframes hintPulse { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
+  @keyframes hintPulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
 
-  /* ── Login Card (hidden until light on) ── */
+  /* ── Login Card ── */
   .card {
     background: var(--card);
-    border: 1px solid rgba(255,255,255,0.07);
-    border-radius: 18px;
-    padding: 32px 30px;
-    width: 340px;
-    margin-top: 16px;
-    box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--card-border);
+    border-radius: 22px;
+    padding: 32px 32px 26px;
+    width: 360px;
+    margin-top: 6px;
+    box-shadow: 0 28px 70px rgba(2, 8, 24, 0.65), inset 0 1px 0 rgba(255,255,255,0.06);
     z-index: 2;
-
-    /* hidden state */
     opacity: 0;
-    transform: translateY(30px) scale(0.96);
+    transform: translateY(28px) scale(0.96);
     pointer-events: none;
-    transition: opacity 0.6s ease 0.2s, transform 0.6s ease 0.2s;
+    transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
   }
-  .card.reveal {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-    pointer-events: auto;
-  }
+  .card.reveal { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
   .card h2 {
     color: var(--text);
     text-align: center;
-    font-size: 1.4rem;
-    font-weight: 600;
-    margin-bottom: 6px;
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+    letter-spacing: 0.2px;
   }
   .card .sub {
     text-align: center;
     color: var(--muted);
-    font-size: 0.85rem;
-    margin-bottom: 24px;
+    font-size: 0.82rem;
+    margin-bottom: 26px;
   }
 
-  .field { position: relative; margin-bottom: 18px; }
+  .field { position: relative; margin-bottom: 16px; }
+  .field label {
+    display: block;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin-bottom: 7px;
+    letter-spacing: 0.4px;
+  }
   .field input {
     width: 100%;
-    padding: 13px 44px 13px 16px;
-    background: #1f1f24;
-    border: 1.5px solid rgba(255,255,255,0.08);
-    border-radius: 10px;
+    padding: 13px 44px 13px 15px;
+    background: rgba(8, 18, 40, 0.7);
+    border: 1.5px solid rgba(120,170,255,0.12);
+    border-radius: 12px;
     color: var(--text);
-    font-size: 0.95rem;
+    font-size: 0.92rem;
     outline: none;
-    transition: border-color 0.25s;
+    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
   }
-  .field input::placeholder { color: #666; }
-  .field input:focus { border-color: var(--accent); }
+  .field input::placeholder { color: #4a5a7c; }
+  .field input:focus {
+    border-color: var(--accent);
+    background: rgba(8, 18, 40, 0.95);
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.16);
+  }
 
   .toggle-pw {
     position: absolute;
-    right: 14px; top: 50%;
-    transform: translateY(-50%);
+    right: 12px; bottom: 10px;
     background: none; border: none;
     color: var(--muted);
-    cursor: pointer;
-    font-size: 1.1rem;
-    line-height: 1;
+    cursor: pointer; font-size: 1.05rem; line-height: 1;
   }
+
+  .row-between {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 6px 0 20px;
+    font-size: 0.8rem;
+  }
+  .row-between label {
+    color: var(--muted);
+    display: flex; align-items: center; gap: 6px; cursor: pointer;
+  }
+  .row-between input { accent-color: var(--accent); width: 14px; height: 14px; }
+  .forgot-link {
+    color: var(--accent-bright);
+    text-decoration: none;
+    font-weight: 500;
+    transition: opacity 0.2s;
+  }
+  .forgot-link:hover { opacity: 0.75; }
 
   .login-btn {
     width: 100%;
-    padding: 13px;
-    background: var(--accent);
-    color: #1a1a1a;
+    padding: 14px;
+    background: linear-gradient(135deg, #4f8dff, #1d4ed8);
+    color: #fff;
     border: none;
-    border-radius: 10px;
-    font-size: 1rem;
-    font-weight: 600;
+    border-radius: 12px;
+    font-size: 0.98rem;
+    font-weight: 700;
     cursor: pointer;
-    transition: transform 0.1s, filter 0.2s;
-    margin-top: 6px;
+    letter-spacing: 0.3px;
+    transition: transform 0.1s, filter 0.2s, box-shadow 0.2s;
+    box-shadow: 0 8px 22px rgba(29,78,216,0.4);
   }
-  .login-btn:hover { filter: brightness(1.08); }
+  .login-btn:hover { filter: brightness(1.08); box-shadow: 0 10px 28px rgba(29,78,216,0.55); }
   .login-btn:active { transform: translateY(2px); }
 
-  .form-footer { margin-top: 1.5rem; text-align: center; }
-  .forgot-link {
-    color: #888;
-    font-size: 0.9rem;
-    text-decoration: none;
-    transition: all 0.3s ease;
+  .card-footer {
+    margin-top: 24px;
+    text-align: center;
+    color: #54648c;
+    font-size: 0.7rem;
+    letter-spacing: 0.3px;
   }
-  .forgot-link:hover { color: var(--accent); }
+  .card-footer span { color: var(--accent-bright); font-weight: 600; }
 
   @media (max-width: 420px) {
-    .card { width: 92%; }
+    .card { width: 93%; }
+    .scene { height: 225px; }
   }
 </style>
 </head>
 <body>
+
+  <!-- Large faded logo watermark -->
+  <svg class="watermark" viewBox="0 28 218 192" xmlns="http://www.w3.org/2000/svg">
+    <path fill="#9fd8f5" d="M115.9,33.71h-18.55c-6.35,0-7.4,0-12.86,0H3.83c28.24,49.03,57.4,99.36,85.63,148.36l30.56-66.02h-60.17l56.06-82.34Z"/>
+    <path fill="#2e4f9b" d="M214.41,33.71h-98.5l-13.83,55.8,68.32-.3-80.93,92.86,3.96,7.11s.03,0,3.18,5.54c.95,1.66,1.46,2.56,2.41,4.22,3.37,5.85,6.74,11.69,10.11,17.55,35.22-61.13,70.17-121.82,105.29-182.78Z"/>
+  </svg>
+
+  <!-- Brand -->
+  <div class="brand">
+    <div class="emblem">
+      <svg viewBox="0 28 218 192" xmlns="http://www.w3.org/2000/svg">
+        <path fill="#9fd8f5" d="M115.9,33.71h-18.55c-6.35,0-7.4,0-12.86,0H3.83c28.24,49.03,57.4,99.36,85.63,148.36l30.56-66.02h-60.17l56.06-82.34Z"/>
+        <path fill="#2e4f9b" d="M214.41,33.71h-98.5l-13.83,55.8,68.32-.3-80.93,92.86,3.96,7.11s.03,0,3.18,5.54c.95,1.66,1.46,2.56,2.41,4.22,3.37,5.85,6.74,11.69,10.11,17.55,35.22-61.13,70.17-121.82,105.29-182.78Z"/>
+      </svg>
+    </div>
+
+    <h1>VISHAL <span class="accent">TECHNOPOWER</span></h1>
+    <div class="tagline">Master Software</div>
+  </div>
 
   <!-- Lamp -->
   <div class="scene">
@@ -289,29 +388,36 @@
       <div class="pole"></div>
       <div class="base"></div>
       <div class="cord" id="cord" title="Pull to turn on the light"></div>
-      <div class="cord-hint">↑ pull the wire</div>
+      <div class="cord-hint">&uarr; pull the wire to sign in</div>
     </div>
   </div>
 
-  <!-- Login Form (revealed after pulling cord) -->
+  <!-- Login Form -->
   <div class="card" id="card">
     <form id="loginForm">
-      <h2>Welcome</h2>
-      <p class="sub">Sign in to continue</p>
+      <h2>Welcome Back</h2>
+      <p class="sub">Sign in to access the Master Software</p>
 
       <div class="field">
-        <input type="text" id="username" placeholder="Username" autocomplete="username" required>
+        <label for="username">Username / Employee ID</label>
+        <input type="text" id="username" placeholder="Enter your ID" autocomplete="username" required>
       </div>
 
       <div class="field">
-        <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
-        <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">👁</button>
+        <label for="password">Password</label>
+        <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>
+        <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">&#128065;</button>
       </div>
 
-      <button type="submit" class="login-btn">Login</button>
-
-      <div class="form-footer">
+      <div class="row-between">
+        <label><input type="checkbox" id="remember"> Remember me</label>
         <a href="#" class="forgot-link">Forgot password?</a>
+      </div>
+
+      <button type="submit" class="login-btn">Sign In</button>
+
+      <div class="card-footer">
+        &copy; 2026 <span>Vishal Technopower Pvt. Ltd.</span> &nbsp;&bull;&nbsp; v1.0
       </div>
     </form>
   </div>
@@ -327,59 +433,47 @@
 
     let isOn = false;
 
-    // Pull the wire → turn light on/off + reveal/hide form
     function pullCord() {
       cord.classList.add('pulled');
       setTimeout(() => cord.classList.remove('pulled'), 200);
-
       isOn = !isOn;
-
       if (isOn) {
-        // Light ON → wake lamp, brighten room, reveal welcome form
         lamp.classList.add('on');
         lamp.classList.remove('sleeping');
         body.classList.add('lit');
         card.classList.add('reveal');
       } else {
-        // Light OFF → back to sleep, hide form
         lamp.classList.remove('on');
         lamp.classList.add('sleeping');
         body.classList.remove('lit');
         card.classList.remove('reveal');
-        username.blur();
-        password.blur();
+        username.blur(); password.blur();
       }
     }
     cord.addEventListener('click', pullCord);
 
-    // Password focus → lamp shuts eyes (won't peek)
-    password.addEventListener('focus', () => {
-      if (isOn) lamp.classList.add('shy');
-    });
+    password.addEventListener('focus', () => { if (isOn) lamp.classList.add('shy'); });
     password.addEventListener('blur', () => lamp.classList.remove('shy'));
-
     username.addEventListener('focus', () => lamp.classList.remove('shy'));
 
-    // Show / hide password
     togglePw.addEventListener('click', () => {
       if (password.type === 'password') {
         password.type = 'text';
-        togglePw.textContent = '🙈';
+        togglePw.textContent = '\u{1F648}';
         lamp.classList.remove('shy');
       } else {
         password.type = 'password';
-        togglePw.textContent = '👁';
+        togglePw.textContent = '\u{1F441}';
         if (document.activeElement === password) lamp.classList.add('shy');
       }
     });
 
-    // Submit
     document.getElementById('loginForm').addEventListener('submit', (e) => {
       e.preventDefault();
       const btn = e.target.querySelector('.login-btn');
-      btn.textContent = 'Logging in...';
+      btn.textContent = 'Signing in...';
       lamp.classList.remove('shy');
-      setTimeout(() => { btn.textContent = 'Login'; }, 1500);
+      setTimeout(() => { btn.textContent = 'Sign In'; }, 1500);
     });
   </script>
 
