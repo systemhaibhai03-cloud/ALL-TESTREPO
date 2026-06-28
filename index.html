@@ -8,24 +8,24 @@
   @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
 
   :root {
-    --bg-1: #050a1a;
-    --bg-2: #0a1530;
-    --bg-lit-1: #0d1d44;
-    --bg-lit-2: #070f26;
-    --card: rgba(16, 28, 56, 0.72);
-    --card-border: rgba(120, 170, 255, 0.16);
-    --shade: #141f38;
-    --shade-on: #1a2848;
-    --pole: #93a6cc;
-    --cord: #5a6e94;
-    --tongue: #38bdf8;
-    --accent: #3b82f6;
-    --accent-bright: #6aa5ff;
-    --text: #eaf1ff;
-    --muted: #8294ba;
-    --light: #d6e8ff;
-    --brand-dark: #2e4f9b;
-    --brand-light: #9fd8f5;
+    --bg-1: #7ed0e0;          /* outer teal */
+    --bg-2: #bdeef4;          /* center light teal */
+    --bg-lit-1: #d4f5f9;      /* center brighter when lit */
+    --bg-lit-2: #8ad9e6;      /* outer when lit */
+    --card: rgba(255, 255, 255, 0.58);
+    --card-border: rgba(255, 255, 255, 0.8);
+    --shade: #1c4452;         /* dark teal lamp */
+    --shade-on: #245563;
+    --pole: #6a8c98;
+    --cord: #436670;
+    --tongue: #ff9a52;        /* warm orange cord ball */
+    --accent: #0e8aa6;        /* deep teal */
+    --accent-deep: #0c7a94;
+    --glow-warm: #fff2cf;     /* warm lamp light */
+    --text: #0e3a4a;          /* dark teal text */
+    --heading: #0c3340;
+    --muted: #4f7c89;
+    --brand-blue: #1f5fa8;
   }
 
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -33,7 +33,7 @@
 
   body {
     min-height: 100vh;
-    background: radial-gradient(circle at 50% 18%, var(--bg-2), var(--bg-1) 72%);
+    background: radial-gradient(circle at 50% 22%, var(--bg-2), var(--bg-1) 78%);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -43,67 +43,74 @@
     transition: background 0.8s ease;
     position: relative;
   }
-  body.lit { background: radial-gradient(circle at 50% 20%, var(--bg-lit-1), var(--bg-lit-2) 74%); }
+  body.lit { background: radial-gradient(circle at 50% 24%, var(--bg-lit-1), var(--bg-lit-2) 80%); }
 
-  /* faint dotted texture */
+  /* airy dotted texture */
   body::before {
     content: '';
     position: fixed; inset: 0;
-    background-image: radial-gradient(rgba(120,170,255,0.05) 1px, transparent 1px);
+    background-image: radial-gradient(rgba(255,255,255,0.32) 1px, transparent 1px);
     background-size: 26px 26px;
     pointer-events: none; z-index: 0;
   }
 
-  /* ── Large logo watermark behind everything ── */
+  /* ── Large faded logo watermark ── */
   .watermark {
     position: fixed;
     top: 46%; left: 50%;
     transform: translate(-50%, -50%);
     width: 640px;
     max-width: 130vw;
-    opacity: 0.045;
+    opacity: 0.09;
     z-index: 0;
     pointer-events: none;
-    filter: blur(0.5px);
     transition: opacity 0.8s ease, transform 0.8s ease;
   }
-  body.lit .watermark { opacity: 0.08; transform: translate(-50%, -50%) scale(1.04); }
+  body.lit .watermark { opacity: 0.14; transform: translate(-50%, -50%) scale(1.04); }
 
   /* ── Brand header ── */
   .brand {
     text-align: center;
     margin-bottom: 6px;
-    opacity: 0.6;
+    opacity: 0.72;
     transform: translateY(6px);
     transition: opacity 0.7s ease, transform 0.7s ease;
     z-index: 3;
   }
   body.lit .brand { opacity: 1; transform: translateY(0); }
 
+  /* white rounded card holding the logo */
   .emblem {
-    width: 78px; height: 70px;
+    width: 86px; height: 86px;
     margin: 0 auto 16px;
-    filter: drop-shadow(0 6px 18px rgba(60, 130, 230, 0.45));
-    transition: filter 0.6s ease;
+    background: #ffffff;
+    border-radius: 22px;
+    display: flex; align-items: center; justify-content: center;
+    padding: 15px;
+    box-shadow: 0 12px 30px rgba(16, 70, 90, 0.22), inset 0 1px 0 rgba(255,255,255,0.9);
+    transition: transform 0.6s ease, box-shadow 0.6s ease;
   }
-  body.lit .emblem { filter: drop-shadow(0 6px 24px rgba(120, 190, 255, 0.6)); }
+  body.lit .emblem {
+    transform: translateY(-2px);
+    box-shadow: 0 16px 38px rgba(16, 90, 115, 0.3), inset 0 1px 0 rgba(255,255,255,0.9);
+  }
   .emblem svg { width: 100%; height: 100%; display: block; }
 
   .brand h1 {
-    color: var(--text);
+    color: var(--heading);
     font-size: clamp(1.35rem, 5vw, 1.85rem);
     font-weight: 800;
     letter-spacing: 1.5px;
     line-height: 1.1;
   }
-  .brand h1 .accent { color: var(--accent-bright); }
+  .brand h1 .accent { color: var(--brand-blue); }
   .brand .tagline {
     color: var(--muted);
     font-size: 0.72rem;
     letter-spacing: 4px;
     text-transform: uppercase;
     margin-top: 7px;
-    font-weight: 500;
+    font-weight: 600;
   }
 
   /* ── Lamp Scene ── */
@@ -118,12 +125,12 @@
     top: 100px; left: 50%;
     transform: translateX(-50%);
     width: 340px; height: 340px;
-    background: radial-gradient(ellipse at top, var(--light) 0%, transparent 60%);
+    background: radial-gradient(ellipse at top, var(--glow-warm) 0%, transparent 62%);
     opacity: 0;
     transition: opacity 0.6s ease;
     pointer-events: none; z-index: 0;
   }
-  .lamp.on .glow { opacity: 0.4; }
+  .lamp.on .glow { opacity: 0.7; }
 
   .lamp { position: relative; width: 200px; height: 240px; z-index: 1; }
   .shade {
@@ -144,12 +151,12 @@
     top: 112px; left: 50%;
     transform: translateX(-50%);
     width: 156px; height: 16px;
-    background: #0c1730;
+    background: #14333d;
     border-radius: 50%;
     z-index: 2;
     transition: all 0.5s ease;
   }
-  .lamp.on .shade-rim { background: var(--light); box-shadow: 0 0 34px 8px var(--light); }
+  .lamp.on .shade-rim { background: var(--glow-warm); box-shadow: 0 0 40px 12px var(--glow-warm); }
 
   .face {
     position: absolute;
@@ -165,13 +172,13 @@
     content: '';
     position: absolute; inset: 0;
     border-radius: 50%;
-    background: #0a1220;
+    background: #d9eef2;
     transition: all 0.25s ease;
   }
   .lamp.sleeping .eye::before,
   .lamp.shy .eye::before {
     background: transparent;
-    border-bottom: 3px solid #0a1220;
+    border-bottom: 3px solid #d9eef2;
     border-radius: 0 0 16px 16px;
     height: 9px; top: 4px;
   }
@@ -181,7 +188,7 @@
     top: 122px; left: 50%;
     transform: translateX(-50%);
     width: 14px; height: 96px;
-    background: linear-gradient(90deg, #74879f, var(--pole), #74879f);
+    background: linear-gradient(90deg, #547682, var(--pole), #547682);
     border-radius: 4px; z-index: 1;
   }
   .base {
@@ -189,7 +196,7 @@
     bottom: 0; left: 50%;
     transform: translateX(-50%);
     width: 116px; height: 20px;
-    background: linear-gradient(180deg, var(--pole), #74879f);
+    background: linear-gradient(180deg, var(--pole), #547682);
     border-radius: 50%; z-index: 1;
   }
 
@@ -210,7 +217,7 @@
     width: 13px; height: 13px;
     background: var(--tongue);
     border-radius: 50%;
-    box-shadow: 0 0 12px rgba(56,189,248,0.7);
+    box-shadow: 0 0 12px rgba(255,154,82,0.7);
     animation: pulse 2s infinite ease-in-out;
   }
   .cord.pulled { height: 80px; }
@@ -224,26 +231,26 @@
     position: absolute;
     top: 162px; left: 18%;
     font-size: 0.7rem;
-    color: var(--accent-bright);
+    color: #c2671f;
     z-index: 5; pointer-events: none;
     white-space: nowrap;
     animation: hintPulse 2s infinite;
-    font-weight: 500;
+    font-weight: 600;
   }
   .lamp.on .cord-hint { display: none; }
-  @keyframes hintPulse { 0%,100%{opacity:0.4;} 50%{opacity:1;} }
+  @keyframes hintPulse { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
 
   /* ── Login Card ── */
   .card {
     background: var(--card);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
     border: 1px solid var(--card-border);
     border-radius: 22px;
     padding: 32px 32px 26px;
     width: 360px;
     margin-top: 6px;
-    box-shadow: 0 28px 70px rgba(2, 8, 24, 0.65), inset 0 1px 0 rgba(255,255,255,0.06);
+    box-shadow: 0 28px 60px rgba(16, 70, 95, 0.25), inset 0 1px 0 rgba(255,255,255,0.6);
     z-index: 2;
     opacity: 0;
     transform: translateY(28px) scale(0.96);
@@ -253,7 +260,7 @@
   .card.reveal { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
 
   .card h2 {
-    color: var(--text);
+    color: var(--heading);
     text-align: center;
     font-size: 1.3rem;
     font-weight: 700;
@@ -279,19 +286,19 @@
   .field input {
     width: 100%;
     padding: 13px 44px 13px 15px;
-    background: rgba(8, 18, 40, 0.7);
-    border: 1.5px solid rgba(120,170,255,0.12);
+    background: rgba(255, 255, 255, 0.66);
+    border: 1.5px solid rgba(16, 90, 110, 0.18);
     border-radius: 12px;
     color: var(--text);
     font-size: 0.92rem;
     outline: none;
     transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
   }
-  .field input::placeholder { color: #4a5a7c; }
+  .field input::placeholder { color: #79a3ad; }
   .field input:focus {
     border-color: var(--accent);
-    background: rgba(8, 18, 40, 0.95);
-    box-shadow: 0 0 0 3px rgba(59,130,246,0.16);
+    background: rgba(255, 255, 255, 0.92);
+    box-shadow: 0 0 0 3px rgba(14, 138, 166, 0.16);
   }
 
   .toggle-pw {
@@ -315,17 +322,17 @@
   }
   .row-between input { accent-color: var(--accent); width: 14px; height: 14px; }
   .forgot-link {
-    color: var(--accent-bright);
+    color: var(--accent-deep);
     text-decoration: none;
-    font-weight: 500;
+    font-weight: 600;
     transition: opacity 0.2s;
   }
-  .forgot-link:hover { opacity: 0.75; }
+  .forgot-link:hover { opacity: 0.7; }
 
   .login-btn {
     width: 100%;
     padding: 14px;
-    background: linear-gradient(135deg, #4f8dff, #1d4ed8);
+    background: linear-gradient(135deg, #16a6c2, #0c7a94);
     color: #fff;
     border: none;
     border-radius: 12px;
@@ -334,19 +341,19 @@
     cursor: pointer;
     letter-spacing: 0.3px;
     transition: transform 0.1s, filter 0.2s, box-shadow 0.2s;
-    box-shadow: 0 8px 22px rgba(29,78,216,0.4);
+    box-shadow: 0 8px 22px rgba(12, 122, 148, 0.4);
   }
-  .login-btn:hover { filter: brightness(1.08); box-shadow: 0 10px 28px rgba(29,78,216,0.55); }
+  .login-btn:hover { filter: brightness(1.07); box-shadow: 0 10px 28px rgba(12, 122, 148, 0.55); }
   .login-btn:active { transform: translateY(2px); }
 
   .card-footer {
     margin-top: 24px;
     text-align: center;
-    color: #54648c;
+    color: #6a93a0;
     font-size: 0.7rem;
     letter-spacing: 0.3px;
   }
-  .card-footer span { color: var(--accent-bright); font-weight: 600; }
+  .card-footer span { color: var(--accent-deep); font-weight: 700; }
 
   @media (max-width: 420px) {
     .card { width: 93%; }
@@ -358,8 +365,8 @@
 
   <!-- Large faded logo watermark -->
   <svg class="watermark" viewBox="0 28 218 192" xmlns="http://www.w3.org/2000/svg">
-    <path fill="#9fd8f5" d="M115.9,33.71h-18.55c-6.35,0-7.4,0-12.86,0H3.83c28.24,49.03,57.4,99.36,85.63,148.36l30.56-66.02h-60.17l56.06-82.34Z"/>
-    <path fill="#2e4f9b" d="M214.41,33.71h-98.5l-13.83,55.8,68.32-.3-80.93,92.86,3.96,7.11s.03,0,3.18,5.54c.95,1.66,1.46,2.56,2.41,4.22,3.37,5.85,6.74,11.69,10.11,17.55,35.22-61.13,70.17-121.82,105.29-182.78Z"/>
+    <path fill="#2e4f9b" d="M115.9,33.71h-18.55c-6.35,0-7.4,0-12.86,0H3.83c28.24,49.03,57.4,99.36,85.63,148.36l30.56-66.02h-60.17l56.06-82.34Z"/>
+    <path fill="#1f5fa8" d="M214.41,33.71h-98.5l-13.83,55.8,68.32-.3-80.93,92.86,3.96,7.11s.03,0,3.18,5.54c.95,1.66,1.46,2.56,2.41,4.22,3.37,5.85,6.74,11.69,10.11,17.55,35.22-61.13,70.17-121.82,105.29-182.78Z"/>
   </svg>
 
   <!-- Brand -->
