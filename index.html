@@ -3,486 +3,628 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vishal Technopower — Master Software</title>
+<title>AI Agency Dashboard — Vishal Group</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
-  @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap");
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0f1a;--surface:#111827;--surface2:#1e293b;--surface3:#283548;
+  --border:#334155;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
+  --accent:#06d6a0;--accent2:#118ab2;--accent3:#ef476f;--accent4:#ffd166;
+  --glass:rgba(17,24,39,0.7);
+}
+body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
 
-  :root {
-    --bg-1: #7ed0e0;          /* outer teal */
-    --bg-2: #bdeef4;          /* center light teal */
-    --bg-lit-1: #d4f5f9;      /* center brighter when lit */
-    --bg-lit-2: #8ad9e6;      /* outer when lit */
-    --card: rgba(255, 255, 255, 0.58);
-    --card-border: rgba(255, 255, 255, 0.8);
-    --shade: #1c4452;         /* dark teal lamp */
-    --shade-on: #245563;
-    --pole: #6a8c98;
-    --cord: #436670;
-    --tongue: #ff9a52;        /* warm orange cord ball */
-    --accent: #0e8aa6;        /* deep teal */
-    --accent-deep: #0c7a94;
-    --glow-warm: #fff2cf;     /* warm lamp light */
-    --text: #0e3a4a;          /* dark teal text */
-    --heading: #0c3340;
-    --muted: #4f7c89;
-    --brand-blue: #1f5fa8;
-  }
+/* Scrollbar */
+::-webkit-scrollbar{width:6px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
 
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body, input, button { font-family: "Plus Jakarta Sans", sans-serif; }
+/* Layout */
+.app{display:grid;grid-template-columns:280px 1fr;grid-template-rows:60px 1fr;height:100vh}
+.topbar{grid-column:1/-1;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
+.topbar h1{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
+.topbar h1 span{color:var(--accent)}
+.topbar-right{display:flex;align-items:center;gap:12px}
 
-  body {
-    min-height: 100vh;
-    background: radial-gradient(circle at 50% 22%, var(--bg-2), var(--bg-1) 78%);
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    overflow-x: hidden;
-    transition: background 0.8s ease;
-    position: relative;
-  }
-  body.lit { background: radial-gradient(circle at 50% 24%, var(--bg-lit-1), var(--bg-lit-2) 80%); }
+/* Provider selector */
+.provider-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer}
+.api-key-btn{background:var(--accent);color:#000;border:none;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.api-key-btn:hover{opacity:.85}
+.api-key-btn.set{background:var(--surface2);color:var(--accent);border:1px solid var(--accent)}
+.status-dot{width:8px;height:8px;border-radius:50%;background:var(--accent3)}
+.status-dot.connected{background:var(--accent)}
 
-  /* airy dotted texture */
-  body::before {
-    content: '';
-    position: fixed; inset: 0;
-    background-image: radial-gradient(rgba(255,255,255,0.32) 1px, transparent 1px);
-    background-size: 26px 26px;
-    pointer-events: none; z-index: 0;
-  }
+/* Sidebar */
+.sidebar{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:12px}
+.sidebar-section{margin-bottom:16px}
+.sidebar-section h3{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);padding:8px 12px;font-weight:600}
+.agent-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .15s;border:1px solid transparent;margin-bottom:2px}
+.agent-card:hover{background:var(--surface2)}
+.agent-card.active{background:var(--surface2);border-color:var(--accent)}
+.agent-emoji{font-size:22px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0}
+.agent-info h4{font-size:13px;font-weight:600;line-height:1.3}
+.agent-info p{font-size:10px;color:var(--text3);line-height:1.3;margin-top:1px}
 
-  /* ── Large faded logo watermark ── */
-  .watermark {
-    position: fixed;
-    top: 46%; left: 50%;
-    transform: translate(-50%, -50%);
-    width: 640px;
-    max-width: 130vw;
-    opacity: 0.09;
-    z-index: 0;
-    pointer-events: none;
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  body.lit .watermark { opacity: 0.14; transform: translate(-50%, -50%) scale(1.04); }
+/* Main area */
+.main{display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
 
-  /* ── Brand header ── */
-  .brand {
-    text-align: center;
-    margin-bottom: 6px;
-    opacity: 0.72;
-    transform: translateY(6px);
-    transition: opacity 0.7s ease, transform 0.7s ease;
-    z-index: 3;
-  }
-  body.lit .brand { opacity: 1; transform: translateY(0); }
+/* Agent header */
+.agent-header{padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px}
+.agent-header-emoji{font-size:32px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border-radius:12px}
+.agent-header-info h2{font-size:18px;font-weight:700}
+.agent-header-info p{font-size:12px;color:var(--text2);margin-top:2px}
+.agent-header-tags{display:flex;gap:6px;margin-left:auto}
+.tag{font-size:10px;padding:4px 10px;border-radius:20px;font-weight:600;border:1px solid}
+.tag-planning{color:var(--accent);border-color:rgba(6,214,160,.3);background:rgba(6,214,160,.08)}
+.tag-finance{color:var(--accent4);border-color:rgba(255,209,102,.3);background:rgba(255,209,102,.08)}
+.tag-engineering{color:var(--accent2);border-color:rgba(17,138,178,.3);background:rgba(17,138,178,.08)}
+.tag-ops{color:var(--accent3);border-color:rgba(239,71,111,.3);background:rgba(239,71,111,.08)}
 
-  /* white rounded card holding the logo */
-  .emblem {
-    width: 86px; height: 86px;
-    margin: 0 auto 16px;
-    background: #ffffff;
-    border-radius: 22px;
-    display: flex; align-items: center; justify-content: center;
-    padding: 15px;
-    box-shadow: 0 12px 30px rgba(16, 70, 90, 0.22), inset 0 1px 0 rgba(255,255,255,0.9);
-    transition: transform 0.6s ease, box-shadow 0.6s ease;
-  }
-  body.lit .emblem {
-    transform: translateY(-2px);
-    box-shadow: 0 16px 38px rgba(16, 90, 115, 0.3), inset 0 1px 0 rgba(255,255,255,0.9);
-  }
-  .emblem svg { width: 100%; height: 100%; display: block; }
+/* Chat area */
+.chat-area{overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
+.msg{max-width:85%;animation:msgIn .3s ease}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.msg.user{align-self:flex-end}
+.msg.assistant{align-self:flex-start}
+.msg-bubble{padding:12px 16px;border-radius:16px;font-size:13px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.msg.user .msg-bubble{background:var(--accent);color:#000;border-bottom-right-radius:4px;font-weight:500}
+.msg.assistant .msg-bubble{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:4px}
+.msg-meta{font-size:10px;color:var(--text3);margin-top:4px;padding:0 4px}
+.msg.user .msg-meta{text-align:right}
+.typing{display:flex;gap:4px;padding:16px;align-self:flex-start}
+.typing span{width:8px;height:8px;background:var(--text3);border-radius:50%;animation:typeDot 1.4s infinite}
+.typing span:nth-child(2){animation-delay:.2s}
+.typing span:nth-child(3){animation-delay:.4s}
+@keyframes typeDot{0%,80%,100%{transform:scale(.4);opacity:.4}40%{transform:scale(1);opacity:1}}
 
-  .brand h1 {
-    color: var(--heading);
-    font-size: clamp(1.35rem, 5vw, 1.85rem);
-    font-weight: 800;
-    letter-spacing: 1.5px;
-    line-height: 1.1;
-  }
-  .brand h1 .accent { color: var(--brand-blue); }
-  .brand .tagline {
-    color: var(--muted);
-    font-size: 0.72rem;
-    letter-spacing: 4px;
-    text-transform: uppercase;
-    margin-top: 7px;
-    font-weight: 600;
-  }
+/* Input area */
+.input-area{padding:16px 24px;background:var(--surface);border-top:1px solid var(--border)}
+.input-row{display:flex;gap:10px;align-items:flex-end}
+.input-wrap{flex:1;position:relative}
+.input-wrap textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:14px;font-size:13px;font-family:inherit;resize:none;outline:none;min-height:46px;max-height:140px;line-height:1.5;transition:border-color .2s}
+.input-wrap textarea:focus{border-color:var(--accent)}
+.input-wrap textarea::placeholder{color:var(--text3)}
+.send-btn{width:46px;height:46px;border-radius:14px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+.send-btn:hover{transform:scale(1.05)}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.send-btn svg{width:20px;height:20px}
 
-  /* ── Lamp Scene ── */
-  .scene {
-    position: relative;
-    width: 260px; height: 250px;
-    display: flex; align-items: flex-end; justify-content: center;
-    z-index: 2;
-  }
-  .glow {
-    position: absolute;
-    top: 100px; left: 50%;
-    transform: translateX(-50%);
-    width: 340px; height: 340px;
-    background: radial-gradient(ellipse at top, var(--glow-warm) 0%, transparent 62%);
-    opacity: 0;
-    transition: opacity 0.6s ease;
-    pointer-events: none; z-index: 0;
-  }
-  .lamp.on .glow { opacity: 0.7; }
+/* Quick prompts */
+.quick-prompts{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
+.quick-prompt{font-size:11px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);border-radius:20px;cursor:pointer;transition:all .15s;font-family:inherit;white-space:nowrap}
+.quick-prompt:hover{border-color:var(--accent);color:var(--accent)}
 
-  .lamp { position: relative; width: 200px; height: 240px; z-index: 1; }
-  .shade {
-    position: absolute;
-    top: 22px; left: 50%;
-    transform: translateX(-50%);
-    width: 152px; height: 96px;
-    background: var(--shade);
-    clip-path: polygon(18% 0, 82% 0, 100% 100%, 0 100%);
-    transition: background 0.5s ease, transform 0.4s ease;
-    z-index: 3;
-  }
-  .lamp.on .shade { background: var(--shade-on); }
-  .lamp.shy .shade { transform: translateX(-50%) translateY(4px); }
+/* Welcome screen */
+.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px}
+.welcome-icon{font-size:64px;margin-bottom:20px}
+.welcome h2{font-size:24px;font-weight:800;margin-bottom:8px}
+.welcome h2 span{color:var(--accent)}
+.welcome p{color:var(--text2);font-size:14px;max-width:460px;line-height:1.7}
+.welcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;max-width:500px;width:100%}
+.welcome-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:left;cursor:pointer;transition:all .15s}
+.welcome-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.welcome-card .emoji{font-size:24px;margin-bottom:8px}
+.welcome-card h4{font-size:13px;font-weight:600;margin-bottom:4px}
+.welcome-card p{font-size:11px;color:var(--text3);line-height:1.5}
 
-  .shade-rim {
-    position: absolute;
-    top: 112px; left: 50%;
-    transform: translateX(-50%);
-    width: 156px; height: 16px;
-    background: #14333d;
-    border-radius: 50%;
-    z-index: 2;
-    transition: all 0.5s ease;
-  }
-  .lamp.on .shade-rim { background: var(--glow-warm); box-shadow: 0 0 40px 12px var(--glow-warm); }
+/* API Key Modal */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;max-width:440px;width:90%;animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.modal h3{font-size:18px;font-weight:700;margin-bottom:6px}
+.modal p{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6}
+.modal label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:6px}
+.modal input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;transition:border-color .2s}
+.modal input:focus{border-color:var(--accent)}
+.modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
+.modal-btn{padding:8px 20px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid var(--border);transition:all .15s}
+.modal-btn.primary{background:var(--accent);color:#000;border-color:var(--accent)}
+.modal-btn.secondary{background:transparent;color:var(--text2)}
+.modal-btn:hover{opacity:.85}
+.modal .hint{font-size:11px;color:var(--text3);margin-top:4px;margin-bottom:16px}
+.modal .hint a{color:var(--accent);text-decoration:none}
 
-  .face {
-    position: absolute;
-    top: 62px; left: 50%;
-    transform: translateX(-50%);
-    width: 108px; height: 26px;
-    z-index: 4;
-    display: flex; align-items: center; justify-content: center;
-    gap: 24px;
-  }
-  .eye { width: 16px; height: 16px; position: relative; }
-  .eye::before {
-    content: '';
-    position: absolute; inset: 0;
-    border-radius: 50%;
-    background: #d9eef2;
-    transition: all 0.25s ease;
-  }
-  .lamp.sleeping .eye::before,
-  .lamp.shy .eye::before {
-    background: transparent;
-    border-bottom: 3px solid #d9eef2;
-    border-radius: 0 0 16px 16px;
-    height: 9px; top: 4px;
-  }
+/* Responsive */
+@media(max-width:768px){
+  .app{grid-template-columns:1fr;grid-template-rows:60px auto 1fr}
+  .sidebar{display:none;max-height:50vh;overflow-y:auto}
+  .sidebar.open{display:block}
+  .menu-toggle{display:flex !important}
+}
+.menu-toggle{display:none;background:none;border:none;color:var(--text);cursor:pointer;padding:4px}
 
-  .pole {
-    position: absolute;
-    top: 122px; left: 50%;
-    transform: translateX(-50%);
-    width: 14px; height: 96px;
-    background: linear-gradient(90deg, #547682, var(--pole), #547682);
-    border-radius: 4px; z-index: 1;
-  }
-  .base {
-    position: absolute;
-    bottom: 0; left: 50%;
-    transform: translateX(-50%);
-    width: 116px; height: 20px;
-    background: linear-gradient(180deg, var(--pole), #547682);
-    border-radius: 50%; z-index: 1;
-  }
+/* Markdown-like formatting in responses */
+.msg-bubble strong{font-weight:700}
+.msg-bubble code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Courier New',monospace}
+.msg-bubble ul,.msg-bubble ol{padding-left:20px;margin:8px 0}
+.msg-bubble li{margin:4px 0}
+.msg-bubble h3,.msg-bubble h4{font-weight:700;margin:12px 0 6px}
 
-  .cord {
-    position: absolute;
-    top: 90px; left: 38%;
-    width: 2px; height: 62px;
-    background: var(--cord);
-    transform-origin: top center;
-    z-index: 5; cursor: pointer;
-    transition: height 0.15s ease;
-  }
-  .cord::after {
-    content: '';
-    position: absolute;
-    bottom: -8px; left: 50%;
-    transform: translateX(-50%);
-    width: 13px; height: 13px;
-    background: var(--tongue);
-    border-radius: 50%;
-    box-shadow: 0 0 12px rgba(255,154,82,0.7);
-    animation: pulse 2s infinite ease-in-out;
-  }
-  .cord.pulled { height: 80px; }
-  .lamp.on .cord::after { animation: none; }
-  @keyframes pulse {
-    0%, 100% { transform: translateX(-50%) scale(1); }
-    50% { transform: translateX(-50%) scale(1.25); }
-  }
-
-  .cord-hint {
-    position: absolute;
-    top: 162px; left: 18%;
-    font-size: 0.7rem;
-    color: #c2671f;
-    z-index: 5; pointer-events: none;
-    white-space: nowrap;
-    animation: hintPulse 2s infinite;
-    font-weight: 600;
-  }
-  .lamp.on .cord-hint { display: none; }
-  @keyframes hintPulse { 0%,100%{opacity:0.5;} 50%{opacity:1;} }
-
-  /* ── Login Card ── */
-  .card {
-    background: var(--card);
-    backdrop-filter: blur(18px);
-    -webkit-backdrop-filter: blur(18px);
-    border: 1px solid var(--card-border);
-    border-radius: 22px;
-    padding: 32px 32px 26px;
-    width: 360px;
-    margin-top: 6px;
-    box-shadow: 0 28px 60px rgba(16, 70, 95, 0.25), inset 0 1px 0 rgba(255,255,255,0.6);
-    z-index: 2;
-    opacity: 0;
-    transform: translateY(28px) scale(0.96);
-    pointer-events: none;
-    transition: opacity 0.6s ease 0.15s, transform 0.6s ease 0.15s;
-  }
-  .card.reveal { opacity: 1; transform: translateY(0) scale(1); pointer-events: auto; }
-
-  .card h2 {
-    color: var(--heading);
-    text-align: center;
-    font-size: 1.3rem;
-    font-weight: 700;
-    margin-bottom: 5px;
-    letter-spacing: 0.2px;
-  }
-  .card .sub {
-    text-align: center;
-    color: var(--muted);
-    font-size: 0.82rem;
-    margin-bottom: 26px;
-  }
-
-  .field { position: relative; margin-bottom: 16px; }
-  .field label {
-    display: block;
-    color: var(--muted);
-    font-size: 0.72rem;
-    font-weight: 600;
-    margin-bottom: 7px;
-    letter-spacing: 0.4px;
-  }
-  .field input {
-    width: 100%;
-    padding: 13px 44px 13px 15px;
-    background: rgba(255, 255, 255, 0.66);
-    border: 1.5px solid rgba(16, 90, 110, 0.18);
-    border-radius: 12px;
-    color: var(--text);
-    font-size: 0.92rem;
-    outline: none;
-    transition: border-color 0.25s, box-shadow 0.25s, background 0.25s;
-  }
-  .field input::placeholder { color: #79a3ad; }
-  .field input:focus {
-    border-color: var(--accent);
-    background: rgba(255, 255, 255, 0.92);
-    box-shadow: 0 0 0 3px rgba(14, 138, 166, 0.16);
-  }
-
-  .toggle-pw {
-    position: absolute;
-    right: 12px; bottom: 10px;
-    background: none; border: none;
-    color: var(--muted);
-    cursor: pointer; font-size: 1.05rem; line-height: 1;
-  }
-
-  .row-between {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 6px 0 20px;
-    font-size: 0.8rem;
-  }
-  .row-between label {
-    color: var(--muted);
-    display: flex; align-items: center; gap: 6px; cursor: pointer;
-  }
-  .row-between input { accent-color: var(--accent); width: 14px; height: 14px; }
-  .forgot-link {
-    color: var(--accent-deep);
-    text-decoration: none;
-    font-weight: 600;
-    transition: opacity 0.2s;
-  }
-  .forgot-link:hover { opacity: 0.7; }
-
-  .login-btn {
-    width: 100%;
-    padding: 14px;
-    background: linear-gradient(135deg, #16a6c2, #0c7a94);
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    font-size: 0.98rem;
-    font-weight: 700;
-    cursor: pointer;
-    letter-spacing: 0.3px;
-    transition: transform 0.1s, filter 0.2s, box-shadow 0.2s;
-    box-shadow: 0 8px 22px rgba(12, 122, 148, 0.4);
-  }
-  .login-btn:hover { filter: brightness(1.07); box-shadow: 0 10px 28px rgba(12, 122, 148, 0.55); }
-  .login-btn:active { transform: translateY(2px); }
-
-  .card-footer {
-    margin-top: 24px;
-    text-align: center;
-    color: #6a93a0;
-    font-size: 0.7rem;
-    letter-spacing: 0.3px;
-  }
-  .card-footer span { color: var(--accent-deep); font-weight: 700; }
-
-  @media (max-width: 420px) {
-    .card { width: 93%; }
-    .scene { height: 225px; }
-  }
+/* Export button */
+.export-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:8px;font-size:11px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;transition:all .15s}
+.export-btn:hover{border-color:var(--accent);color:var(--accent)}
 </style>
 </head>
 <body>
 
-  <!-- Large faded logo watermark -->
-  <svg class="watermark" viewBox="0 28 218 192" xmlns="http://www.w3.org/2000/svg">
-    <path fill="#2e4f9b" d="M115.9,33.71h-18.55c-6.35,0-7.4,0-12.86,0H3.83c28.24,49.03,57.4,99.36,85.63,148.36l30.56-66.02h-60.17l56.06-82.34Z"/>
-    <path fill="#1f5fa8" d="M214.41,33.71h-98.5l-13.83,55.8,68.32-.3-80.93,92.86,3.96,7.11s.03,0,3.18,5.54c.95,1.66,1.46,2.56,2.41,4.22,3.37,5.85,6.74,11.69,10.11,17.55,35.22-61.13,70.17-121.82,105.29-182.78Z"/>
-  </svg>
-
-  <!-- Brand -->
-  <div class="brand">
-    <div class="emblem">
-      <svg viewBox="0 28 218 192" xmlns="http://www.w3.org/2000/svg">
-        <path fill="#9fd8f5" d="M115.9,33.71h-18.55c-6.35,0-7.4,0-12.86,0H3.83c28.24,49.03,57.4,99.36,85.63,148.36l30.56-66.02h-60.17l56.06-82.34Z"/>
-        <path fill="#2e4f9b" d="M214.41,33.71h-98.5l-13.83,55.8,68.32-.3-80.93,92.86,3.96,7.11s.03,0,3.18,5.54c.95,1.66,1.46,2.56,2.41,4.22,3.37,5.85,6.74,11.69,10.11,17.55,35.22-61.13,70.17-121.82,105.29-182.78Z"/>
-      </svg>
+<div class="app" id="app">
+  <!-- Topbar -->
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="menu-toggle" onclick="toggleSidebar()">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+      </button>
+      <h1>⚡ <span>AI Agency</span> Dashboard</h1>
     </div>
-
-    <h1>VISHAL <span class="accent">TECHNOPOWER</span></h1>
-    <div class="tagline">Master Software</div>
-  </div>
-
-  <!-- Lamp -->
-  <div class="scene">
-    <div class="lamp sleeping" id="lamp">
-      <div class="glow"></div>
-      <div class="shade"></div>
-      <div class="shade-rim"></div>
-      <div class="face">
-        <div class="eye"></div>
-        <div class="eye"></div>
-      </div>
-      <div class="pole"></div>
-      <div class="base"></div>
-      <div class="cord" id="cord" title="Pull to turn on the light"></div>
-      <div class="cord-hint">&uarr; pull the wire to sign in</div>
+    <div class="topbar-right">
+      <select class="provider-select" id="providerSelect" onchange="switchProvider()">
+        <option value="gemini">Gemini 2.0 Flash (Free)</option>
+        <option value="groq">Groq Llama 3.3 70B (Free)</option>
+      </select>
+      <div class="status-dot" id="statusDot" title="Not connected"></div>
+      <button class="api-key-btn" id="apiKeyBtn" onclick="showApiKeyModal()">🔑 Set API Key</button>
+      <button class="export-btn" onclick="exportChat()">📋 Export</button>
     </div>
   </div>
 
-  <!-- Login Form -->
-  <div class="card" id="card">
-    <form id="loginForm">
-      <h2>Welcome Back</h2>
-      <p class="sub">Sign in to access the Master Software</p>
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar"></div>
 
-      <div class="field">
-        <label for="username">Username / Employee ID</label>
-        <input type="text" id="username" placeholder="Enter your ID" autocomplete="username" required>
-      </div>
+  <!-- Main -->
+  <div class="main" id="mainArea"></div>
+</div>
 
-      <div class="field">
-        <label for="password">Password</label>
-        <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password" required>
-        <button type="button" class="toggle-pw" id="togglePw" aria-label="Show password">&#128065;</button>
-      </div>
-
-      <div class="row-between">
-        <label><input type="checkbox" id="remember"> Remember me</label>
-        <a href="#" class="forgot-link">Forgot password?</a>
-      </div>
-
-      <button type="submit" class="login-btn">Sign In</button>
-
-      <div class="card-footer">
-        &copy; 2026 <span>Vishal Technopower Pvt. Ltd.</span> &nbsp;&bull;&nbsp; v1.0
-      </div>
-    </form>
+<!-- API Key Modal -->
+<div class="modal-overlay" id="apiModal" style="display:none">
+  <div class="modal">
+    <h3>🔑 API Key Setup</h3>
+    <p>Free API key daalo — sab free hai, koi charge nahi lagega.</p>
+    
+    <div id="geminiKeySection">
+      <label>Gemini API Key</label>
+      <input type="password" id="geminiKeyInput" placeholder="AIzaSy...">
+      <div class="hint">Free → <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> se lo (2 min)</div>
+    </div>
+    
+    <div id="groqKeySection">
+      <label>Groq API Key</label>
+      <input type="password" id="groqKeyInput" placeholder="gsk_...">
+      <div class="hint">Free → <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a> se lo (2 min)</div>
+    </div>
+    
+    <div class="modal-btns">
+      <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
+      <button class="modal-btn primary" onclick="saveApiKeys()">Save Keys</button>
+    </div>
   </div>
+</div>
 
-  <script>
-    const lamp = document.getElementById('lamp');
-    const cord = document.getElementById('cord');
-    const card = document.getElementById('card');
-    const body = document.body;
-    const username = document.getElementById('username');
-    const password = document.getElementById('password');
-    const togglePw = document.getElementById('togglePw');
+<script>
+// ============ AGENTS DATABASE ============
+const AGENTS = [
+  // Finance
+  { id:'fin-analyst', name:'Financial Analyst', emoji:'📊', division:'Finance', tag:'finance',
+    desc:'Cash flow, GP tracking, variance analysis, FY planning',
+    prompt:'You are Morgan, a Financial Analyst with 12+ years experience. You specialize in financial modeling, cash flow analysis, GP (Gross Profit) tracking using Ind AS 115/POC methodology, variance analysis, and FY planning for Indian EPC companies. You work with PSU projects (IOCL, HPCL, NTPC, GAIL). Always provide practical analysis with Indian accounting context. Use Hinglish when helpful. Format responses clearly with sections.',
+    quickPrompts:['GP Tracker review karo','Cash flow forecast banao','Debtor aging analysis','FY27 budget planning'] },
+  
+  { id:'fin-bookkeeper', name:'Bookkeeper / Controller', emoji:'📒', division:'Finance', tag:'finance',
+    desc:'Day book, Tally integration, voucher reconciliation, GST',
+    prompt:'You are a senior Bookkeeper & Controller specializing in Indian SME accounting. Expert in Tally ERP9/Prime, GST compliance, TDS, bank reconciliation, day book management, and voucher verification. You work with EPC companies handling multiple project sites. Provide practical solutions for Indian business accounting. Use Hinglish when helpful.',
+    quickPrompts:['Day book format review','GST reconciliation help','TDS calculation check','Bank reco process'] },
 
-    let isOn = false;
+  { id:'fin-cfo', name:'Chief Financial Officer', emoji:'💼', division:'Finance', tag:'finance',
+    desc:'Strategic finance, BG management, LD exposure, fund flow',
+    prompt:'You are a CFO with deep experience in Indian EPC/infrastructure companies. You handle bank guarantee management, LD (Liquidated Damages) exposure analysis, fund flow planning, working capital optimization, and strategic financial decisions for companies working with PSUs. Think at CXO level. Use Hinglish when helpful.',
+    quickPrompts:['BG expiry tracker review','Working capital optimization','LD exposure analysis','Fund flow planning'] },
 
-    function pullCord() {
-      cord.classList.add('pulled');
-      setTimeout(() => cord.classList.remove('pulled'), 200);
-      isOn = !isOn;
-      if (isOn) {
-        lamp.classList.add('on');
-        lamp.classList.remove('sleeping');
-        body.classList.add('lit');
-        card.classList.add('reveal');
-      } else {
-        lamp.classList.remove('on');
-        lamp.classList.add('sleeping');
-        body.classList.remove('lit');
-        card.classList.remove('reveal');
-        username.blur(); password.blur();
-      }
-    }
-    cord.addEventListener('click', pullCord);
+  { id:'fin-tax', name:'Tax Strategist', emoji:'🏛️', division:'Finance', tag:'finance',
+    desc:'Income tax, GST, TDS, MSMED Act, compliance',
+    prompt:'You are an Indian Tax Strategist expert in Income Tax, GST, TDS/TCS, MSMED Act 2006, and tax planning for EPC companies. You understand PSU payment cycles, retention money taxation, and multi-entity tax optimization (Pvt Ltd + Proprietorship). Provide practical tax-saving strategies within legal framework. Use Hinglish when helpful.',
+    quickPrompts:['MSMED Act notice draft','GST input credit review','TDS rate check','Tax planning FY26-27'] },
 
-    password.addEventListener('focus', () => { if (isOn) lamp.classList.add('shy'); });
-    password.addEventListener('blur', () => lamp.classList.remove('shy'));
-    username.addEventListener('focus', () => lamp.classList.remove('shy'));
+  // Engineering
+  { id:'eng-backend', name:'Backend Architect', emoji:'⚙️', division:'Engineering', tag:'engineering',
+    desc:'Node.js, Express, MongoDB, API design, system architecture',
+    prompt:'You are a Backend Architect specializing in Node.js/Express/MongoDB stack. Expert in REST API design, authentication systems, Google Apps Script integration, and building internal business tools. You understand monorepo patterns, deployment on Render/Railway, and Google Sheets as lightweight database. Build production-ready, scalable solutions. Use Hinglish when helpful.',
+    quickPrompts:['API architecture design','MongoDB schema review','Auth system design','GAS backend pattern'] },
 
-    togglePw.addEventListener('click', () => {
-      if (password.type === 'password') {
-        password.type = 'text';
-        togglePw.textContent = '\u{1F648}';
-        lamp.classList.remove('shy');
-      } else {
-        password.type = 'password';
-        togglePw.textContent = '\u{1F441}';
-        if (document.activeElement === password) lamp.classList.add('shy');
-      }
-    });
+  { id:'eng-frontend', name:'Frontend Developer', emoji:'🖥️', division:'Engineering', tag:'engineering',
+    desc:'React, HTML/CSS, dashboard UI, glassmorphism, responsive',
+    prompt:'You are a Frontend Developer expert in React, HTML5/CSS3, and modern UI development. Specialize in building internal dashboards, glassmorphism design, single-file HTML tools, responsive layouts, and integrating with Google Sheets/Apps Script backends. Expert in Tailwind CSS, charts/data visualization. Use Hinglish when helpful.',
+    quickPrompts:['Dashboard UI component','Chart integration help','Glassmorphism login page','Mobile responsive fix'] },
 
-    document.getElementById('loginForm').addEventListener('submit', (e) => {
-      e.preventDefault();
-      const btn = e.target.querySelector('.login-btn');
-      btn.textContent = 'Signing in...';
-      lamp.classList.remove('shy');
-      setTimeout(() => { btn.textContent = 'Sign In'; }, 1500);
-    });
-  </script>
+  { id:'eng-devops', name:'DevOps Engineer', emoji:'🚀', division:'Engineering', tag:'engineering',
+    desc:'GitHub Actions, Render deploy, Docker, CI/CD',
+    prompt:'You are a DevOps Engineer specializing in GitHub Pages deployment, Render.com hosting, GitHub Actions CI/CD, custom domain setup (is-a.dev), and containerization with Docker. Expert in managing multiple micro-apps, CDN configuration, and zero-downtime deployments for small teams. Use Hinglish when helpful.',
+    quickPrompts:['GitHub Actions workflow','Render deploy setup','Custom domain config','CI/CD pipeline design'] },
 
+  { id:'eng-mobile', name:'Mobile App Developer', emoji:'📱', division:'Engineering', tag:'engineering',
+    desc:'React Native, Capacitor, Play Store, PWA',
+    prompt:'You are a Mobile App Developer specializing in React + Capacitor for Android apps, PWA development, and Play Store publishing. Expert in converting web apps to mobile, offline-first architecture, push notifications, and biometric auth integration. Understand Indian market requirements for business apps. Use Hinglish when helpful.',
+    quickPrompts:['Capacitor setup guide','Play Store checklist','PWA offline support','Push notification setup'] },
+
+  { id:'eng-code-review', name:'Code Reviewer', emoji:'🔍', division:'Engineering', tag:'engineering',
+    desc:'Code quality, security audit, performance, best practices',
+    prompt:'You are a Senior Code Reviewer with expertise in JavaScript/TypeScript, Google Apps Script, React, and Node.js codebases. You identify security vulnerabilities, performance bottlenecks, code smells, and suggest best practices. You review code for production readiness, maintainability, and scalability. Use Hinglish when helpful.',
+    quickPrompts:['Review my GAS code','Security audit karo','Performance bottleneck check','Code quality improve'] },
+
+  // Operations & Project Management
+  { id:'ops-manager', name:'Operations Manager', emoji:'🏗️', division:'Operations', tag:'ops',
+    desc:'Multi-site ops, resource allocation, project tracking, SOP',
+    prompt:'You are an Operations Manager for an Indian electrical EPC company with 40+ project sites across India (IOCL, HPCL, NTPC, GAIL, NFC, AAI). Expert in resource allocation, material tracking, manpower deployment, SOP creation, site-level MIS reporting, and vendor coordination. Think practically about ground-level operations. Use Hinglish when helpful.',
+    quickPrompts:['Site MIS report format','Resource allocation plan','SOP for material receipt','Vendor follow-up process'] },
+
+  { id:'pm-senior', name:'Senior Project Manager', emoji:'📋', division:'Operations', tag:'ops',
+    desc:'Work order management, approval workflows, milestone tracking',
+    prompt:'You are a Senior Project Manager specializing in EPC projects for Indian PSUs. Expert in work order management, BOQ tracking, milestone billing, approval workflows (Manager→HOD→CEO), and project documentation. You understand Indian PSU procurement processes, deviation management, and contractual compliance. Use Hinglish when helpful.',
+    quickPrompts:['Work order tracker design','Approval workflow optimize','Milestone billing plan','Deviation report format'] },
+
+  { id:'hr-manager', name:'HR & Payroll Manager', emoji:'👥', division:'Operations', tag:'ops',
+    desc:'HRMS, attendance, leave management, payroll, PF/ESI',
+    prompt:'You are an HR & Payroll Manager for an Indian company with 200+ employees across multiple sites. Expert in attendance management, leave policies, salary structuring, PF/ESI compliance, offer letter generation, and HRMS system design. Understand multi-location HR challenges in construction/EPC industry. Use Hinglish when helpful.',
+    quickPrompts:['Leave policy draft','Salary structure optimize','PF/ESI compliance check','HRMS feature list'] },
+
+  // Specialized
+  { id:'spec-legal', name:'Legal & Compliance', emoji:'⚖️', division:'Specialized', tag:'ops',
+    desc:'MSMED Act, contract review, legal notices, PSU compliance',
+    prompt:'You are a Legal & Compliance expert specializing in Indian EPC/construction industry. Expert in MSMED Act 2006, contract interpretation, legal notice drafting, time extension claims, arbitration, and PSU tender compliance. Understand standard PSU terms (IOCL GCC, NTPC conditions). Provide practical legal guidance with proper section references. Use Hinglish when helpful.',
+    quickPrompts:['MSMED notice draft','Contract clause review','Time extension claim','Arbitration process guide'] },
+
+  { id:'spec-procurement', name:'Procurement Specialist', emoji:'📦', division:'Specialized', tag:'ops',
+    desc:'Vendor management, rate comparison, PO/LOI, material planning',
+    prompt:'You are a Procurement Specialist for Indian electrical EPC projects. Expert in vendor identification, rate comparison analysis, PO/LOI generation, material planning, freight management, and vendor payment tracking. Understand electrical materials (transformers, cables, panels, switchgear) and PSU specifications. Use Hinglish when helpful.',
+    quickPrompts:['Rate comparison template','Vendor evaluation criteria','Material planning format','Freight cost analysis'] },
+
+  { id:'spec-strategy', name:'Business Strategist', emoji:'🎯', division:'Specialized', tag:'planning',
+    desc:'Growth planning, competitive analysis, tender strategy, expansion',
+    prompt:'You are a Business Strategist specializing in Indian SME growth, particularly EPC/infrastructure companies. Expert in tender strategy, market expansion, competitive analysis, partnership development, and long-term business planning. Understand PSU qualification criteria, prequalification requirements, and industry trends in power/oil & gas sector. Use Hinglish when helpful.',
+    quickPrompts:['FY27 growth strategy','New PSU market entry plan','Tender win rate improve','Competitive analysis'] },
+
+  { id:'spec-training', name:'Training & SOP Designer', emoji:'📚', division:'Specialized', tag:'planning',
+    desc:'Employee training, SOP documentation, process standardization',
+    prompt:'You are a Corporate Training & SOP Designer for an Indian EPC company. Expert in creating training modules for field engineers, safety procedures, process documentation, and digital adoption training. Design practical, ground-level training materials that work for semi-technical staff at remote sites. Use Hinglish when helpful.',
+    quickPrompts:['Safety training module','New employee onboarding SOP','Digital tool adoption plan','Site engineer checklist'] },
+];
+
+const DIVISIONS = [...new Set(AGENTS.map(a => a.division))];
+
+// ============ STATE ============
+let state = {
+  activeAgent: null,
+  messages: {},
+  geminiKey: localStorage.getItem('gemini_key') || '',
+  groqKey: localStorage.getItem('groq_key') || '',
+  provider: localStorage.getItem('ai_provider') || 'gemini',
+  sidebarOpen: false
+};
+
+// ============ RENDER ============
+function renderSidebar() {
+  const sb = document.getElementById('sidebar');
+  let html = '';
+  DIVISIONS.forEach(div => {
+    const agents = AGENTS.filter(a => a.division === div);
+    html += `<div class="sidebar-section">
+      <h3>${div} (${agents.length})</h3>
+      ${agents.map(a => `
+        <div class="agent-card ${state.activeAgent?.id === a.id ? 'active' : ''}" onclick="selectAgent('${a.id}')">
+          <div class="agent-emoji">${a.emoji}</div>
+          <div class="agent-info">
+            <h4>${a.name}</h4>
+            <p>${a.desc.substring(0, 50)}...</p>
+          </div>
+        </div>
+      `).join('')}
+    </div>`;
+  });
+  sb.innerHTML = html;
+}
+
+function renderMain() {
+  const main = document.getElementById('mainArea');
+  if (!state.activeAgent) {
+    main.innerHTML = renderWelcome();
+    return;
+  }
+  const a = state.activeAgent;
+  const msgs = state.messages[a.id] || [];
+  const tagClass = `tag-${a.tag}`;
+  
+  main.innerHTML = `
+    <div class="agent-header">
+      <div class="agent-header-emoji">${a.emoji}</div>
+      <div class="agent-header-info">
+        <h2>${a.name}</h2>
+        <p>${a.desc}</p>
+      </div>
+      <div class="agent-header-tags">
+        <span class="tag ${tagClass}">${a.division}</span>
+      </div>
+    </div>
+    <div class="chat-area" id="chatArea">
+      ${msgs.map(m => `
+        <div class="msg ${m.role}">
+          <div class="msg-bubble">${formatMsg(m.content)}</div>
+          <div class="msg-meta">${m.role === 'user' ? 'You' : a.name} · ${m.time}</div>
+        </div>
+      `).join('')}
+      ${msgs.length === 0 ? `
+        <div style="text-align:center;padding:40px;color:var(--text3)">
+          <div style="font-size:48px;margin-bottom:12px">${a.emoji}</div>
+          <p style="font-size:14px;font-weight:600;color:var(--text2)">${a.name} ready hai!</p>
+          <p style="font-size:12px;margin-top:4px">Neeche se quick prompt use karo ya apna question likho</p>
+        </div>
+      ` : ''}
+    </div>
+    <div class="input-area">
+      <div class="quick-prompts">
+        ${a.quickPrompts.map(q => `<button class="quick-prompt" onclick="sendQuick('${q.replace(/'/g,"\\'")}')">${q}</button>`).join('')}
+      </div>
+      <div class="input-row">
+        <div class="input-wrap">
+          <textarea id="msgInput" placeholder="${a.name} se kuch poocho..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+        </div>
+        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+      </div>
+    </div>
+  `;
+  scrollToBottom();
+}
+
+function renderWelcome() {
+  return `<div class="welcome">
+    <div class="welcome-icon">⚡</div>
+    <h2>Welcome to <span>AI Agency</span></h2>
+    <p>Apne kaam ke liye sahi AI agent select karo — Finance, Engineering, Operations, ya Strategy. Har agent expert hai apne domain mein.</p>
+    <div class="welcome-grid">
+      <div class="welcome-card" onclick="selectAgent('fin-analyst')">
+        <div class="emoji">📊</div>
+        <h4>Financial Analyst</h4>
+        <p>GP tracking, cash flow, FY planning, variance analysis</p>
+      </div>
+      <div class="welcome-card" onclick="selectAgent('eng-backend')">
+        <div class="emoji">⚙️</div>
+        <h4>Backend Architect</h4>
+        <p>API design, MongoDB, Node.js, system architecture</p>
+      </div>
+      <div class="welcome-card" onclick="selectAgent('ops-manager')">
+        <div class="emoji">🏗️</div>
+        <h4>Operations Manager</h4>
+        <p>Multi-site ops, resource planning, SOP, MIS</p>
+      </div>
+      <div class="welcome-card" onclick="selectAgent('spec-strategy')">
+        <div class="emoji">🎯</div>
+        <h4>Business Strategist</h4>
+        <p>Growth planning, tender strategy, market expansion</p>
+      </div>
+    </div>
+  </div>`;
+}
+
+function formatMsg(text) {
+  return text
+    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+    .replace(/`(.*?)`/g, '<code>$1</code>')
+    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
+    .replace(/^#### (.*$)/gm, '<h4>$1</h4>')
+    .replace(/^- (.*$)/gm, '• $1')
+    .replace(/\n/g, '<br>');
+}
+
+// ============ ACTIONS ============
+function selectAgent(id) {
+  state.activeAgent = AGENTS.find(a => a.id === id);
+  if (!state.messages[id]) state.messages[id] = [];
+  state.sidebarOpen = false;
+  document.getElementById('sidebar').classList.remove('open');
+  renderSidebar();
+  renderMain();
+}
+
+function sendQuick(text) {
+  document.getElementById('msgInput').value = text;
+  sendMessage();
+}
+
+async function sendMessage() {
+  const input = document.getElementById('msgInput');
+  const text = input.value.trim();
+  if (!text || !state.activeAgent) return;
+
+  const key = getCurrentKey();
+  if (!key) { showApiKeyModal(); return; }
+
+  const a = state.activeAgent;
+  const msgs = state.messages[a.id];
+  const now = new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
+  
+  msgs.push({ role:'user', content:text, time:now });
+  input.value = '';
+  autoResize(input);
+  renderMain();
+  
+  // Show typing
+  const chatArea = document.getElementById('chatArea');
+  chatArea.insertAdjacentHTML('beforeend', '<div class="typing" id="typingDots"><span></span><span></span><span></span></div>');
+  scrollToBottom();
+  document.getElementById('sendBtn').disabled = true;
+
+  try {
+    const reply = await callAI(a.prompt, msgs);
+    msgs.push({ role:'assistant', content:reply, time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
+  } catch(e) {
+    msgs.push({ role:'assistant', content:`❌ Error: ${e.message}\n\nAPI key check karo ya provider switch karo.`, time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
+  }
+  
+  document.getElementById('sendBtn').disabled = false;
+  renderMain();
+}
+
+// ============ AI API CALLS ============
+async function callAI(systemPrompt, messages) {
+  const provider = state.provider;
+  
+  if (provider === 'gemini') return callGemini(systemPrompt, messages);
+  if (provider === 'groq') return callGroq(systemPrompt, messages);
+}
+
+async function callGemini(systemPrompt, messages) {
+  const key = state.geminiKey;
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`;
+  
+  // Build Gemini format
+  const contents = messages.map(m => ({
+    role: m.role === 'user' ? 'user' : 'model',
+    parts: [{ text: m.content }]
+  }));
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system_instruction: { parts: [{ text: systemPrompt }] },
+      contents,
+      generationConfig: { temperature: 0.8, maxOutputTokens: 2048 }
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `Gemini API error ${res.status}`);
+  }
+
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+}
+
+async function callGroq(systemPrompt, messages) {
+  const key = state.groqKey;
+  const url = 'https://api.groq.com/openai/v1/chat/completions';
+  
+  const chatMessages = [
+    { role: 'system', content: systemPrompt },
+    ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
+  ];
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${key}`
+    },
+    body: JSON.stringify({
+      model: 'llama-3.3-70b-versatile',
+      messages: chatMessages,
+      temperature: 0.8,
+      max_tokens: 2048
+    })
+  });
+
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || `Groq API error ${res.status}`);
+  }
+
+  const data = await res.json();
+  return data.choices?.[0]?.message?.content || 'No response received.';
+}
+
+// ============ API KEY MANAGEMENT ============
+function getCurrentKey() {
+  return state.provider === 'gemini' ? state.geminiKey : state.groqKey;
+}
+
+function showApiKeyModal() {
+  document.getElementById('apiModal').style.display = 'flex';
+  document.getElementById('geminiKeyInput').value = state.geminiKey;
+  document.getElementById('groqKeyInput').value = state.groqKey;
+}
+
+function closeModal() {
+  document.getElementById('apiModal').style.display = 'none';
+}
+
+function saveApiKeys() {
+  state.geminiKey = document.getElementById('geminiKeyInput').value.trim();
+  state.groqKey = document.getElementById('groqKeyInput').value.trim();
+  localStorage.setItem('gemini_key', state.geminiKey);
+  localStorage.setItem('groq_key', state.groqKey);
+  closeModal();
+  updateStatus();
+}
+
+function switchProvider() {
+  state.provider = document.getElementById('providerSelect').value;
+  localStorage.setItem('ai_provider', state.provider);
+  updateStatus();
+}
+
+function updateStatus() {
+  const dot = document.getElementById('statusDot');
+  const btn = document.getElementById('apiKeyBtn');
+  const key = getCurrentKey();
+  if (key) {
+    dot.classList.add('connected');
+    dot.title = 'Connected';
+    btn.textContent = '✅ Key Set';
+    btn.classList.add('set');
+  } else {
+    dot.classList.remove('connected');
+    dot.title = 'Not connected';
+    btn.textContent = '🔑 Set API Key';
+    btn.classList.remove('set');
+  }
+}
+
+// ============ UTILITIES ============
+function handleKey(e) {
+  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+}
+
+function autoResize(el) {
+  el.style.height = 'auto';
+  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
+}
+
+function scrollToBottom() {
+  setTimeout(() => {
+    const chat = document.getElementById('chatArea');
+    if (chat) chat.scrollTop = chat.scrollHeight;
+  }, 50);
+}
+
+function toggleSidebar() {
+  state.sidebarOpen = !state.sidebarOpen;
+  document.getElementById('sidebar').classList.toggle('open', state.sidebarOpen);
+}
+
+function exportChat() {
+  if (!state.activeAgent) return;
+  const msgs = state.messages[state.activeAgent.id] || [];
+  if (!msgs.length) return;
+  let text = `=== ${state.activeAgent.name} — Chat Export ===\n`;
+  text += `Date: ${new Date().toLocaleDateString('en-IN')}\n\n`;
+  msgs.forEach(m => {
+    text += `[${m.time}] ${m.role === 'user' ? 'You' : state.activeAgent.name}:\n${m.content}\n\n`;
+  });
+  const blob = new Blob([text], {type:'text/plain'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = `${state.activeAgent.id}-chat-${Date.now()}.txt`;
+  a.click();
+}
+
+// ============ INIT ============
+document.getElementById('providerSelect').value = state.provider;
+renderSidebar();
+renderMain();
+updateStatus();
+</script>
 </body>
 </html>
+
