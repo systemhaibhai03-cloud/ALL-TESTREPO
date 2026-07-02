@@ -3,628 +3,712 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Agency Dashboard — Vishal Group</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Tender FMS — Vishal Technopower</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box}
 :root{
-  --bg:#0a0f1a;--surface:#111827;--surface2:#1e293b;--surface3:#283548;
-  --border:#334155;--text:#e2e8f0;--text2:#94a3b8;--text3:#64748b;
-  --accent:#06d6a0;--accent2:#118ab2;--accent3:#ef476f;--accent4:#ffd166;
-  --glass:rgba(17,24,39,0.7);
+  --navy:#1a1f36; --navy2:#232a47; --accent:#4361ee; --accent-soft:#eef1fe;
+  --bg:#f5f6fa; --card:#ffffff; --border:#e6e8f0; --text:#1a1f36; --muted:#6b7192;
+  --green:#0f9d58; --green-bg:#e6f4ea; --red:#d93025; --red-bg:#fdecea;
+  --yellow:#b06000; --yellow-bg:#fef7e0; --radius:10px;
+  --shadow:0 1px 3px rgba(26,31,54,.08), 0 4px 14px rgba(26,31,54,.05);
 }
-body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:14px}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:14px;padding:9px 12px;border:1px solid var(--border);border-radius:8px;width:100%;background:#fff;color:var(--text)}
+input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);outline-offset:-1px;border-color:var(--accent)}
+label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin:12px 0 5px;text-transform:uppercase;letter-spacing:.04em}
+.mono{font-family:'JetBrains Mono',monospace}
+.hidden{display:none!important}
 
-/* Scrollbar */
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:transparent}
-::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+/* ---------- Auth / Config screens ---------- */
+.fullscreen{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--navy);
+  background-image:radial-gradient(ellipse at 20% 10%, #2b3560 0%, transparent 55%), radial-gradient(ellipse at 85% 90%, #202a55 0%, transparent 50%)}
+.auth-card{background:var(--card);border-radius:16px;padding:36px;width:400px;max-width:92vw;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+.brand-mark{width:42px;height:42px;border-radius:10px;background:var(--accent);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px}
+.brand h1{font-size:19px;font-weight:800;letter-spacing:-.02em}
+.brand small{display:block;font-weight:500;color:var(--muted);font-size:11.5px;letter-spacing:.02em}
+.auth-card p.sub{color:var(--muted);font-size:13px;margin:4px 0 8px}
 
-/* Layout */
-.app{display:grid;grid-template-columns:280px 1fr;grid-template-rows:60px 1fr;height:100vh}
-.topbar{grid-column:1/-1;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:10}
-.topbar h1{font-size:16px;font-weight:700;display:flex;align-items:center;gap:8px}
-.topbar h1 span{color:var(--accent)}
-.topbar-right{display:flex;align-items:center;gap:12px}
+/* ---------- Layout ---------- */
+#app{display:flex;min-height:100vh}
+aside{width:232px;background:var(--navy);color:#c6cbe4;position:fixed;top:0;bottom:0;left:0;display:flex;flex-direction:column;z-index:20}
+aside .brand{padding:18px 16px;border-bottom:1px solid rgba(255,255,255,.08)}
+aside .brand h1{color:#fff;font-size:15px}
+aside .brand small{color:#8b93b8}
+nav{flex:1;padding:10px 8px;overflow-y:auto}
+nav a{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;color:#c6cbe4;text-decoration:none;font-weight:500;font-size:13.5px;margin-bottom:2px}
+nav a:hover{background:rgba(255,255,255,.06);color:#fff}
+nav a.active{background:var(--accent);color:#fff}
+nav a .ic{width:18px;text-align:center}
+.userbox{padding:14px 16px;border-top:1px solid rgba(255,255,255,.08);font-size:12.5px}
+.userbox b{color:#fff;display:block;font-size:13px}
+.userbox span{color:#8b93b8}
+main{flex:1;margin-left:232px;padding:26px 30px;max-width:1500px}
+.page-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap}
+.page-head h2{font-size:21px;font-weight:800;letter-spacing:-.02em}
+.page-head .sub{color:var(--muted);font-size:13px;margin-top:2px}
 
-/* Provider selector */
-.provider-select{background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 12px;border-radius:8px;font-size:12px;font-family:inherit;cursor:pointer}
-.api-key-btn{background:var(--accent);color:#000;border:none;padding:6px 14px;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
-.api-key-btn:hover{opacity:.85}
-.api-key-btn.set{background:var(--surface2);color:var(--accent);border:1px solid var(--accent)}
-.status-dot{width:8px;height:8px;border-radius:50%;background:var(--accent3)}
-.status-dot.connected{background:var(--accent)}
+/* ---------- Components ---------- */
+.btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:8px;border:1px solid transparent;font-weight:600;font-size:13.5px;background:var(--accent);color:#fff;transition:filter .15s}
+.btn:hover{filter:brightness(1.08)}
+.btn:disabled{opacity:.55;cursor:wait}
+.btn.ghost{background:#fff;color:var(--text);border-color:var(--border)}
+.btn.ghost:hover{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.btn.danger{background:var(--red)}
+.btn.sm{padding:5px 11px;font-size:12.5px;border-radius:7px}
+.btn.wide{width:100%;justify-content:center;padding:11px}
 
-/* Sidebar */
-.sidebar{background:var(--surface);border-right:1px solid var(--border);overflow-y:auto;padding:12px}
-.sidebar-section{margin-bottom:16px}
-.sidebar-section h3{font-size:11px;text-transform:uppercase;letter-spacing:1.2px;color:var(--text3);padding:8px 12px;font-weight:600}
-.agent-card{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;cursor:pointer;transition:all .15s;border:1px solid transparent;margin-bottom:2px}
-.agent-card:hover{background:var(--surface2)}
-.agent-card.active{background:var(--surface2);border-color:var(--accent)}
-.agent-emoji{font-size:22px;width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0}
-.agent-info h4{font-size:13px;font-weight:600;line-height:1.3}
-.agent-info p{font-size:10px;color:var(--text3);line-height:1.3;margin-top:1px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:14px;margin-bottom:22px}
+.kpi{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow)}
+.kpi .v{font-size:26px;font-weight:800;letter-spacing:-.03em;margin-top:2px}
+.kpi .l{font-size:11.5px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.kpi.alert .v{color:var(--red)}
+.kpi.good .v{color:var(--green)}
 
-/* Main area */
-.main{display:grid;grid-template-rows:auto 1fr auto;overflow:hidden}
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:20px}
+.card-head{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--border);gap:10px;flex-wrap:wrap}
+.card-head h3{font-size:14.5px;font-weight:700}
+.card-body{padding:18px}
 
-/* Agent header */
-.agent-header{padding:16px 24px;background:var(--surface);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:16px}
-.agent-header-emoji{font-size:32px;width:48px;height:48px;display:flex;align-items:center;justify-content:center;background:var(--surface2);border-radius:12px}
-.agent-header-info h2{font-size:18px;font-weight:700}
-.agent-header-info p{font-size:12px;color:var(--text2);margin-top:2px}
-.agent-header-tags{display:flex;gap:6px;margin-left:auto}
-.tag{font-size:10px;padding:4px 10px;border-radius:20px;font-weight:600;border:1px solid}
-.tag-planning{color:var(--accent);border-color:rgba(6,214,160,.3);background:rgba(6,214,160,.08)}
-.tag-finance{color:var(--accent4);border-color:rgba(255,209,102,.3);background:rgba(255,209,102,.08)}
-.tag-engineering{color:var(--accent2);border-color:rgba(17,138,178,.3);background:rgba(17,138,178,.08)}
-.tag-ops{color:var(--accent3);border-color:rgba(239,71,111,.3);background:rgba(239,71,111,.08)}
+table{width:100%;border-collapse:collapse;font-size:13.5px}
+th{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em;text-align:left;padding:10px 14px;border-bottom:1px solid var(--border);background:#fafbfe;white-space:nowrap}
+td{padding:11px 14px;border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr:hover{background:#fafbff}
+tr.clickable{cursor:pointer}
 
-/* Chat area */
-.chat-area{overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:16px}
-.msg{max-width:85%;animation:msgIn .3s ease}
-@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
-.msg.user{align-self:flex-end}
-.msg.assistant{align-self:flex-start}
-.msg-bubble{padding:12px 16px;border-radius:16px;font-size:13px;line-height:1.7;white-space:pre-wrap;word-break:break-word}
-.msg.user .msg-bubble{background:var(--accent);color:#000;border-bottom-right-radius:4px;font-weight:500}
-.msg.assistant .msg-bubble{background:var(--surface2);border:1px solid var(--border);border-bottom-left-radius:4px}
-.msg-meta{font-size:10px;color:var(--text3);margin-top:4px;padding:0 4px}
-.msg.user .msg-meta{text-align:right}
-.typing{display:flex;gap:4px;padding:16px;align-self:flex-start}
-.typing span{width:8px;height:8px;background:var(--text3);border-radius:50%;animation:typeDot 1.4s infinite}
-.typing span:nth-child(2){animation-delay:.2s}
-.typing span:nth-child(3){animation-delay:.4s}
-@keyframes typeDot{0%,80%,100%{transform:scale(.4);opacity:.4}40%{transform:scale(1);opacity:1}}
+.tag{display:inline-block;padding:3px 9px;border-radius:20px;font-size:11.5px;font-weight:700}
+.tag.green{background:var(--green-bg);color:var(--green)}
+.tag.red{background:var(--red-bg);color:var(--red)}
+.tag.yellow{background:var(--yellow-bg);color:var(--yellow)}
+.tag.blue{background:var(--accent-soft);color:var(--accent)}
+.tag.gray{background:#eef0f6;color:var(--muted)}
 
-/* Input area */
-.input-area{padding:16px 24px;background:var(--surface);border-top:1px solid var(--border)}
-.input-row{display:flex;gap:10px;align-items:flex-end}
-.input-wrap{flex:1;position:relative}
-.input-wrap textarea{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:12px 16px;border-radius:14px;font-size:13px;font-family:inherit;resize:none;outline:none;min-height:46px;max-height:140px;line-height:1.5;transition:border-color .2s}
-.input-wrap textarea:focus{border-color:var(--accent)}
-.input-wrap textarea::placeholder{color:var(--text3)}
-.send-btn{width:46px;height:46px;border-radius:14px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
-.send-btn:hover{transform:scale(1.05)}
-.send-btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
-.send-btn svg{width:20px;height:20px}
+.empty{text-align:center;padding:40px 20px;color:var(--muted)}
+.empty b{display:block;color:var(--text);margin-bottom:4px;font-size:15px}
 
-/* Quick prompts */
-.quick-prompts{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap}
-.quick-prompt{font-size:11px;padding:6px 12px;background:var(--surface2);border:1px solid var(--border);color:var(--text2);border-radius:20px;cursor:pointer;transition:all .15s;font-family:inherit;white-space:nowrap}
-.quick-prompt:hover{border-color:var(--accent);color:var(--accent)}
+/* Pipeline */
+.pipeline{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 8px}
+.ph{flex:1;min-width:130px;background:#fafbfe;border:1px solid var(--border);border-radius:9px;padding:10px 12px}
+.ph .n{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.ph .s{font-weight:700;font-size:13px;margin-top:3px}
+.ph.done{background:var(--green-bg);border-color:#bfe3cd}
+.ph.done .s{color:var(--green)}
+.ph.progress{background:var(--accent-soft);border-color:#c9d4fb}
+.ph.progress .s{color:var(--accent)}
+.ph .bar{height:4px;background:rgba(0,0,0,.08);border-radius:3px;margin-top:8px;overflow:hidden}
+.ph .bar i{display:block;height:100%;background:currentColor;border-radius:3px}
 
-/* Welcome screen */
-.welcome{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;text-align:center;padding:40px}
-.welcome-icon{font-size:64px;margin-bottom:20px}
-.welcome h2{font-size:24px;font-weight:800;margin-bottom:8px}
-.welcome h2 span{color:var(--accent)}
-.welcome p{color:var(--text2);font-size:14px;max-width:460px;line-height:1.7}
-.welcome-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:32px;max-width:500px;width:100%}
-.welcome-card{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:16px;text-align:left;cursor:pointer;transition:all .15s}
-.welcome-card:hover{border-color:var(--accent);transform:translateY(-2px)}
-.welcome-card .emoji{font-size:24px;margin-bottom:8px}
-.welcome-card h4{font-size:13px;font-weight:600;margin-bottom:4px}
-.welcome-card p{font-size:11px;color:var(--text3);line-height:1.5}
+.phase-block{margin-bottom:6px}
+.phase-title{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;padding:14px 18px 6px}
 
-/* API Key Modal */
-.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);backdrop-filter:blur(8px);z-index:100;display:flex;align-items:center;justify-content:center;animation:fadeIn .2s}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-.modal{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:32px;max-width:440px;width:90%;animation:slideUp .3s ease}
-@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-.modal h3{font-size:18px;font-weight:700;margin-bottom:6px}
-.modal p{font-size:13px;color:var(--text2);margin-bottom:20px;line-height:1.6}
-.modal label{font-size:12px;font-weight:600;color:var(--text2);display:block;margin-bottom:6px}
-.modal input{width:100%;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:10px 14px;border-radius:10px;font-size:13px;font-family:inherit;outline:none;margin-bottom:16px;transition:border-color .2s}
-.modal input:focus{border-color:var(--accent)}
-.modal-btns{display:flex;gap:10px;justify-content:flex-end;margin-top:8px}
-.modal-btn{padding:8px 20px;border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;font-family:inherit;border:1px solid var(--border);transition:all .15s}
-.modal-btn.primary{background:var(--accent);color:#000;border-color:var(--accent)}
-.modal-btn.secondary{background:transparent;color:var(--text2)}
-.modal-btn:hover{opacity:.85}
-.modal .hint{font-size:11px;color:var(--text3);margin-top:4px;margin-bottom:16px}
-.modal .hint a{color:var(--accent);text-decoration:none}
+/* Modal */
+.overlay{position:fixed;inset:0;background:rgba(26,31,54,.55);display:flex;align-items:center;justify-content:center;z-index:100;padding:16px}
+.modal{background:#fff;border-radius:14px;width:520px;max-width:100%;max-height:90vh;overflow-y:auto;animation:pop .18s ease}
+@keyframes pop{from{transform:translateY(14px);opacity:0}to{transform:none;opacity:1}}
+.modal-head{padding:18px 22px 0}
+.modal-head h3{font-size:16px;font-weight:800}
+.modal-head .sub{color:var(--muted);font-size:12.5px;margin-top:3px}
+.modal-body{padding:6px 22px 22px}
+.modal-foot{display:flex;gap:10px;justify-content:flex-end;padding:0 22px 20px}
+.radio-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.radio-row label{margin:0;flex:1;min-width:110px}
+.radio-row input{display:none}
+.radio-row span{display:block;text-align:center;padding:10px;border:1.5px solid var(--border);border-radius:8px;font-weight:600;font-size:13px;color:var(--text);text-transform:none;letter-spacing:0}
+.radio-row input:checked + span{border-color:var(--accent);background:var(--accent-soft);color:var(--accent)}
 
-/* Responsive */
-@media(max-width:768px){
-  .app{grid-template-columns:1fr;grid-template-rows:60px auto 1fr}
-  .sidebar{display:none;max-height:50vh;overflow-y:auto}
-  .sidebar.open{display:block}
-  .menu-toggle{display:flex !important}
-}
-.menu-toggle{display:none;background:none;border:none;color:var(--text);cursor:pointer;padding:4px}
+/* Toast */
+#toasts{position:fixed;top:18px;right:18px;z-index:200;display:flex;flex-direction:column;gap:8px}
+.toast{background:var(--navy);color:#fff;padding:12px 16px;border-radius:9px;font-weight:600;font-size:13px;box-shadow:0 8px 24px rgba(0,0,0,.25);animation:pop .2s ease;max-width:360px}
+.toast.err{background:var(--red)} .toast.ok{background:var(--green)}
 
-/* Markdown-like formatting in responses */
-.msg-bubble strong{font-weight:700}
-.msg-bubble code{background:rgba(255,255,255,.08);padding:2px 6px;border-radius:4px;font-size:12px;font-family:'Courier New',monospace}
-.msg-bubble ul,.msg-bubble ol{padding-left:20px;margin:8px 0}
-.msg-bubble li{margin:4px 0}
-.msg-bubble h3,.msg-bubble h4{font-weight:700;margin:12px 0 6px}
-
-/* Export button */
-.export-btn{background:var(--surface2);border:1px solid var(--border);color:var(--text2);padding:6px 12px;border-radius:8px;font-size:11px;cursor:pointer;font-family:inherit;display:flex;align-items:center;gap:4px;transition:all .15s}
-.export-btn:hover{border-color:var(--accent);color:var(--accent)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:0 16px}
+.searchbar{max-width:280px}
+.detail-grid{display:grid;grid-template-columns:1fr 320px;gap:20px;align-items:start}
+.info-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px dashed var(--border);font-size:13px;gap:12px}
+.info-row:last-child{border-bottom:none}
+.info-row b{text-align:right}
+.spin{display:inline-block;width:14px;height:14px;border:2px solid rgba(255,255,255,.4);border-top-color:#fff;border-radius:50%;animation:sp .7s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.loading{padding:50px;text-align:center;color:var(--muted)}
+@media(max-width:900px){aside{display:none}main{margin-left:0;padding:16px}.detail-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
-<div class="app" id="app">
-  <!-- Topbar -->
-  <div class="topbar">
-    <div style="display:flex;align-items:center;gap:12px">
-      <button class="menu-toggle" onclick="toggleSidebar()">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
-      </button>
-      <h1>⚡ <span>AI Agency</span> Dashboard</h1>
-    </div>
-    <div class="topbar-right">
-      <select class="provider-select" id="providerSelect" onchange="switchProvider()">
-        <option value="gemini">Gemini 2.0 Flash (Free)</option>
-        <option value="groq">Groq Llama 3.3 70B (Free)</option>
-      </select>
-      <div class="status-dot" id="statusDot" title="Not connected"></div>
-      <button class="api-key-btn" id="apiKeyBtn" onclick="showApiKeyModal()">🔑 Set API Key</button>
-      <button class="export-btn" onclick="exportChat()">📋 Export</button>
-    </div>
-  </div>
-
-  <!-- Sidebar -->
-  <div class="sidebar" id="sidebar"></div>
-
-  <!-- Main -->
-  <div class="main" id="mainArea"></div>
-</div>
-
-<!-- API Key Modal -->
-<div class="modal-overlay" id="apiModal" style="display:none">
-  <div class="modal">
-    <h3>🔑 API Key Setup</h3>
-    <p>Free API key daalo — sab free hai, koi charge nahi lagega.</p>
-    
-    <div id="geminiKeySection">
-      <label>Gemini API Key</label>
-      <input type="password" id="geminiKeyInput" placeholder="AIzaSy...">
-      <div class="hint">Free → <a href="https://aistudio.google.com/apikey" target="_blank">aistudio.google.com/apikey</a> se lo (2 min)</div>
-    </div>
-    
-    <div id="groqKeySection">
-      <label>Groq API Key</label>
-      <input type="password" id="groqKeyInput" placeholder="gsk_...">
-      <div class="hint">Free → <a href="https://console.groq.com/keys" target="_blank">console.groq.com/keys</a> se lo (2 min)</div>
-    </div>
-    
-    <div class="modal-btns">
-      <button class="modal-btn secondary" onclick="closeModal()">Cancel</button>
-      <button class="modal-btn primary" onclick="saveApiKeys()">Save Keys</button>
-    </div>
+<!-- ============ CONFIG SCREEN ============ -->
+<div id="scrConfig" class="fullscreen hidden">
+  <div class="auth-card">
+    <div class="brand"><div class="brand-mark">T</div><div><h1>Tender FMS</h1><small>Vishal Technopower Pvt. Ltd.</small></div></div>
+    <p class="sub">First-time setup: Apps Script Web App URL paste karo. Yeh browser mein save ho jayega.</p>
+    <label>Apps Script Web App URL</label>
+    <input id="cfgUrl" placeholder="https://script.google.com/macros/s/XXXX/exec">
+    <div style="margin-top:16px"><button class="btn wide" onclick="saveConfig()">Save &amp; Continue</button></div>
   </div>
 </div>
+
+<!-- ============ LOGIN SCREEN ============ -->
+<div id="scrLogin" class="fullscreen hidden">
+  <div class="auth-card">
+    <div class="brand"><div class="brand-mark">T</div><div><h1>Tender FMS</h1><small>Vishal Technopower Pvt. Ltd.</small></div></div>
+    <p class="sub">Sign in to your workspace</p>
+    <form onsubmit="doLogin(event)">
+      <label>Email</label><input id="loginEmail" type="email" required autocomplete="username">
+      <label>Password</label><input id="loginPass" type="password" required autocomplete="current-password">
+      <div style="margin-top:18px"><button class="btn wide" id="btnLogin" type="submit">Sign in</button></div>
+    </form>
+    <div style="margin-top:14px;text-align:center"><a href="#" onclick="resetConfig();return false" style="color:var(--muted);font-size:12px">Change API URL</a></div>
+  </div>
+</div>
+
+<!-- ============ APP ============ -->
+<div id="app" class="hidden">
+  <aside>
+    <div class="brand"><div class="brand-mark">T</div><div><h1>Tender FMS</h1><small>Vishal Technopower</small></div></div>
+    <nav id="nav">
+      <a href="#dashboard" data-v="dashboard"><span class="ic">📊</span> Dashboard</a>
+      <a href="#new" data-v="new" data-role="Admin,Sales Coordinator"><span class="ic">➕</span> New Tender</a>
+      <a href="#tenders" data-v="tenders"><span class="ic">📁</span> Tender List</a>
+      <a href="#tasks" data-v="tasks"><span class="ic">✅</span> My Tasks</a>
+      <a href="#tbq" data-v="tbq"><span class="ic">📋</span> TBQ Management</a>
+      <a href="#revenue" data-v="revenue"><span class="ic">📈</span> Revenue Tracker</a>
+      <a href="#users" data-v="users" data-role="Admin"><span class="ic">⚙️</span> User Management</a>
+    </nav>
+    <div class="userbox">
+      <b id="uName"></b><span id="uRole"></span>
+      <div style="margin-top:10px"><button class="btn ghost sm" onclick="doLogout()">🚪 Logout</button></div>
+    </div>
+  </aside>
+  <main id="main"></main>
+</div>
+
+<div id="toasts"></div>
+<div id="modalHost"></div>
 
 <script>
-// ============ AGENTS DATABASE ============
-const AGENTS = [
-  // Finance
-  { id:'fin-analyst', name:'Financial Analyst', emoji:'📊', division:'Finance', tag:'finance',
-    desc:'Cash flow, GP tracking, variance analysis, FY planning',
-    prompt:'You are Morgan, a Financial Analyst with 12+ years experience. You specialize in financial modeling, cash flow analysis, GP (Gross Profit) tracking using Ind AS 115/POC methodology, variance analysis, and FY planning for Indian EPC companies. You work with PSU projects (IOCL, HPCL, NTPC, GAIL). Always provide practical analysis with Indian accounting context. Use Hinglish when helpful. Format responses clearly with sections.',
-    quickPrompts:['GP Tracker review karo','Cash flow forecast banao','Debtor aging analysis','FY27 budget planning'] },
-  
-  { id:'fin-bookkeeper', name:'Bookkeeper / Controller', emoji:'📒', division:'Finance', tag:'finance',
-    desc:'Day book, Tally integration, voucher reconciliation, GST',
-    prompt:'You are a senior Bookkeeper & Controller specializing in Indian SME accounting. Expert in Tally ERP9/Prime, GST compliance, TDS, bank reconciliation, day book management, and voucher verification. You work with EPC companies handling multiple project sites. Provide practical solutions for Indian business accounting. Use Hinglish when helpful.',
-    quickPrompts:['Day book format review','GST reconciliation help','TDS calculation check','Bank reco process'] },
+/* ============================ CORE ============================ */
+var API = localStorage.getItem('tfms_api') || '';
+var TOKEN = sessionStorage.getItem('tfms_token') || '';
+var USER = JSON.parse(sessionStorage.getItem('tfms_user') || 'null');
+var CACHE = { options: null, tenders: [] };
 
-  { id:'fin-cfo', name:'Chief Financial Officer', emoji:'💼', division:'Finance', tag:'finance',
-    desc:'Strategic finance, BG management, LD exposure, fund flow',
-    prompt:'You are a CFO with deep experience in Indian EPC/infrastructure companies. You handle bank guarantee management, LD (Liquidated Damages) exposure analysis, fund flow planning, working capital optimization, and strategic financial decisions for companies working with PSUs. Think at CXO level. Use Hinglish when helpful.',
-    quickPrompts:['BG expiry tracker review','Working capital optimization','LD exposure analysis','Fund flow planning'] },
+function $(id){ return document.getElementById(id); }
+function esc(s){ return String(s==null?'':s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
 
-  { id:'fin-tax', name:'Tax Strategist', emoji:'🏛️', division:'Finance', tag:'finance',
-    desc:'Income tax, GST, TDS, MSMED Act, compliance',
-    prompt:'You are an Indian Tax Strategist expert in Income Tax, GST, TDS/TCS, MSMED Act 2006, and tax planning for EPC companies. You understand PSU payment cycles, retention money taxation, and multi-entity tax optimization (Pvt Ltd + Proprietorship). Provide practical tax-saving strategies within legal framework. Use Hinglish when helpful.',
-    quickPrompts:['MSMED Act notice draft','GST input credit review','TDS rate check','Tax planning FY26-27'] },
+async function api(action, data){
+  var res = await fetch(API, { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify({ action:action, token:TOKEN, data:data||{} }) });
+  var out = await res.json();
+  if(out && out.error === 'SESSION_EXPIRED'){ toast('Session expired — login again', 'err'); logoutLocal(); throw new Error('SESSION_EXPIRED'); }
+  return out;
+}
 
-  // Engineering
-  { id:'eng-backend', name:'Backend Architect', emoji:'⚙️', division:'Engineering', tag:'engineering',
-    desc:'Node.js, Express, MongoDB, API design, system architecture',
-    prompt:'You are a Backend Architect specializing in Node.js/Express/MongoDB stack. Expert in REST API design, authentication systems, Google Apps Script integration, and building internal business tools. You understand monorepo patterns, deployment on Render/Railway, and Google Sheets as lightweight database. Build production-ready, scalable solutions. Use Hinglish when helpful.',
-    quickPrompts:['API architecture design','MongoDB schema review','Auth system design','GAS backend pattern'] },
+function toast(msg, type){
+  var d = document.createElement('div');
+  d.className = 'toast ' + (type||'');
+  d.textContent = msg;
+  $('toasts').appendChild(d);
+  setTimeout(function(){ d.remove(); }, 4000);
+}
 
-  { id:'eng-frontend', name:'Frontend Developer', emoji:'🖥️', division:'Engineering', tag:'engineering',
-    desc:'React, HTML/CSS, dashboard UI, glassmorphism, responsive',
-    prompt:'You are a Frontend Developer expert in React, HTML5/CSS3, and modern UI development. Specialize in building internal dashboards, glassmorphism design, single-file HTML tools, responsive layouts, and integrating with Google Sheets/Apps Script backends. Expert in Tailwind CSS, charts/data visualization. Use Hinglish when helpful.',
-    quickPrompts:['Dashboard UI component','Chart integration help','Glassmorphism login page','Mobile responsive fix'] },
+function busy(btn, on){
+  if(!btn) return;
+  btn.disabled = on;
+  if(on){ btn.dataset.txt = btn.innerHTML; btn.innerHTML = '<span class="spin"></span> Please wait'; }
+  else btn.innerHTML = btn.dataset.txt;
+}
 
-  { id:'eng-devops', name:'DevOps Engineer', emoji:'🚀', division:'Engineering', tag:'engineering',
-    desc:'GitHub Actions, Render deploy, Docker, CI/CD',
-    prompt:'You are a DevOps Engineer specializing in GitHub Pages deployment, Render.com hosting, GitHub Actions CI/CD, custom domain setup (is-a.dev), and containerization with Docker. Expert in managing multiple micro-apps, CDN configuration, and zero-downtime deployments for small teams. Use Hinglish when helpful.',
-    quickPrompts:['GitHub Actions workflow','Render deploy setup','Custom domain config','CI/CD pipeline design'] },
+/* ---------- Formatting ---------- */
+var INR = new Intl.NumberFormat('en-IN', { style:'currency', currency:'INR', maximumFractionDigits:0 });
+function fInr(n){ return n ? INR.format(n) : '—'; }
+var MON = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+function fDate(iso){ if(!iso) return '—'; var d = new Date(iso); return ('0'+d.getDate()).slice(-2)+'-'+MON[d.getMonth()]+'-'+d.getFullYear(); }
+function fDT(iso){ if(!iso) return '—'; var d = new Date(iso); return fDate(iso)+' '+('0'+d.getHours()).slice(-2)+':'+('0'+d.getMinutes()).slice(-2); }
+function stateTag(s){
+  return { done:'<span class="tag green">Done</span>', overdue:'<span class="tag red">Overdue</span>',
+    today:'<span class="tag yellow">Due today</span>', pending:'<span class="tag blue">Pending</span>' }[s] || '<span class="tag gray">'+esc(s)+'</span>';
+}
+function statusTag(s){
+  var m = { Lead:'blue', Live:'green', Submitted:'yellow', Won:'green', Lost:'red', Rejected:'red', Closed:'gray' };
+  return '<span class="tag '+(m[s]||'gray')+'">'+esc(s)+'</span>';
+}
 
-  { id:'eng-mobile', name:'Mobile App Developer', emoji:'📱', division:'Engineering', tag:'engineering',
-    desc:'React Native, Capacitor, Play Store, PWA',
-    prompt:'You are a Mobile App Developer specializing in React + Capacitor for Android apps, PWA development, and Play Store publishing. Expert in converting web apps to mobile, offline-first architecture, push notifications, and biometric auth integration. Understand Indian market requirements for business apps. Use Hinglish when helpful.',
-    quickPrompts:['Capacitor setup guide','Play Store checklist','PWA offline support','Push notification setup'] },
-
-  { id:'eng-code-review', name:'Code Reviewer', emoji:'🔍', division:'Engineering', tag:'engineering',
-    desc:'Code quality, security audit, performance, best practices',
-    prompt:'You are a Senior Code Reviewer with expertise in JavaScript/TypeScript, Google Apps Script, React, and Node.js codebases. You identify security vulnerabilities, performance bottlenecks, code smells, and suggest best practices. You review code for production readiness, maintainability, and scalability. Use Hinglish when helpful.',
-    quickPrompts:['Review my GAS code','Security audit karo','Performance bottleneck check','Code quality improve'] },
-
-  // Operations & Project Management
-  { id:'ops-manager', name:'Operations Manager', emoji:'🏗️', division:'Operations', tag:'ops',
-    desc:'Multi-site ops, resource allocation, project tracking, SOP',
-    prompt:'You are an Operations Manager for an Indian electrical EPC company with 40+ project sites across India (IOCL, HPCL, NTPC, GAIL, NFC, AAI). Expert in resource allocation, material tracking, manpower deployment, SOP creation, site-level MIS reporting, and vendor coordination. Think practically about ground-level operations. Use Hinglish when helpful.',
-    quickPrompts:['Site MIS report format','Resource allocation plan','SOP for material receipt','Vendor follow-up process'] },
-
-  { id:'pm-senior', name:'Senior Project Manager', emoji:'📋', division:'Operations', tag:'ops',
-    desc:'Work order management, approval workflows, milestone tracking',
-    prompt:'You are a Senior Project Manager specializing in EPC projects for Indian PSUs. Expert in work order management, BOQ tracking, milestone billing, approval workflows (Manager→HOD→CEO), and project documentation. You understand Indian PSU procurement processes, deviation management, and contractual compliance. Use Hinglish when helpful.',
-    quickPrompts:['Work order tracker design','Approval workflow optimize','Milestone billing plan','Deviation report format'] },
-
-  { id:'hr-manager', name:'HR & Payroll Manager', emoji:'👥', division:'Operations', tag:'ops',
-    desc:'HRMS, attendance, leave management, payroll, PF/ESI',
-    prompt:'You are an HR & Payroll Manager for an Indian company with 200+ employees across multiple sites. Expert in attendance management, leave policies, salary structuring, PF/ESI compliance, offer letter generation, and HRMS system design. Understand multi-location HR challenges in construction/EPC industry. Use Hinglish when helpful.',
-    quickPrompts:['Leave policy draft','Salary structure optimize','PF/ESI compliance check','HRMS feature list'] },
-
-  // Specialized
-  { id:'spec-legal', name:'Legal & Compliance', emoji:'⚖️', division:'Specialized', tag:'ops',
-    desc:'MSMED Act, contract review, legal notices, PSU compliance',
-    prompt:'You are a Legal & Compliance expert specializing in Indian EPC/construction industry. Expert in MSMED Act 2006, contract interpretation, legal notice drafting, time extension claims, arbitration, and PSU tender compliance. Understand standard PSU terms (IOCL GCC, NTPC conditions). Provide practical legal guidance with proper section references. Use Hinglish when helpful.',
-    quickPrompts:['MSMED notice draft','Contract clause review','Time extension claim','Arbitration process guide'] },
-
-  { id:'spec-procurement', name:'Procurement Specialist', emoji:'📦', division:'Specialized', tag:'ops',
-    desc:'Vendor management, rate comparison, PO/LOI, material planning',
-    prompt:'You are a Procurement Specialist for Indian electrical EPC projects. Expert in vendor identification, rate comparison analysis, PO/LOI generation, material planning, freight management, and vendor payment tracking. Understand electrical materials (transformers, cables, panels, switchgear) and PSU specifications. Use Hinglish when helpful.',
-    quickPrompts:['Rate comparison template','Vendor evaluation criteria','Material planning format','Freight cost analysis'] },
-
-  { id:'spec-strategy', name:'Business Strategist', emoji:'🎯', division:'Specialized', tag:'planning',
-    desc:'Growth planning, competitive analysis, tender strategy, expansion',
-    prompt:'You are a Business Strategist specializing in Indian SME growth, particularly EPC/infrastructure companies. Expert in tender strategy, market expansion, competitive analysis, partnership development, and long-term business planning. Understand PSU qualification criteria, prequalification requirements, and industry trends in power/oil & gas sector. Use Hinglish when helpful.',
-    quickPrompts:['FY27 growth strategy','New PSU market entry plan','Tender win rate improve','Competitive analysis'] },
-
-  { id:'spec-training', name:'Training & SOP Designer', emoji:'📚', division:'Specialized', tag:'planning',
-    desc:'Employee training, SOP documentation, process standardization',
-    prompt:'You are a Corporate Training & SOP Designer for an Indian EPC company. Expert in creating training modules for field engineers, safety procedures, process documentation, and digital adoption training. Design practical, ground-level training materials that work for semi-technical staff at remote sites. Use Hinglish when helpful.',
-    quickPrompts:['Safety training module','New employee onboarding SOP','Digital tool adoption plan','Site engineer checklist'] },
-];
-
-const DIVISIONS = [...new Set(AGENTS.map(a => a.division))];
-
-// ============ STATE ============
-let state = {
-  activeAgent: null,
-  messages: {},
-  geminiKey: localStorage.getItem('gemini_key') || '',
-  groqKey: localStorage.getItem('groq_key') || '',
-  provider: localStorage.getItem('ai_provider') || 'gemini',
-  sidebarOpen: false
-};
-
-// ============ RENDER ============
-function renderSidebar() {
-  const sb = document.getElementById('sidebar');
-  let html = '';
-  DIVISIONS.forEach(div => {
-    const agents = AGENTS.filter(a => a.division === div);
-    html += `<div class="sidebar-section">
-      <h3>${div} (${agents.length})</h3>
-      ${agents.map(a => `
-        <div class="agent-card ${state.activeAgent?.id === a.id ? 'active' : ''}" onclick="selectAgent('${a.id}')">
-          <div class="agent-emoji">${a.emoji}</div>
-          <div class="agent-info">
-            <h4>${a.name}</h4>
-            <p>${a.desc.substring(0, 50)}...</p>
-          </div>
-        </div>
-      `).join('')}
-    </div>`;
+/* ============================ AUTH FLOW ============================ */
+function boot(){
+  if(!API){ show('scrConfig'); return; }
+  if(!TOKEN || !USER){ show('scrLogin'); return; }
+  show('app');
+  $('uName').textContent = USER.name;
+  $('uRole').textContent = USER.role;
+  document.querySelectorAll('#nav a[data-role]').forEach(function(a){
+    if(a.dataset.role.split(',').indexOf(USER.role) === -1) a.classList.add('hidden');
   });
-  sb.innerHTML = html;
+  route();
 }
+function show(id){
+  ['scrConfig','scrLogin','app'].forEach(function(s){ $(s).classList.add('hidden'); });
+  $(id).classList.remove('hidden');
+}
+function saveConfig(){
+  var u = $('cfgUrl').value.trim();
+  if(!/^https:\/\/script\.google\.com\/.+\/exec$/.test(u)){ toast('Valid /exec URL daalo', 'err'); return; }
+  localStorage.setItem('tfms_api', u); API = u; boot();
+}
+function resetConfig(){ localStorage.removeItem('tfms_api'); API=''; boot(); }
 
-function renderMain() {
-  const main = document.getElementById('mainArea');
-  if (!state.activeAgent) {
-    main.innerHTML = renderWelcome();
-    return;
+async function doLogin(e){
+  e.preventDefault();
+  var b = $('btnLogin'); busy(b, true);
+  try{
+    var r = await api('login', { email:$('loginEmail').value, password:$('loginPass').value });
+    if(!r.ok){ toast(r.error, 'err'); return; }
+    TOKEN = r.token; USER = r.user;
+    sessionStorage.setItem('tfms_token', TOKEN);
+    sessionStorage.setItem('tfms_user', JSON.stringify(USER));
+    boot(); toast('Welcome, ' + USER.name, 'ok');
+  }catch(err){ toast('Network error — API URL check karo', 'err'); }
+  finally{ busy(b, false); }
+}
+function logoutLocal(){
+  TOKEN=''; USER=null;
+  sessionStorage.removeItem('tfms_token'); sessionStorage.removeItem('tfms_user');
+  show('scrLogin');
+}
+async function doLogout(){ try{ await api('logout'); }catch(e){} logoutLocal(); }
+
+/* ============================ ROUTER ============================ */
+window.addEventListener('hashchange', route);
+function route(){
+  if($('app').classList.contains('hidden')) return;
+  var v = (location.hash || '#dashboard').slice(1).split('/');
+  document.querySelectorAll('#nav a').forEach(function(a){ a.classList.toggle('active', a.dataset.v === v[0]); });
+  var views = { dashboard:vDashboard, new:vNewTender, tenders:vTenders, tender:function(){ vTenderDetail(v[1]); },
+    tasks:vTasks, tbq:vTBQ, revenue:vRevenue, users:vUsers };
+  (views[v[0]] || vDashboard)();
+}
+function setMain(html){ $('main').innerHTML = html; }
+function loading(title){ setMain('<div class="page-head"><h2>'+esc(title)+'</h2></div><div class="card"><div class="loading"><span class="spin" style="border-color:#ccd;border-top-color:var(--accent)"></span></div></div>'); }
+
+/* ============================ DASHBOARD ============================ */
+async function vDashboard(){
+  loading('Dashboard');
+  var r = await api('getBootstrap');
+  if(!r.ok){ toast(r.error,'err'); return; }
+  var k = r.kpis;
+  CACHE.tenders = r.tenders;
+  var live = r.tenders.filter(function(t){ return ['Lead','Live'].indexOf(t.status) > -1; });
+  var h = '<div class="page-head"><div><h2>Dashboard</h2><div class="sub">Namaste, '+esc(USER.name)+' — aaj ka overview</div></div>'
+    + (USER.role==='Admin'||USER.role==='Sales Coordinator' ? '<a class="btn" href="#new">➕ New Tender</a>' : '') + '</div>';
+  h += '<div class="kpis">'
+    + kpi('Active Tenders', k.activeTenders)
+    + kpi('Due This Week', k.dueThisWeek, k.dueThisWeek>0?'alert':'')
+    + kpi('Overdue Tasks', k.overdueTasks, k.overdueTasks>0?'alert':'good')
+    + kpi('Submitted This Month', k.submittedThisMonth)
+    + kpi('Win Rate', k.winRate + '%', 'good')
+    + kpi('Total Bid Value', fInr(k.totalBidValue))
+    + kpi('Pending TBQs', k.pendingTBQ) + '</div>';
+
+  h += '<div class="card"><div class="card-head"><h3>'+(USER.role==='Admin'?'All Pending Tasks':'My Tasks')+'</h3><span class="tag blue">'+r.tasks.length+' pending</span></div>' + taskTable(r.tasks) + '</div>';
+
+  h += '<div class="card"><div class="card-head"><h3>Live &amp; Active Tenders</h3></div>';
+  if(!live.length) h += '<div class="empty"><b>No active tenders</b>+ New Tender se shuru karo.</div>';
+  else{
+    h += '<table><thead><tr><th>TND ID</th><th>Project</th><th>Department</th><th>Value</th><th>Due Date</th><th>Current Step</th><th>Days Left</th><th>Status</th></tr></thead><tbody>';
+    live.forEach(function(t){ h += tenderRow(t); });
+    h += '</tbody></table>';
   }
-  const a = state.activeAgent;
-  const msgs = state.messages[a.id] || [];
-  const tagClass = `tag-${a.tag}`;
-  
-  main.innerHTML = `
-    <div class="agent-header">
-      <div class="agent-header-emoji">${a.emoji}</div>
-      <div class="agent-header-info">
-        <h2>${a.name}</h2>
-        <p>${a.desc}</p>
-      </div>
-      <div class="agent-header-tags">
-        <span class="tag ${tagClass}">${a.division}</span>
-      </div>
-    </div>
-    <div class="chat-area" id="chatArea">
-      ${msgs.map(m => `
-        <div class="msg ${m.role}">
-          <div class="msg-bubble">${formatMsg(m.content)}</div>
-          <div class="msg-meta">${m.role === 'user' ? 'You' : a.name} · ${m.time}</div>
-        </div>
-      `).join('')}
-      ${msgs.length === 0 ? `
-        <div style="text-align:center;padding:40px;color:var(--text3)">
-          <div style="font-size:48px;margin-bottom:12px">${a.emoji}</div>
-          <p style="font-size:14px;font-weight:600;color:var(--text2)">${a.name} ready hai!</p>
-          <p style="font-size:12px;margin-top:4px">Neeche se quick prompt use karo ya apna question likho</p>
-        </div>
-      ` : ''}
-    </div>
-    <div class="input-area">
-      <div class="quick-prompts">
-        ${a.quickPrompts.map(q => `<button class="quick-prompt" onclick="sendQuick('${q.replace(/'/g,"\\'")}')">${q}</button>`).join('')}
-      </div>
-      <div class="input-row">
-        <div class="input-wrap">
-          <textarea id="msgInput" placeholder="${a.name} se kuch poocho..." rows="1" onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
-        </div>
-        <button class="send-btn" id="sendBtn" onclick="sendMessage()">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.5"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
-        </button>
-      </div>
-    </div>
-  `;
-  scrollToBottom();
+  h += '</div>';
+  setMain(h);
 }
-
-function renderWelcome() {
-  return `<div class="welcome">
-    <div class="welcome-icon">⚡</div>
-    <h2>Welcome to <span>AI Agency</span></h2>
-    <p>Apne kaam ke liye sahi AI agent select karo — Finance, Engineering, Operations, ya Strategy. Har agent expert hai apne domain mein.</p>
-    <div class="welcome-grid">
-      <div class="welcome-card" onclick="selectAgent('fin-analyst')">
-        <div class="emoji">📊</div>
-        <h4>Financial Analyst</h4>
-        <p>GP tracking, cash flow, FY planning, variance analysis</p>
-      </div>
-      <div class="welcome-card" onclick="selectAgent('eng-backend')">
-        <div class="emoji">⚙️</div>
-        <h4>Backend Architect</h4>
-        <p>API design, MongoDB, Node.js, system architecture</p>
-      </div>
-      <div class="welcome-card" onclick="selectAgent('ops-manager')">
-        <div class="emoji">🏗️</div>
-        <h4>Operations Manager</h4>
-        <p>Multi-site ops, resource planning, SOP, MIS</p>
-      </div>
-      <div class="welcome-card" onclick="selectAgent('spec-strategy')">
-        <div class="emoji">🎯</div>
-        <h4>Business Strategist</h4>
-        <p>Growth planning, tender strategy, market expansion</p>
-      </div>
-    </div>
-  </div>`;
+function kpi(l, v, cls){ return '<div class="kpi '+(cls||'')+'"><div class="l">'+l+'</div><div class="v">'+v+'</div></div>'; }
+function tenderRow(t){
+  var dl = t.daysLeft;
+  var dlTag = dl==null ? '—' : '<span class="tag '+(dl<3?'red':dl<7?'yellow':'green')+'">'+dl+' days</span>';
+  return '<tr class="clickable" onclick="location.hash=\'tender/'+t.uid+'\'">'
+    + '<td class="mono" style="font-size:12px">'+esc(t.uid)+'</td><td><b>'+esc(t.project)+'</b></td><td>'+esc(t.department)+'</td>'
+    + '<td>'+fInr(t.value)+'</td><td>'+fDate(t.due)+'</td><td style="max-width:220px">'+esc(t.currentStepName||'—')+'</td>'
+    + '<td>'+dlTag+'</td><td>'+statusTag(t.status)+'</td></tr>';
 }
-
-function formatMsg(text) {
-  return text
-    .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    .replace(/`(.*?)`/g, '<code>$1</code>')
-    .replace(/^### (.*$)/gm, '<h3>$1</h3>')
-    .replace(/^#### (.*$)/gm, '<h4>$1</h4>')
-    .replace(/^- (.*$)/gm, '• $1')
-    .replace(/\n/g, '<br>');
-}
-
-// ============ ACTIONS ============
-function selectAgent(id) {
-  state.activeAgent = AGENTS.find(a => a.id === id);
-  if (!state.messages[id]) state.messages[id] = [];
-  state.sidebarOpen = false;
-  document.getElementById('sidebar').classList.remove('open');
-  renderSidebar();
-  renderMain();
-}
-
-function sendQuick(text) {
-  document.getElementById('msgInput').value = text;
-  sendMessage();
-}
-
-async function sendMessage() {
-  const input = document.getElementById('msgInput');
-  const text = input.value.trim();
-  if (!text || !state.activeAgent) return;
-
-  const key = getCurrentKey();
-  if (!key) { showApiKeyModal(); return; }
-
-  const a = state.activeAgent;
-  const msgs = state.messages[a.id];
-  const now = new Date().toLocaleTimeString('en-IN', {hour:'2-digit',minute:'2-digit'});
-  
-  msgs.push({ role:'user', content:text, time:now });
-  input.value = '';
-  autoResize(input);
-  renderMain();
-  
-  // Show typing
-  const chatArea = document.getElementById('chatArea');
-  chatArea.insertAdjacentHTML('beforeend', '<div class="typing" id="typingDots"><span></span><span></span><span></span></div>');
-  scrollToBottom();
-  document.getElementById('sendBtn').disabled = true;
-
-  try {
-    const reply = await callAI(a.prompt, msgs);
-    msgs.push({ role:'assistant', content:reply, time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
-  } catch(e) {
-    msgs.push({ role:'assistant', content:`❌ Error: ${e.message}\n\nAPI key check karo ya provider switch karo.`, time:new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'}) });
-  }
-  
-  document.getElementById('sendBtn').disabled = false;
-  renderMain();
-}
-
-// ============ AI API CALLS ============
-async function callAI(systemPrompt, messages) {
-  const provider = state.provider;
-  
-  if (provider === 'gemini') return callGemini(systemPrompt, messages);
-  if (provider === 'groq') return callGroq(systemPrompt, messages);
-}
-
-async function callGemini(systemPrompt, messages) {
-  const key = state.geminiKey;
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${key}`;
-  
-  // Build Gemini format
-  const contents = messages.map(m => ({
-    role: m.role === 'user' ? 'user' : 'model',
-    parts: [{ text: m.content }]
-  }));
-
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      system_instruction: { parts: [{ text: systemPrompt }] },
-      contents,
-      generationConfig: { temperature: 0.8, maxOutputTokens: 2048 }
-    })
+function taskTable(tasks){
+  if(!tasks.length) return '<div class="empty"><b>Sab kaam done! 🎉</b>Koi pending task nahi hai.</div>';
+  var h = '<table><thead><tr><th>Task</th><th>Project</th><th>Phase</th><th>Doer</th><th>Planned</th><th>Status</th><th></th></tr></thead><tbody>';
+  tasks.forEach(function(t, i){
+    var canDo = USER.role === 'Admin' || String(t.doerEmail).toLowerCase() === String(USER.email).toLowerCase();
+    h += '<tr><td style="max-width:280px"><b>'+esc(t.name)+'</b><div style="color:var(--muted);font-size:11.5px" class="mono">'+esc(t.code)+'</div></td>'
+      + '<td>'+esc(t.project)+'</td><td>'+esc(t.phaseName)+'</td><td>'+esc(t.doerName)+'</td>'
+      + '<td>'+fDate(t.planned)+'</td><td>'+stateTag(t.state)+'</td>'
+      + '<td>'+(canDo ? '<button class="btn sm" onclick=\'openStepModal('+JSON.stringify(t).replace(/'/g,"&#39;")+')\'>Update</button>' : '')+'</td></tr>';
   });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `Gemini API error ${res.status}`);
-  }
-
-  const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response received.';
+  return h + '</tbody></table>';
 }
 
-async function callGroq(systemPrompt, messages) {
-  const key = state.groqKey;
-  const url = 'https://api.groq.com/openai/v1/chat/completions';
-  
-  const chatMessages = [
-    { role: 'system', content: systemPrompt },
-    ...messages.map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.content }))
-  ];
+/* ============================ MY TASKS ============================ */
+async function vTasks(){
+  loading('My Tasks');
+  var r = await api('getMyTasks');
+  if(!r.ok){ toast(r.error,'err'); return; }
+  setMain('<div class="page-head"><div><h2>My Tasks</h2><div class="sub">Aapko assigned pending steps</div></div></div>'
+    + '<div class="card">' + taskTable(r.tasks) + '</div>');
+}
 
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      'Authorization': `Bearer ${key}`
-    },
-    body: JSON.stringify({
-      model: 'llama-3.3-70b-versatile',
-      messages: chatMessages,
-      temperature: 0.8,
-      max_tokens: 2048
-    })
+/* ============================ NEW TENDER ============================ */
+async function vNewTender(){
+  loading('New Tender');
+  if(!CACHE.options){
+    var r = await api('getFormOptions');
+    if(!r.ok){ toast(r.error,'err'); return; }
+    CACHE.options = r;
+  }
+  var o = CACHE.options;
+  function sel(id, list, valKey, txtKey){
+    var h = '<select id="'+id+'" required><option value="">— Select —</option>';
+    list.forEach(function(x){
+      var v = valKey ? x[valKey] : x, t = txtKey ? x[txtKey]+' ('+x[valKey]+')' : x;
+      h += '<option value="'+esc(v)+'">'+esc(t)+'</option>';
+    });
+    return h + '</select>';
+  }
+  setMain('<div class="page-head"><div><h2>New Tender Entry</h2><div class="sub">Lead Generation — Phase 1 shuru hoga</div></div></div>'
+  + '<div class="card"><div class="card-body"><form onsubmit="submitTender(event)"><div class="grid2">'
+  + '<div><label>Name of Department *</label>'+sel('fDept', o.departments)+'</div>'
+  + '<div><label>Project / Work Name *</label><input id="fProject" required></div>'
+  + '<div><label>Tender Value (₹)</label><input id="fValue" type="number" min="0"></div>'
+  + '<div><label>Tender Cost (₹)</label><input id="fCost" type="number" min="0"></div>'
+  + '<div><label>EMD Amount (₹)</label><input id="fEmd" type="number" min="0"></div>'
+  + '<div><label>E-Tender Portal *</label>'+sel('fPortal', o.portals)+'</div>'
+  + '<div><label>Date of Pre-Bid Query</label><input id="fPreBid" type="datetime-local"></div>'
+  + '<div><label>Tender Due Date *</label><input id="fDue" type="datetime-local" required></div>'
+  + '<div><label>Tender Type *</label>'+sel('fType', o.tenderTypes)+'</div><div></div>'
+  + '<div><label>Sales Coordinator *</label>'+sel('fSC', o.usersByRole['Sales Coordinator'], 'email', 'name')+'</div>'
+  + '<div><label>Operations Doer *</label>'+sel('fOD', o.usersByRole['Operations Doer'], 'email', 'name')+'</div>'
+  + '<div><label>Technical Bid Doer *</label>'+sel('fTB', o.usersByRole['Technical Bid Doer'], 'email', 'name')+'</div>'
+  + '<div><label>Costing Doer *</label>'+sel('fCD', o.usersByRole['Costing Doer'], 'email', 'name')+'</div>'
+  + '<div><label>Tender Submission Doer *</label>'+sel('fSD', o.usersByRole['Submission Doer'], 'email', 'name')+'</div>'
+  + '</div><div style="margin-top:20px;display:flex;gap:10px"><button class="btn" id="btnCreate" type="submit">Create Tender</button>'
+  + '<a class="btn ghost" href="#dashboard">Cancel</a></div></form></div></div>');
+}
+async function submitTender(e){
+  e.preventDefault();
+  var b = $('btnCreate'); busy(b, true);
+  try{
+    var r = await api('createTender', {
+      department:$('fDept').value, projectName:$('fProject').value, tenderValue:$('fValue').value,
+      tenderCost:$('fCost').value, emd:$('fEmd').value, portal:$('fPortal').value,
+      preBidDate:$('fPreBid').value, dueDate:$('fDue').value, tenderType:$('fType').value,
+      salesCoordinator:$('fSC').value, operationsDoer:$('fOD').value, technicalBidDoer:$('fTB').value,
+      costingDoer:$('fCD').value, submissionDoer:$('fSD').value
+    });
+    if(!r.ok){ toast(r.error,'err'); return; }
+    toast(r.message, 'ok');
+    location.hash = 'tender/' + r.uid;
+  }catch(err){ toast('Network error', 'err'); }
+  finally{ busy(b, false); }
+}
+
+/* ============================ TENDER LIST ============================ */
+async function vTenders(){
+  loading('Tender List');
+  var r = await api('getTenders');
+  if(!r.ok){ toast(r.error,'err'); return; }
+  CACHE.tenders = r.tenders;
+  var h = '<div class="page-head"><div><h2>Tender List</h2><div class="sub">'+r.tenders.length+' total tenders</div></div>'
+    + '<div style="display:flex;gap:10px"><input class="searchbar" id="tSearch" placeholder="🔍 Search project / ID / dept" oninput="filterTenders()">'
+    + '<select id="tStatus" style="width:150px" onchange="filterTenders()"><option value="">All Status</option>'
+    + ['Lead','Live','Submitted','Won','Lost','Rejected'].map(function(s){return '<option>'+s+'</option>';}).join('') + '</select></div></div>'
+    + '<div class="card"><table><thead><tr><th>TND ID</th><th>Project</th><th>Department</th><th>Value</th><th>Due Date</th><th>Current Step</th><th>Days Left</th><th>Status</th></tr></thead><tbody id="tBody"></tbody></table><div id="tEmpty"></div></div>';
+  setMain(h);
+  filterTenders();
+}
+function filterTenders(){
+  var q = ($('tSearch').value||'').toLowerCase(), s = $('tStatus').value;
+  var list = CACHE.tenders.filter(function(t){
+    return (!s || t.status === s) && (!q || (t.project+' '+t.uid+' '+t.department).toLowerCase().indexOf(q) > -1);
   });
-
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({}));
-    throw new Error(err.error?.message || `Groq API error ${res.status}`);
-  }
-
-  const data = await res.json();
-  return data.choices?.[0]?.message?.content || 'No response received.';
+  $('tBody').innerHTML = list.map(tenderRow).join('');
+  $('tEmpty').innerHTML = list.length ? '' : '<div class="empty"><b>No tenders found</b>Filter ya search change karke dekho.</div>';
 }
 
-// ============ API KEY MANAGEMENT ============
-function getCurrentKey() {
-  return state.provider === 'gemini' ? state.geminiKey : state.groqKey;
-}
+/* ============================ TENDER DETAIL ============================ */
+async function vTenderDetail(uid){
+  loading('Tender Detail');
+  var r = await api('getTenderDetail', { uid: uid });
+  if(!r.ok){ toast(r.error,'err'); location.hash='tenders'; return; }
+  var t = r.tender, steps = r.steps;
 
-function showApiKeyModal() {
-  document.getElementById('apiModal').style.display = 'flex';
-  document.getElementById('geminiKeyInput').value = state.geminiKey;
-  document.getElementById('groqKeyInput').value = state.groqKey;
-}
+  // Phase pipeline (1,2,3,4,6)
+  var phases = [1,2,3,4];
+  var pipe = '<div class="pipeline">';
+  phases.forEach(function(p){
+    var ps = steps.filter(function(s){ return s.phase === p; });
+    var done = ps.filter(function(s){ return s.status === 'Done'; }).length;
+    var expected = {1:4, 2:2, 3:8, 4:8}[p];
+    var cls = '', label = '🔒 Pending', pct = 0;
+    if(ps.length){
+      pct = Math.round(done / expected * 100);
+      if(done === ps.length && ps.length >= expected){ cls='done'; label='✅ Complete'; pct=100; }
+      else { cls='progress'; label='⏳ '+done+'/'+expected+' steps'; }
+    }
+    if(t.status==='Rejected' && !ps.length) label = '—';
+    pipe += '<div class="ph '+cls+'"><div class="n">Phase '+p+'</div><div class="s">'+label+'</div>'
+      + '<div style="font-size:11px;color:var(--muted);margin-top:2px">'+({1:'Lead Gen',2:'Selection',3:'Costing',4:'Tech Bid'})[p]+'</div>'
+      + '<div class="bar"><i style="width:'+pct+'%"></i></div></div>';
+  });
+  var revLabel = r.revenue ? (String(r.revenue.orderAwarded).toUpperCase()==='DONE' ? '✅ Order Awarded' : '⏳ Tracking') : '🔒 Pending';
+  pipe += '<div class="ph '+(r.revenue?'progress':'')+'"><div class="n">Phase 6</div><div class="s">'+revLabel+'</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Revenue Track</div><div class="bar"><i style="width:'+(r.revenue?50:0)+'%"></i></div></div></div>';
 
-function closeModal() {
-  document.getElementById('apiModal').style.display = 'none';
-}
+  var h = '<div class="page-head"><div><h2>'+esc(t.project)+'</h2>'
+    + '<div class="sub mono">'+esc(t.uid)+' · '+esc(t.department)+' · Due '+fDate(t.due)+'</div></div>'
+    + '<div>'+statusTag(t.status)+'</div></div>' + pipe;
 
-function saveApiKeys() {
-  state.geminiKey = document.getElementById('geminiKeyInput').value.trim();
-  state.groqKey = document.getElementById('groqKeyInput').value.trim();
-  localStorage.setItem('gemini_key', state.geminiKey);
-  localStorage.setItem('groq_key', state.groqKey);
-  closeModal();
-  updateStatus();
-}
+  h += '<div class="detail-grid"><div>';
+  // Steps grouped by phase
+  [1,2,3,4].forEach(function(p){
+    var ps = steps.filter(function(s){ return s.phase === p; });
+    if(!ps.length) return;
+    h += '<div class="card phase-block"><div class="phase-title">Phase '+p+' — '+({1:'Lead Generation',2:'Tender Selection',3:'Costing & Vendor Work',4:'Technical Bid Preparation'})[p]+'</div>';
+    h += '<table><thead><tr><th>Step</th><th>Assigned</th><th>Planned</th><th>Actual</th><th>Delay</th><th>Status</th><th></th></tr></thead><tbody>';
+    ps.forEach(function(s){
+      var canDo = s.status !== 'Done' && (USER.role==='Admin' || String(s.doerEmail).toLowerCase() === String(USER.email).toLowerCase());
+      var dly = s.status !== 'Done' ? '—' : '<span class="tag '+(s.delay<=0?'green':s.delay<=2?'yellow':'red')+'">'+(s.delay<=0?'On time':'+'+s.delay+'d')+'</span>';
+      var extra = [];
+      if(s.decision) extra.push('Decision: <b>'+esc(s.decision)+'</b>');
+      if(s.file1) extra.push('<a href="'+esc(s.file1)+'" target="_blank" style="color:var(--accent)">📎 File 1</a>');
+      if(s.file2) extra.push('<a href="'+esc(s.file2)+'" target="_blank" style="color:var(--accent)">📎 File 2</a>');
+      if(s.priceBid) extra.push('Price Bid: <b>'+fInr(s.priceBid)+'</b>');
+      h += '<tr><td style="max-width:300px"><b>'+esc(s.name)+'</b><div style="font-size:11.5px;color:var(--muted)" class="mono">'+esc(s.code)+' · TAT '+s.tat+'%</div>'
+        + (extra.length?'<div style="font-size:12px;margin-top:3px">'+extra.join(' · ')+'</div>':'')+'</td>'
+        + '<td>'+esc(s.doerName)+'</td><td>'+fDate(s.planned)+'</td><td>'+fDT(s.actual)+'</td><td>'+dly+'</td><td>'+stateTag(s.state)+'</td>'
+        + '<td>'+(canDo ? '<button class="btn sm" onclick=\'openStepModal('+JSON.stringify(s).replace(/'/g,"&#39;")+')\'>Update</button>' : '')+'</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  });
+  if(r.revenue) h += revenueCard([r.revenue], true);
+  h += '</div>';
 
-function switchProvider() {
-  state.provider = document.getElementById('providerSelect').value;
-  localStorage.setItem('ai_provider', state.provider);
-  updateStatus();
+  // Right info panel
+  h += '<div class="card"><div class="card-head"><h3>Tender Info</h3></div><div class="card-body">'
+    + info('Tender Value', fInr(t.value)) + info('Tender Cost', fInr(t.cost)) + info('EMD', fInr(t.emd))
+    + info('Portal', t.portal) + info('Type', t.type) + info('Pre-Bid Date', fDate(t.preBid))
+    + info('Due Date', fDate(t.due)) + info('Process Days', t.processDays + ' working days')
+    + info('Created', fDT(t.created))
+    + '<div style="margin:14px 0 6px;font-weight:800;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em">Team</div>';
+  Object.keys(t.team).forEach(function(role){ h += info(role, t.team[role] || '—'); });
+  h += '</div></div></div>';
+  setMain(h);
 }
+function info(l, v){ return '<div class="info-row"><span style="color:var(--muted)">'+esc(l)+'</span><b>'+((''+v).indexOf('<')===0?v:esc(v))+'</b></div>'; }
 
-function updateStatus() {
-  const dot = document.getElementById('statusDot');
-  const btn = document.getElementById('apiKeyBtn');
-  const key = getCurrentKey();
-  if (key) {
-    dot.classList.add('connected');
-    dot.title = 'Connected';
-    btn.textContent = '✅ Key Set';
-    btn.classList.add('set');
+/* ============================ STEP UPDATE MODAL ============================ */
+function openStepModal(s){
+  var body = '';
+  if(s.kind === 'decision3'){
+    body = '<label>Decision *</label><div class="radio-row">'
+      + rad('mDecision','Approved') + rad('mDecision','PRE-BID') + rad('mDecision','Rejected') + '</div>'
+      + '<p style="font-size:12px;color:var(--muted);margin-top:8px">Approved → Tender Selection · PRE-BID → Query steps · Rejected → tender closed</p>';
+  } else if(s.kind === 'decision'){
+    body = '<label>Decision *</label><div class="radio-row">' + rad('mDecision','Approved') + rad('mDecision','Rejected') + '</div>';
+  } else if(s.kind === 'file'){
+    body = '<label>Google Drive File Link *</label><input id="mFile1" placeholder="https://drive.google.com/...">';
+  } else if(s.kind === 'submission'){
+    body = '<label>Final Submitted Price Bid (₹) *</label><input id="mPrice" type="number" min="1">'
+      + '<label>Acknowledgement File Link *</label><input id="mFile1" placeholder="https://drive.google.com/...">'
+      + '<label>BOQ File Link *</label><input id="mFile2" placeholder="https://drive.google.com/...">';
+  } else if(s.kind === 'notes'){
+    body = '<label>Notes / Details (optional)</label><textarea id="mNotes" rows="3" placeholder="'+(s.code==='S17'?'Courier tracking number...':'Negotiated price / notes...')+'"></textarea>';
   } else {
-    dot.classList.remove('connected');
-    dot.title = 'Not connected';
-    btn.textContent = '🔑 Set API Key';
-    btn.classList.remove('set');
+    body = '<p style="color:var(--muted);font-size:13px;margin-top:10px">Is step ko <b>DONE</b> mark karne ke liye confirm karo. Actual date abhi ki timestamp hogi.</p>';
+  }
+  var isReject = s.kind.indexOf('decision') === 0;
+  $('modalHost').innerHTML = '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'
+    + '<div class="modal-head"><h3>'+esc(s.name)+'</h3><div class="sub mono">'+esc(s.code)+' · '+esc(s.uid)+' · Planned: '+fDate(s.planned)+'</div></div>'
+    + '<div class="modal-body">'+body+'</div>'
+    + '<div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancel</button>'
+    + '<button class="btn" id="btnStep" onclick=\'submitStep('+JSON.stringify({uid:s.uid,code:s.code,kind:s.kind}).replace(/'/g,"&#39;")+')\'>'
+    + (s.kind==='done'||s.kind==='notes' ? 'Mark as DONE' : 'Submit') + '</button></div></div></div>';
+}
+function rad(name, val){ return '<label><input type="radio" name="'+name+'" value="'+val+'"><span>'+val+'</span></label>'; }
+function closeModal(){ $('modalHost').innerHTML = ''; }
+
+async function submitStep(ctx){
+  var d = { uid: ctx.uid, stepCode: ctx.code };
+  var dec = document.querySelector('input[name=mDecision]:checked');
+  if(ctx.kind.indexOf('decision') === 0){
+    if(!dec){ toast('Decision select karo', 'err'); return; }
+    d.decision = dec.value;
+    if(dec.value === 'Rejected' && !confirm('Tender REJECT karna hai? Yeh irreversible hai.')) return;
+  }
+  if($('mFile1')) d.file1 = $('mFile1').value.trim();
+  if($('mFile2')) d.file2 = $('mFile2').value.trim();
+  if($('mPrice')) d.priceBid = $('mPrice').value;
+  if($('mNotes')) d.notes = $('mNotes').value.trim();
+  var b = $('btnStep'); busy(b, true);
+  try{
+    var r = await api('updateStep', d);
+    if(!r.ok){ toast(r.error, 'err'); return; }
+    closeModal(); toast(r.message, 'ok'); route();
+  }catch(err){ toast('Network error', 'err'); }
+  finally{ if($('btnStep')) busy(b, false); }
+}
+
+/* ============================ TBQ ============================ */
+async function vTBQ(){
+  loading('TBQ Management');
+  var r = await api('getTBQs');
+  if(!r.ok){ toast(r.error,'err'); return; }
+  var h = '<div class="page-head"><div><h2>Tender Bid Query</h2><div class="sub">Pre-bid query response process</div></div>'
+    + '<button class="btn" onclick="openTBQModal()">➕ New Bid Query</button></div>';
+  if(!r.tbqs.length) h += '<div class="card"><div class="empty"><b>No bid queries yet</b>+ New Bid Query se shuru karo.</div></div>';
+  r.tbqs.forEach(function(q){
+    h += '<div class="card"><div class="card-head"><h3><span class="mono" style="color:var(--accent)">'+esc(q.id)+'</span> — '+esc(q.project)+'</h3>'
+      + '<div>Received '+fDate(q.received)+' · Deadline <b>'+fDate(q.deadline)+'</b> · <span class="tag '+(q.status==='Completed'?'green':'blue')+'">'+esc(q.status)+'</span></div></div>';
+    h += '<table><thead><tr><th>Step</th><th>Doer</th><th>Planned</th><th>Actual</th><th>Status</th><th></th></tr></thead><tbody>';
+    q.steps.forEach(function(s){
+      var canDo = s.status !== 'Done' && (USER.role==='Admin' || String(s.doerEmail).toLowerCase() === String(USER.email).toLowerCase());
+      h += '<tr><td><b>'+esc(s.name)+'</b> <span style="color:var(--muted);font-size:11.5px" class="mono">TAT '+s.tat+'%</span></td>'
+        + '<td>'+esc(s.doerName)+'</td><td>'+fDate(s.planned)+'</td><td>'+fDT(s.actual)+'</td><td>'+stateTag(s.state)+'</td>'
+        + '<td>'+(canDo ? '<button class="btn sm" onclick=\'openStepModal('+JSON.stringify(s).replace(/'/g,"&#39;")+')\'>Update</button>' : '')+'</td></tr>';
+    });
+    h += '</tbody></table></div>';
+  });
+  setMain(h);
+}
+function openTBQModal(){
+  $('modalHost').innerHTML = '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'
+    + '<div class="modal-head"><h3>New Tender Bid Query</h3><div class="sub">TBQ ID auto-generate hogi</div></div>'
+    + '<div class="modal-body"><label>Name of Project *</label><input id="qProject">'
+    + '<label>Query Received Date *</label><input id="qRec" type="datetime-local">'
+    + '<label>Query Reply Deadline *</label><input id="qDl" type="datetime-local"></div>'
+    + '<div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancel</button>'
+    + '<button class="btn" id="btnTBQ" onclick="submitTBQ()">Create TBQ</button></div></div></div>';
+}
+async function submitTBQ(){
+  if(!$('qProject').value || !$('qRec').value || !$('qDl').value){ toast('Sab fields required hain', 'err'); return; }
+  var b = $('btnTBQ'); busy(b, true);
+  try{
+    var r = await api('createTBQ', { projectName:$('qProject').value, queryReceived:$('qRec').value, replyDeadline:$('qDl').value });
+    if(!r.ok){ toast(r.error,'err'); return; }
+    closeModal(); toast(r.message, 'ok'); vTBQ();
+  }catch(e){ toast('Network error','err'); }
+  finally{ if($('btnTBQ')) busy(b,false); }
+}
+
+/* ============================ REVENUE TRACKER ============================ */
+async function vRevenue(){
+  loading('Revenue Tracker');
+  var r = await api('getRevenue');
+  if(!r.ok){ toast(r.error,'err'); return; }
+  var h = '<div class="page-head"><div><h2>Revenue Tender Tracker</h2><div class="sub">Post-submission milestones · EMD tracking</div></div></div>';
+  h += r.revenue.length ? revenueCard(r.revenue, false) : '<div class="card"><div class="empty"><b>No submitted tenders yet</b>Step 10 complete hone par entry yahan aayegi.</div></div>';
+  setMain(h);
+}
+function revenueCard(list, compact){
+  var canEdit = ['Admin','Sales Coordinator'].indexOf(USER.role) > -1;
+  var h = '<div class="card"><div class="card-head"><h3>'+(compact?'Phase 6 — Revenue Tracker':'Submitted Tenders')+'</h3></div>'
+    + '<div style="overflow-x:auto"><table><thead><tr><th>TND ID</th>'+(compact?'':'<th>Project</th>')+'<th>Bid Value</th><th>EMD</th><th>Submitted</th>'
+    + '<th>Opening</th><th>Tech Eval</th><th>Fin Eval</th><th>R.A.</th><th>Rank</th><th>Awarded</th><th>EMD Status</th></tr></thead><tbody>';
+  list.forEach(function(v){
+    function cell(field, val, opts){
+      var disp = val ? '<span class="tag '+(String(val).toUpperCase()==='DONE'||val==='L1'?'green':field==='rank'?'yellow':'blue')+'">'+esc(val)+'</span>' : '<span class="tag gray">—</span>';
+      if(canEdit) disp = '<a href="#" onclick=\'openRevModal("'+v.uid+'","'+field+'","'+esc(v.project)+'");return false\'>'+disp+'</a>';
+      return '<td>'+disp+'</td>';
+    }
+    var emdStatus = !v.rank ? '<span class="tag gray">Awaiting rank</span>'
+      : v.rank === 'L1' ? '<span class="tag green">With client (L1)</span>'
+      : '<span class="tag red">Refund pending</span>';
+    h += '<tr><td class="mono" style="font-size:12px"><a href="#tender/'+v.uid+'" style="color:var(--accent)">'+esc(v.uid)+'</a></td>'
+      + (compact?'':'<td><b>'+esc(v.project)+'</b><div style="color:var(--muted);font-size:11.5px">'+esc(v.department)+'</div></td>')
+      + '<td>'+fInr(v.bidValue)+'</td><td>'+fInr(v.emd)+'</td><td>'+fDate(v.submitted)+'</td>'
+      + cell('openingBid', v.openingBid) + cell('techEval', v.techEval) + cell('finEval', v.finEval)
+      + cell('ra', v.ra ? v.ra + (v.raDate ? ' · '+fDate(v.raDate) : '') : '')
+      + cell('rank', v.rank) + cell('orderAwarded', v.orderAwarded)
+      + '<td>'+emdStatus+'</td></tr>';
+  });
+  return h + '</tbody></table></div></div>';
+}
+function openRevModal(uid, field, project){
+  var titles = { openingBid:'Opening Bid Status', techEval:'Technical Evaluation', finEval:'Financial Bid Evaluation', ra:'Reverse Auction (R.A.)', rank:'Rank of Financial Evaluation', orderAwarded:'Order Awarded Status' };
+  var body = '';
+  if(field === 'ra'){
+    body = '<label>Reverse Auction?</label><div class="radio-row">'+rad('mRev','Yes')+rad('mRev','No')+'</div>'
+      + '<div id="raDateWrap" class="hidden"><label>R.A. Date</label><input id="mRaDate" type="date"></div>';
+  } else if(field === 'rank'){
+    body = '<label>Rank</label><select id="mRevSel">'+['L1','L2','L3','L4','L5'].map(function(x){return '<option>'+x+'</option>';}).join('')+'</select>';
+  } else {
+    body = '<label>Status</label><div class="radio-row">'+rad('mRev','DONE')+'</div>';
+  }
+  $('modalHost').innerHTML = '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'
+    + '<div class="modal-head"><h3>'+titles[field]+'</h3><div class="sub">'+esc(project)+' · <span class="mono">'+esc(uid)+'</span></div></div>'
+    + '<div class="modal-body">'+body+'</div>'
+    + '<div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancel</button>'
+    + '<button class="btn" id="btnRev" onclick="submitRev(\''+uid+'\',\''+field+'\')">Update Status</button></div></div></div>';
+  if(field === 'ra'){
+    document.querySelectorAll('input[name=mRev]').forEach(function(x){
+      x.onchange = function(){ $('raDateWrap').classList.toggle('hidden', this.value !== 'Yes'); };
+    });
   }
 }
-
-// ============ UTILITIES ============
-function handleKey(e) {
-  if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+async function submitRev(uid, field){
+  var val;
+  if($('mRevSel')) val = $('mRevSel').value;
+  else { var c = document.querySelector('input[name=mRev]:checked'); if(!c){ toast('Value select karo','err'); return; } val = c.value; }
+  var b = $('btnRev'); busy(b, true);
+  try{
+    var r = await api('updateRevenue', { uid:uid, field:field, value:val });
+    if(r.ok && field === 'ra' && val === 'Yes' && $('mRaDate') && $('mRaDate').value){
+      await api('updateRevenue', { uid:uid, field:'raDate', value:$('mRaDate').value });
+    }
+    if(!r.ok){ toast(r.error,'err'); return; }
+    closeModal(); toast(r.message,'ok'); route();
+  }catch(e){ toast('Network error','err'); }
+  finally{ if($('btnRev')) busy(b,false); }
 }
 
-function autoResize(el) {
-  el.style.height = 'auto';
-  el.style.height = Math.min(el.scrollHeight, 140) + 'px';
-}
-
-function scrollToBottom() {
-  setTimeout(() => {
-    const chat = document.getElementById('chatArea');
-    if (chat) chat.scrollTop = chat.scrollHeight;
-  }, 50);
-}
-
-function toggleSidebar() {
-  state.sidebarOpen = !state.sidebarOpen;
-  document.getElementById('sidebar').classList.toggle('open', state.sidebarOpen);
-}
-
-function exportChat() {
-  if (!state.activeAgent) return;
-  const msgs = state.messages[state.activeAgent.id] || [];
-  if (!msgs.length) return;
-  let text = `=== ${state.activeAgent.name} — Chat Export ===\n`;
-  text += `Date: ${new Date().toLocaleDateString('en-IN')}\n\n`;
-  msgs.forEach(m => {
-    text += `[${m.time}] ${m.role === 'user' ? 'You' : state.activeAgent.name}:\n${m.content}\n\n`;
+/* ============================ USERS (ADMIN) ============================ */
+async function vUsers(){
+  loading('User Management');
+  var r = await api('getUsers');
+  if(!r.ok){ toast(r.error,'err'); return; }
+  var h = '<div class="page-head"><div><h2>User Management</h2><div class="sub">Roles &amp; access control</div></div>'
+    + '<button class="btn" onclick="openUserModal()">➕ Add User</button></div>'
+    + '<div class="card"><table><thead><tr><th>ID</th><th>Name</th><th>Email</th><th>Role</th><th>Last Login</th><th>Status</th><th></th></tr></thead><tbody>';
+  r.users.forEach(function(u){
+    h += '<tr><td class="mono">'+esc(u.id)+'</td><td><b>'+esc(u.name)+'</b></td><td>'+esc(u.email)+'</td>'
+      + '<td><span class="tag blue">'+esc(u.role)+'</span></td><td>'+fDT(u.lastLogin)+'</td>'
+      + '<td><span class="tag '+(u.status==='Active'?'green':'gray')+'">'+esc(u.status)+'</span></td>'
+      + '<td><button class="btn ghost sm" onclick="toggleUser(\''+esc(u.email)+'\',\''+(u.status==='Active'?'Inactive':'Active')+'\')">'+(u.status==='Active'?'Deactivate':'Activate')+'</button></td></tr>';
   });
-  const blob = new Blob([text], {type:'text/plain'});
-  const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = `${state.activeAgent.id}-chat-${Date.now()}.txt`;
-  a.click();
+  setMain(h + '</tbody></table></div>');
+}
+function openUserModal(){
+  var roles = ['Admin','Sales Coordinator','Operations Doer','Technical Bid Doer','Costing Doer','Tender Head','Submission Doer'];
+  $('modalHost').innerHTML = '<div class="overlay" onclick="if(event.target===this)closeModal()"><div class="modal">'
+    + '<div class="modal-head"><h3>Add User</h3></div><div class="modal-body">'
+    + '<label>Full Name *</label><input id="nuName"><label>Email *</label><input id="nuEmail" type="email">'
+    + '<label>Password *</label><input id="nuPass" type="text"><label>Role *</label><select id="nuRole">'
+    + roles.map(function(x){return '<option>'+x+'</option>';}).join('') + '</select></div>'
+    + '<div class="modal-foot"><button class="btn ghost" onclick="closeModal()">Cancel</button>'
+    + '<button class="btn" id="btnUser" onclick="submitUser()">Add User</button></div></div></div>';
+}
+async function submitUser(){
+  var b = $('btnUser'); busy(b, true);
+  try{
+    var r = await api('addUser', { name:$('nuName').value, email:$('nuEmail').value, password:$('nuPass').value, role:$('nuRole').value });
+    if(!r.ok){ toast(r.error,'err'); return; }
+    closeModal(); toast(r.message,'ok'); vUsers();
+  }catch(e){ toast('Network error','err'); }
+  finally{ if($('btnUser')) busy(b,false); }
+}
+async function toggleUser(email, status){
+  var r = await api('setUserStatus', { email:email, status:status });
+  toast(r.ok ? r.message : r.error, r.ok ? 'ok' : 'err');
+  if(r.ok) vUsers();
 }
 
-// ============ INIT ============
-document.getElementById('providerSelect').value = state.provider;
-renderSidebar();
-renderMain();
-updateStatus();
+boot();
 </script>
 </body>
 </html>
-
